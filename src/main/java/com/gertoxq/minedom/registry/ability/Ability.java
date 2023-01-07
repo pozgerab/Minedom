@@ -1,6 +1,8 @@
 package com.gertoxq.minedom.registry.ability;
 
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
+import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.registry.ability.abilities.Devour;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.string.StrGen;
@@ -11,17 +13,15 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class Ability {
 
     public static ArrayList<Ability> defaultAbilities = new ArrayList<>();
-    public Class<? extends Event> event;
+    public List<Class<? extends Event>> event;
     public String name;
     public int cooldown;
-    public HashMap<UUID, Long> cooldownMap = new HashMap<>();
+    protected HashMap<UUID, Long> cooldownMap = new HashMap<>();
     public Boolean hasRequirement;
     public Skill requirementType;
     public int requirementLevel;
@@ -29,8 +29,9 @@ public abstract class Ability {
     public Double baseDamage;
     public Abilitystate state;
 
-    public Ability(Class<? extends Event> event /* <- Get the class of an event*/) {
-        this.event = event;
+    @SafeVarargs
+    public Ability(Class<? extends Event>... event /* <- Get the class of an event*/) {
+        this.event = Arrays.stream(event).toList();
         this.name = setName();
         this.state = setState();
         this.cooldown = setCooldown();
@@ -68,33 +69,20 @@ public abstract class Ability {
 
     public abstract void ability(EntityDamageByEntityEvent e, RegistryPlayer player);
 
-    public abstract void ability(MagicHitEvent e, RegistryPlayer player);
+    public abstract void ability(RegistryDeathEvent e, RegistryPlayer player);
 
-    public abstract void ability(EntityDeathEvent e, RegistryPlayer player);
+    public abstract void ability(MagicHitEvent e, RegistryPlayer player);
 
     public abstract void ability(EntityShootBowEvent e, RegistryPlayer player);
 
     public abstract void ability(ProjectileHitEvent e, RegistryPlayer player);
 
-    public void handleAbility(EntityDamageByEntityEvent e, RegistryPlayer player) {
-        if (setHasRequirement()) {
-            if (player.skillLevels.get(setRequirementType()) < setRequirementLevel()) return;
-        }
-
-        if (cooldownMap.containsKey(player.player.getUniqueId())) {
-            long timeElapsed = System.currentTimeMillis() - cooldownMap.get(player.player.getUniqueId());
-            if (timeElapsed >= cooldown * 1000L) {
-                cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
-                ability(e, player);
-            }
-
-            return;
-        }
-        ability(e, player);
-        cooldownMap.put(e.getDamager().getUniqueId(), System.currentTimeMillis());
+    public void handleEvent(Event e, RegistryPlayer player) {
+        handleAbility(e, player);
     }
 
-    public void handleAbility(MagicHitEvent e, RegistryPlayer player) {
+    protected void handleAbility(Event e, RegistryPlayer player) {
+
         if (setHasRequirement()) {
             if (player.skillLevels.get(setRequirementType()) < setRequirementLevel()) return;
         }
@@ -103,54 +91,24 @@ public abstract class Ability {
             long timeElapsed = System.currentTimeMillis() - cooldownMap.get(player.player.getUniqueId());
             if (timeElapsed >= cooldown * 1000L) {
                 cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
-                ability(e, player);
+                if (e instanceof EntityDamageByEntityEvent event) ability(event, player);
+                else if (e instanceof RegistryDeathEvent event) ability(event, player);
+                else if (e instanceof MagicHitEvent event) ability(event, player);
+                else if (e instanceof EntityShootBowEvent event) ability(event, player);
+                else if (e instanceof ProjectileHitEvent event) ability(event, player);
+
             }
 
             return;
         }
-        ability(e, player);
+        if (e instanceof EntityDamageByEntityEvent event) ability(event, player);
+        else if (e instanceof RegistryDeathEvent event) ability(event, player);
+        else if (e instanceof MagicHitEvent event) ability(event, player);
+        else if (e instanceof EntityShootBowEvent event) ability(event, player);
+        else if (e instanceof ProjectileHitEvent event) ability(event, player);
         cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
     }
 
-    public void handleAbility(EntityShootBowEvent e, RegistryPlayer player) {
-
-        if (setHasRequirement()) {
-            if (player.skillLevels.get(setRequirementType()) < setRequirementLevel()) return;
-        }
-
-        if (cooldownMap.containsKey(player.player.getUniqueId())) {
-            long timeElapsed = System.currentTimeMillis() - cooldownMap.get(player.player.getUniqueId());
-            if (timeElapsed >= cooldown * 1000L) {
-                ability(e, player);
-                cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
-            }
-
-            return;
-        }
-        ability(e, player);
-        cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
-
-    }
-
-    public void handleAbility(ProjectileHitEvent e, RegistryPlayer player) {
-
-        if (setHasRequirement()) {
-            if (player.skillLevels.get(setRequirementType()) < setRequirementLevel()) return;
-        }
-
-        if (cooldownMap.containsKey(player.player.getUniqueId())) {
-            long timeElapsed = System.currentTimeMillis() - cooldownMap.get(player.player.getUniqueId());
-            if (timeElapsed >= cooldown * 1000L) {
-                ability(e, player);
-                cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
-            }
-
-            return;
-        }
-        ability(e, player);
-        cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
-
-    }
     public enum Abilitystate {
         PASSIVE,
         ACTIVE

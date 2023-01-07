@@ -56,7 +56,7 @@ public class DmgCalc {
             magicDef = entity.stats.get(Stats.MAGIC_DEFENSE);
         }
         double finalDamage = toEntityMagicDmgCalc(rawDamage, player.stats.get(Stats.MAGIC_DAMAGE), player.stats.get(Stats.MANA), magicDef);
-        MagicHitEvent event = new MagicHitEvent(player, entity, finalDamage, true);
+        MagicHitEvent event = new MagicHitEvent(player, entity, finalDamage);
         Bukkit.getServer().getPluginManager().callEvent(event);
         entity.entity.damage(finalDamage);
     }

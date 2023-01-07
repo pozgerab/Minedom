@@ -16,8 +16,9 @@ import java.util.HashMap;
 
 public class DamageIndicator extends RegistryEntity {
 
-    public DamageIndicator() {
-        super("damage_indicator");
+    public DamageIndicator() {super("damage_indicator");}
+    public DamageIndicator(Entity entity) {
+        super("damage_indicator", entity);
     }
 
     @Override

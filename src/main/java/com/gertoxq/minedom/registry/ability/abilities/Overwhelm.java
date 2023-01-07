@@ -2,6 +2,7 @@ package com.gertoxq.minedom.registry.ability.abilities;
 
 import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
+import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.RegistryItem;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class Overwhelm extends Ability {
     public Overwhelm() {
-        super(ProjectileHitEvent.class);
+        super(ProjectileHitEvent.class, EntityShootBowEvent.class, EntityDamageByEntityEvent.class);
     }
 
     @Override
@@ -79,15 +80,14 @@ public class Overwhelm extends Ability {
     }
 
     @Override
-    public void ability(MagicHitEvent e, RegistryPlayer player) {
+    public void ability(RegistryDeathEvent e, RegistryPlayer player) {
 
     }
 
     @Override
-    public void ability(EntityDeathEvent e, RegistryPlayer player) {
+    public void ability(MagicHitEvent e, RegistryPlayer player) {
 
     }
-
 
     static int particleTask;
     @Override

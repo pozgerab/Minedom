@@ -6,6 +6,7 @@ import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import java.util.HashMap;
@@ -13,6 +14,9 @@ import java.util.HashMap;
 public class SuperGolem extends RegistryEntity {
     public SuperGolem() {
         super("super_golem");
+    }
+    public SuperGolem(Entity entity) {
+        super("super_golem", entity);
     }
 
     @Override

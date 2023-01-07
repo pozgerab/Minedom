@@ -1,6 +1,7 @@
 package com.gertoxq.minedom.registry.ability.abilities;
 
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
+import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
 import com.gertoxq.minedom.math.DmgCalc;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
@@ -13,13 +14,6 @@ import org.bukkit.event.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/*
-*
-*   MEG KELL JAVÍTANI AZ INFINITE LIGHTNINGOT
-*
-*
-* */
 
 public class Lightning extends Ability {
 
@@ -84,12 +78,12 @@ public class Lightning extends Ability {
     }
 
     @Override
-    public void ability(MagicHitEvent e, RegistryPlayer player) {
+    public void ability(RegistryDeathEvent e, RegistryPlayer player) {
 
     }
 
     @Override
-    public void ability(EntityDeathEvent e, RegistryPlayer player) {
+    public void ability(MagicHitEvent e, RegistryPlayer player) {
 
     }
 

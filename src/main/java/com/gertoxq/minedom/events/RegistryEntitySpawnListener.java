@@ -35,13 +35,13 @@ public class RegistryEntitySpawnListener implements Listener {
                         spawn = false;
                         Class<? extends RegistryEntity> entityClass = RegistryEntity.getRegistryEntityClassFromType(type).getClass();
                         try {
-                            newEntity = entityClass.getDeclaredConstructor().newInstance();
+                            newEntity = entityClass.getDeclaredConstructor(Entity.class).newInstance(e.getEntity());
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                             ex.printStackTrace();
                         }
-                        newEntity.spawn(e.getLocation());
-                        e.setCancelled(true);
-                        entity.remove();
+                        //newEntity.spawn(e.getLocation());
+                        //e.setCancelled(true);
+                        //entity.remove();
                     }
                 }
             }
@@ -59,8 +59,7 @@ public class RegistryEntitySpawnListener implements Listener {
                         Class<? extends RegistryEntity> entityClass = RegistryEntity.getRegistryEntityClass(tag).getClass();
                         try {
                             spawn = false;
-                            newEntity.entity.remove();
-                            newEntity = entityClass.getDeclaredConstructor().newInstance();
+                            newEntity = entityClass.getDeclaredConstructor(Entity.class).newInstance(entity);
                             newEntity.spawn(e.getLocation());
                         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
                             ex.printStackTrace();

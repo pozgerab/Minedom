@@ -47,7 +47,6 @@ public class RegistryPlayer extends RegistryEntity{
         this.player = player;
         this.player.setHealthScale(40.0);
         this.state = EntityState.PLAYER;
-        entities.add(this);
         players.add(this);
     }
 
@@ -75,7 +74,6 @@ public class RegistryPlayer extends RegistryEntity{
         stats = StatSystem.sumStats(this);
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.get(Stats.HEALTH));
         player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(stats.get(Stats.AGILITY) / 1000);
-        ((RegistryEntity)this).stats = stats;
         player.setHealthScale(40.0);
     }
 

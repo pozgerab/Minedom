@@ -8,6 +8,7 @@ import com.gertoxq.minedom.commands.Stats.GetStatGUICommand;
 import com.gertoxq.minedom.events.*;
 import com.gertoxq.minedom.events.AbilityListeners.PublicAbilityListener;
 import com.gertoxq.minedom.events.Damage.DamageOut;
+import com.gertoxq.minedom.events.EventTriggers.RegistryDeathEventTrigger;
 import com.gertoxq.minedom.events.UpdateStats.UpdateStats;
 import com.gertoxq.minedom.events.menuListener.MenuListener;
 import com.gertoxq.minedom.events.skillListeners.CombatExpGainListener;
@@ -46,6 +47,7 @@ public final class Minedom extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PublicAbilityListener(), this);
         getServer().getPluginManager().registerEvents(new DeathMsgFix(), this);
         getServer().getPluginManager().registerEvents(new CombatExpGainListener(), this);
+        getServer().getPluginManager().registerEvents(new RegistryDeathEventTrigger(), this);
         getCommand("stats").setExecutor(new GetStatGUICommand());
         getCommand("getstat").setExecutor(new GetStatCommand());
         getCommand("giveitem").setExecutor(new GiveCustomItem());

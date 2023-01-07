@@ -3,6 +3,7 @@ package com.gertoxq.minedom.registry.ability.abilities;
 import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
+import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.RegistryItem;
@@ -23,7 +24,7 @@ import java.util.HashMap;
 
 public class Devour extends Ability {
     public Devour() {
-        super(EntityDeathEvent.class);
+        super(RegistryDeathEvent.class);
     }
 
     @Override
@@ -77,60 +78,58 @@ public class Devour extends Ability {
     HashMap<RegistryPlayer, Integer> playerTaskMap = new HashMap<>();
     @Override
     public void ability(EntityDamageByEntityEvent e, RegistryPlayer player) {
-        RegistryEntity killedEntity = RegistryEntity.getRegistryEntity(e.getEntity());
-        if (killedEntity == null) return;
-        if ((killedEntity.entity.getHealth() - e.getFinalDamage()) <= 0) {
-            if (player.player.getEquipment() == null || player.player.getEquipment().getChestplate() == null) return;
-            ItemStack cp = player.player.getEquipment().getChestplate();
-            RegistryItem chestplate = RegistryItem.getItemByItemStack(cp);
-            if (chestplate == null) return;
-            if (!playerCastMap.containsKey(player)) {
-                playerCastMap.put(player, 1);
-            } else {
-                playerCastMap.put(player, playerCastMap.get(player)+1);
-            }
-            player.abilityStats.put(Stats.AGILITY, player.abilityStats.get(Stats.AGILITY) + 20);
-            player.abilityStats.put(Stats.STRENGTH, player.abilityStats.get(Stats.STRENGTH) + 10);
-            player.updateStats();
 
-            Runnable runnable = () -> {
-                if (!playerCastMap.containsKey(player)) return;
-                int strLoss = 10 * playerCastMap.get(player);
-                int agLoss = 20 * playerCastMap.get(player);
-                int statLoss = strLoss + agLoss;
-                player.abilityStats.put(Stats.AGILITY, player.abilityStats.get(Stats.AGILITY) - agLoss);
-                player.abilityStats.put(Stats.STRENGTH, player.abilityStats.get(Stats.STRENGTH) - strLoss);
-                player.player.setAbsorptionAmount(player.player.getAbsorptionAmount() + statLoss);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> {
-                    if (player.player.getAbsorptionAmount() - statLoss < 0) {
-                        player.player.setAbsorptionAmount(0);
-                    } else {
-                        player.player.setAbsorptionAmount(player.player.getAbsorptionAmount() - statLoss);
-                    }
-                }, 200L);
-                player.updateStats();
-                playerCastMap.remove(player);
-                playerTaskMap.remove(player);
-            };
-            BukkitTask task = Bukkit.getScheduler().runTaskLater(Minedom.getPlugin(), runnable, 80L);
-            if (playerTaskMap.containsKey(player)) {
-                Bukkit.getScheduler().cancelTask(playerTaskMap.get(player));
-                playerTaskMap.remove(player);
-                task = Bukkit.getScheduler().runTaskLater(Minedom.getPlugin(), runnable, 80L);
-                playerTaskMap.put(player, task.getTaskId());
-            } else {
-                playerTaskMap.put(player, task.getTaskId());
-            }
+    }
+
+    @Override
+    public void ability(RegistryDeathEvent e, RegistryPlayer player) {
+        cooldown = 0;
+        if (player.player.getEquipment() == null || player.player.getEquipment().getChestplate() == null) return;
+        ItemStack cp = player.player.getEquipment().getChestplate();
+        RegistryItem chestplate = RegistryItem.getItemByItemStack(cp);
+        if (chestplate == null) return;
+        if (!playerCastMap.containsKey(player)) {
+            playerCastMap.put(player, 1);
+        } else {
+            playerCastMap.put(player, playerCastMap.get(player)+1);
+        }
+        player.abilityStats.put(Stats.AGILITY, player.abilityStats.get(Stats.AGILITY) + 20);
+        player.abilityStats.put(Stats.STRENGTH, player.abilityStats.get(Stats.STRENGTH) + 10);
+        player.updateStats();
+
+        Runnable runnable = () -> {
+            if (!playerCastMap.containsKey(player)) return;
+            int strLoss = 10 * playerCastMap.get(player);
+            int agLoss = 20 * playerCastMap.get(player);
+            int statLoss = strLoss + agLoss;
+            player.abilityStats.put(Stats.AGILITY, player.abilityStats.get(Stats.AGILITY) - agLoss);
+            player.abilityStats.put(Stats.STRENGTH, player.abilityStats.get(Stats.STRENGTH) - strLoss);
+            player.player.setAbsorptionAmount(player.player.getAbsorptionAmount() + statLoss);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> {
+                if (player.player.getAbsorptionAmount() - statLoss < 0) {
+                    player.player.setAbsorptionAmount(0);
+                } else {
+                    player.player.setAbsorptionAmount(player.player.getAbsorptionAmount() - statLoss);
+                }
+                cooldown = setCooldown();
+            }, 200L);
+            player.updateStats();
+            playerCastMap.remove(player);
+            playerTaskMap.remove(player);
+        };
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(Minedom.getPlugin(), runnable, 80L);
+        if (playerTaskMap.containsKey(player)) {
+            Bukkit.getScheduler().cancelTask(playerTaskMap.get(player));
+            playerTaskMap.remove(player);
+            task = Bukkit.getScheduler().runTaskLater(Minedom.getPlugin(), runnable, 80L);
+            playerTaskMap.put(player, task.getTaskId());
+        } else {
+            playerTaskMap.put(player, task.getTaskId());
         }
     }
 
     @Override
     public void ability(MagicHitEvent e, RegistryPlayer player) {
-
-    }
-
-    @Override
-    public void ability(EntityDeathEvent e, RegistryPlayer player) {
 
     }
 

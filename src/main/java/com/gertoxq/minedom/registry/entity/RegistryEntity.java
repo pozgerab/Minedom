@@ -67,6 +67,7 @@ public abstract class RegistryEntity {
         this.uuid = entity.getUniqueId();
         this.entity = (LivingEntity) entity;
         if (replaceRegistryEntityFrom != null) registryEntityReplacement.put(replaceRegistryEntityFrom, this);
+        entities.add(this);
         replacement.put(replaceFrom, this);
     }
 

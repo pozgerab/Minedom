@@ -9,18 +9,18 @@ public class MagicHitEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private RegistryEntity target;
-    private RegistryPlayer damager;
+    private final RegistryEntity target;
+    private final RegistryEntity damager;
     private double damage;
     private final boolean lock;
 
-    public MagicHitEvent(RegistryPlayer damager, RegistryEntity target, double damage, boolean lock) {
+    public MagicHitEvent(RegistryEntity damager, RegistryEntity target, double damage, boolean lock) {
         this.damager = damager;
         this.target = target;
         this.damage = damage;
         this.lock = lock;
     }
-    public MagicHitEvent(RegistryPlayer damager, RegistryEntity target, double damage) {
+    public MagicHitEvent(RegistryEntity damager, RegistryEntity target, double damage) {
         this.damager = damager;
         this.target = target;
         this.damage = damage;
@@ -31,7 +31,7 @@ public class MagicHitEvent extends Event {
         return target;
     }
 
-    public RegistryPlayer getDamager() {
+    public RegistryEntity getDamager() {
         return damager;
     }
 

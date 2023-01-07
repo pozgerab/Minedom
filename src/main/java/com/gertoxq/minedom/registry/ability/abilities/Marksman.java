@@ -1,6 +1,7 @@
 package com.gertoxq.minedom.registry.ability.abilities;
 
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
+import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class Marksman extends Ability {
     public Marksman() {
-        super(EntityShootBowEvent.class);
+        super(EntityDamageByEntityEvent.class);
     }
 
     @Override
@@ -69,12 +70,12 @@ public class Marksman extends Ability {
     }
 
     @Override
-    public void ability(MagicHitEvent e, RegistryPlayer player) {
+    public void ability(RegistryDeathEvent e, RegistryPlayer player) {
 
     }
 
     @Override
-    public void ability(EntityDeathEvent e, RegistryPlayer player) {
+    public void ability(MagicHitEvent e, RegistryPlayer player) {
 
     }
 

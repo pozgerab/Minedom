@@ -16,8 +16,7 @@ These entities should be registered in the ```RegisterEntities``` class by creat
 The ```RegistryPlayer``` class is an extension of the ```RegistryEntity``` class.\
 These two classes hold mostly different values, so make sure to cast to the class you want to use, but both of the classes have a variable with the bukkit entity itself.
 
-The class contains a ```public void updateStats()``` method, that is being called with certain events to keep the player stats relevant. The method also assigns a new value to its ```RegistryEntity``` cast ```HashMap<Stats, Double> stats``` variable, so in both of the casts is the right stat value (so you don't have to cast to a ```RegistryPlayer``` class every time you use the ```getRegistryEntity``` method).\
-Declaring the stats to the ```RegistryEntity``` cast: ```((RegistryEntity)this).stats = stats;```
+In both of the casts the stat values are the same (so you don't have to cast to a ```RegistryPlayer``` class every time you use the ```getRegistryEntity``` method).
 ***
 ### Abilities
 There is an abstract class for creating custom abilities quickly.\
@@ -59,8 +58,13 @@ These items should be registered in the ```RegisterItems``` class by creating a 
 ***
 ### Events
 An ability trigger listener keeps track of events.\
+The ```PublicAbilityListener``` class tracks  every important event and passes them to the ability handlers. Then the ```Ability``` class checks the instance of the event and executes only the specific event related methods.
+
+
 There is a custom event for magic damage: ```MagicHitEvent```. It only triggers on direct call from ```Bukkit.getServer().getPluginManager().callEvent();``` function, doesn't trigger naturally.\
-It has a ```boolean lock``` parameter. When it's ```true```, it prevents any ```MagicHitEvent``` listener (so ability listeners too) from triggering when calling this event. It's used to prevent infinite damage loops when an ability deals extra magic damage to any entity. 
+It has a ```boolean lock``` parameter. When it's ```true```, it prevents any ```MagicHitEvent``` listener (so ability listeners too) from triggering when calling this event. It's used to prevent infinite damage loops when an ability deals extra magic damage to any entity.
+
+```RegistryDeathEvent``` class is also a custom event. It's called, whenever a ```MagicHitEvent``` or ```EntityDamageByEntityEvent``` happens. If the damage is greater than the attacked entity's health the event is called.
 ***
 ### Damage & Calculations
 In the 'events' folder inside 'Damage', there is a DamageOut class for listening to damage events.
