@@ -3,6 +3,7 @@ package com.gertoxq.minedom.registry.ability.abilities;
 import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
 import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
@@ -87,6 +88,11 @@ public class QuickShot extends Ability {
 
     @Override
     public void ability(ProjectileHitEvent e, RegistryPlayer player) {
+
+    }
+
+    @Override
+    public void ability(RegistryHitEvent e, RegistryPlayer player) {
 
     }
 }

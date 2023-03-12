@@ -2,6 +2,10 @@ package com.gertoxq.minedom.registry.entity;
 
 import com.gertoxq.minedom.StatSystem.EntityState;
 import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.events.Events.MagicHitEvent;
+import com.gertoxq.minedom.events.Events.RegistryHitEvent;
+import com.gertoxq.minedom.math.DmgCalc;
+import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -109,6 +113,26 @@ public abstract class RegistryEntity {
         replacement.put(replaceFrom, this);
         entities.add(this);
         return entity;
+    }
+
+    public void kill(RegistryEntity killer, RegistryHitEvent.DamageSource source) {
+        RegistryHitEvent event = new RegistryHitEvent(killer, this, entity.getHealth()+1, source, true);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    public void magicdamage(double rawDamage, RegistryEntity entity) {
+        double magicDef = 0;
+        if (this.stats.get(Stats.MAGIC_DEFENSE) != null) {
+            magicDef = this.stats.get(Stats.MAGIC_DEFENSE);
+        }
+        double finalDamage = DmgCalc.toEntityMagicDmgCalc(rawDamage, entity.stats.get(Stats.MAGIC_DAMAGE), entity.stats.get(Stats.MANA), magicDef);
+        MagicHitEvent event = new MagicHitEvent(entity, this, finalDamage);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    public void damage(double damage, RegistryEntity damager, RegistryHitEvent.DamageSource source) {
+        RegistryHitEvent event = new RegistryHitEvent(damager, this, damage, source);
+        Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
     public static RegistryEntity getRegistryEntity(Entity entity) {

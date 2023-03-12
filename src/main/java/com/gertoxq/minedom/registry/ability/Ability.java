@@ -2,6 +2,7 @@ package com.gertoxq.minedom.registry.ability;
 
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
 import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.abilities.Devour;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
@@ -77,6 +78,8 @@ public abstract class Ability {
 
     public abstract void ability(ProjectileHitEvent e, RegistryPlayer player);
 
+    public abstract void ability(RegistryHitEvent e, RegistryPlayer player);
+
     public void handleEvent(Event e, RegistryPlayer player) {
         handleAbility(e, player);
     }
@@ -96,7 +99,7 @@ public abstract class Ability {
                 else if (e instanceof MagicHitEvent event) ability(event, player);
                 else if (e instanceof EntityShootBowEvent event) ability(event, player);
                 else if (e instanceof ProjectileHitEvent event) ability(event, player);
-
+                else if (e instanceof RegistryHitEvent event) ability(event, player);
             }
 
             return;
@@ -106,6 +109,7 @@ public abstract class Ability {
         else if (e instanceof MagicHitEvent event) ability(event, player);
         else if (e instanceof EntityShootBowEvent event) ability(event, player);
         else if (e instanceof ProjectileHitEvent event) ability(event, player);
+        else if (e instanceof RegistryHitEvent event) ability(event, player);
         cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
     }
 

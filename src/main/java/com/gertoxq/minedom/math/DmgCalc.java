@@ -1,7 +1,7 @@
 package com.gertoxq.minedom.math;
 
 import com.gertoxq.minedom.StatSystem.Stats;
-import com.gertoxq.minedom.events.Events.MagicHitEvent;
+import com.gertoxq.minedom.events.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import org.bukkit.Bukkit;
@@ -48,17 +48,6 @@ public class DmgCalc {
 
     public static double fromEntityMagicDmgCalc(Double predDmg, Double victMagicDef) {
         return reduceMagicDamage(calcMagicDmg(predDmg, 0.0, 0.0), victMagicDef);
-    }
-
-    public static void magicdamageEntity(RegistryEntity entity, double rawDamage, RegistryPlayer player) {
-        double magicDef = 0;
-        if (entity.stats.get(Stats.MAGIC_DEFENSE) != null) {
-            magicDef = entity.stats.get(Stats.MAGIC_DEFENSE);
-        }
-        double finalDamage = toEntityMagicDmgCalc(rawDamage, player.stats.get(Stats.MAGIC_DAMAGE), player.stats.get(Stats.MANA), magicDef);
-        MagicHitEvent event = new MagicHitEvent(player, entity, finalDamage);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        entity.entity.damage(finalDamage);
     }
 
 }

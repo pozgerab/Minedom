@@ -3,6 +3,7 @@ package com.gertoxq.minedom.registry.ability.abilities;
 import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
 import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.RegistryItem;
@@ -118,5 +119,10 @@ public class Overwhelm extends Ability {
         if (entity == null) return;
         entity.entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 1));
         entity.entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 255));
+    }
+
+    @Override
+    public void ability(RegistryHitEvent e, RegistryPlayer player) {
+
     }
 }

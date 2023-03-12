@@ -4,14 +4,22 @@ import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
 import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.string.StrGen;
+import net.minecraft.network.protocol.game.PacketPlayOutAnimation;
+import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -93,6 +101,9 @@ public class Devour extends Ability {
         } else {
             playerCastMap.put(player, playerCastMap.get(player)+1);
         }
+
+        e.getEntity().entity.getWorld().spawnEntity(e.getEntity().entity.getLocation(), EntityType.EVOKER_FANGS);
+
         player.abilityStats.put(Stats.AGILITY, player.abilityStats.get(Stats.AGILITY) + 20);
         player.abilityStats.put(Stats.STRENGTH, player.abilityStats.get(Stats.STRENGTH) + 10);
         player.updateStats();
@@ -140,6 +151,11 @@ public class Devour extends Ability {
 
     @Override
     public void ability(ProjectileHitEvent e, RegistryPlayer player) {
+
+    }
+
+    @Override
+    public void ability(RegistryHitEvent e, RegistryPlayer player) {
 
     }
 

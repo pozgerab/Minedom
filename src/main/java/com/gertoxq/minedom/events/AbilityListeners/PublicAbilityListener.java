@@ -2,6 +2,7 @@ package com.gertoxq.minedom.events.AbilityListeners;
 
 import com.gertoxq.minedom.events.Events.MagicHitEvent;
 import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.RegistryItem;
@@ -62,6 +63,15 @@ public class PublicAbilityListener implements Listener {
         }
 
     }
+
+    @EventHandler
+    public void projectileHit(RegistryHitEvent e) {
+        if (e.getDamager() instanceof RegistryPlayer player) {
+            searchAbilityUsage(player, e);
+        }
+
+    }
+
 
     public void searchAbilityUsage(RegistryPlayer registryPlayer, Event e) {
         if (registryPlayer == null) return;

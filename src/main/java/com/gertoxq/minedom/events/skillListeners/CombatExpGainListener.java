@@ -10,6 +10,7 @@ public class CombatExpGainListener implements Listener {
 
     @EventHandler (priority = EventPriority.HIGH)
     public void onExpGainFromMagic(RegistryDeathEvent e) {
+        if (e.isCancelled()) return;
         if (e.getEntity().expType == null) return;
         if (e.getKiller() instanceof RegistryPlayer) {
             ((RegistryPlayer) e.getKiller()).addExp(e.getEntity());

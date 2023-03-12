@@ -2,6 +2,7 @@ package com.gertoxq.minedom.events.Damage;
 
 import com.gertoxq.minedom.StatSystem.EntityState;
 import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.events.Events.RegistryHitEvent;
 import com.gertoxq.minedom.math.DmgCalc;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
@@ -25,6 +26,7 @@ public class DamageOut implements Listener {
         Entity victim = e.getEntity();
         RegistryEntity registryVictim = RegistryEntity.getRegistryEntity(victim);
         if (registryVictim == null) return;
+        e.setCancelled(true);
 
         Entity predator = e.getDamager();
         RegistryEntity registryPredator = RegistryEntity.getRegistryEntity(predator);
@@ -34,10 +36,10 @@ public class DamageOut implements Listener {
             Double predStr = ((RegistryPlayer) registryPredator).stats.get(Stats.STRENGTH);
             Double predDmg = ((RegistryPlayer) registryPredator).stats.get(Stats.DAMAGE);
             double finalDmg = DmgCalc.toEntityDmgCalc(predDmg,predStr, registryVictim.stats.get(Stats.DEFENSE));
-            e.setDamage(finalDmg);
+            registryVictim.damage(finalDmg, registryPredator, RegistryHitEvent.DamageSource.MELEE);
 
         } else  {
-            e.setDamage(DmgCalc.fromEntityDmgCalc(registryPredator.stats.get(Stats.DAMAGE), ((RegistryPlayer)registryVictim).stats.get(Stats.DEFENSE)));
+            registryVictim.damage(DmgCalc.fromEntityDmgCalc(registryPredator.stats.get(Stats.DAMAGE), ((RegistryPlayer)registryVictim).stats.get(Stats.DEFENSE)), registryPredator, RegistryHitEvent.DamageSource.MELEE);
         }
 
     }
@@ -59,10 +61,10 @@ public class DamageOut implements Listener {
             Double predStr = ((RegistryPlayer) registryPredator).stats.get(Stats.STRENGTH);
             Double predDmg = ((RegistryPlayer) registryPredator).stats.get(Stats.DAMAGE);
             double finalDmg = DmgCalc.toEntityDmgCalc(predDmg,predStr, registryVictim.stats.get(Stats.DEFENSE));
-            registryVictim.entity.damage(finalDmg, registryPredator.entity);
+            registryVictim.damage(finalDmg, registryPredator, RegistryHitEvent.DamageSource.PROJECTILE);
 
         } else {
-            registryVictim.entity.damage(DmgCalc.fromEntityDmgCalc(registryPredator.stats.get(Stats.DAMAGE), registryVictim.stats.get(Stats.DEFENSE)));
+            registryVictim.damage(DmgCalc.fromEntityDmgCalc(registryPredator.stats.get(Stats.DAMAGE), registryVictim.stats.get(Stats.DEFENSE)), registryPredator, RegistryHitEvent.DamageSource.PROJECTILE);
         }
 
     }
