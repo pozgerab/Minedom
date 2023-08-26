@@ -1,9 +1,9 @@
 package com.gertoxq.minedom.registry.item.items.armor.HawkArmor;
 
-import com.gertoxq.minedom.StatSystem.StatSystem;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.ability.abilities.Hawkeye;
+import com.gertoxq.minedom.registry.item.AbilityItem;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class HawkChestplate extends RegistryItem {
+public class HawkChestplate extends AbilityItem {
     @Override
     public Material setMaterial() {
         return Material.CHAINMAIL_CHESTPLATE;
@@ -21,7 +21,7 @@ public class HawkChestplate extends RegistryItem {
 
     @Override
     public HashMap<Stats, Double> setStats() {
-        return StatSystem.newPlayerStats(80d, 10d, 10d, 10d, 0d, 0d, 0d, 0d, 20d);
+        return Stats.newPlayerStats(80d, 10d, 10d, 10d, 0d, 0d, 0d, 0d, 0.0, 20d, 0.0);
     }
 
     @Override
@@ -51,18 +51,4 @@ public class HawkChestplate extends RegistryItem {
         return abilities;
     }
 
-    @Override
-    public Boolean hasRequirement() {
-        return false;
-    }
-
-    @Override
-    public Skill setRequirementType() {
-        return null;
-    }
-
-    @Override
-    public int setRequirementLvl() {
-        return 0;
-    }
 }

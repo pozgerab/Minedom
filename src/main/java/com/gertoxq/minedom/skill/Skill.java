@@ -31,7 +31,7 @@ public enum Skill {
     public static void addSkillExp(Skill skill, RegistryPlayer player, Double exp) {
         Double newExp = player.skillExps.get(skill) + exp;
         player.skillExps.put(skill, newExp);
-        player.skillLevels.put(skill, (double) CalcLvlFromEXP(skill, newExp));
+        player.skillLevels.put(skill, CalcLvlFromEXP(skill, newExp));
     }
 
     public static double CalcLvlFromEXP(Skill skill, Double exp) {

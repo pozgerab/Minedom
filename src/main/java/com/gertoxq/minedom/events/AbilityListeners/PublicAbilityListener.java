@@ -1,71 +1,69 @@
 package com.gertoxq.minedom.events.AbilityListeners;
 
-import com.gertoxq.minedom.events.Events.MagicHitEvent;
-import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
-import com.gertoxq.minedom.events.Events.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.*;
+import com.gertoxq.minedom.events.Custom.AEvent;
+import com.gertoxq.minedom.events.Custom.Events.ProjectileHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
-import com.gertoxq.minedom.registry.entity.RegistryEntity;
-import com.gertoxq.minedom.registry.item.RegistryItem;
+import com.gertoxq.minedom.registry.item.AbilityItem;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.*;
 
 public class PublicAbilityListener implements Listener {
 
-    @EventHandler
-    public void onMeleeHit(EntityDamageByEntityEvent e) {
-        if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-            if (e.getDamager() instanceof Player player) {
-                RegistryPlayer registryPlayer = RegistryPlayer.getRegistryPlayer(player);
-                if (registryPlayer == null) return;
-                searchAbilityUsage(registryPlayer, e);
-            }
-        }
+    @EventHandler (priority = EventPriority.LOWEST)
+    public void onInit(InitEvent e) {
+        searchAbilityUsage(e.getPlayer(), e);
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOWEST)
     public void onMagicHit(MagicHitEvent e) {
         if (e.isLock()) return;
-        if (e.getDamager() instanceof RegistryPlayer) {
-            searchAbilityUsage((RegistryPlayer) e.getDamager(), e);
+        if (e.getDamager() instanceof RegistryPlayer player) {
+            searchAbilityUsage(player, e);
         }
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOWEST)
+    public void onMeleeHit(MeleeHitEvent e) {
+        if (e.getDamager() instanceof RegistryPlayer player) {
+            searchAbilityUsage(player, e);
+        }
+    }
+
+    @EventHandler (priority = EventPriority.LOWEST)
     public void onDeath(RegistryDeathEvent e) {
         if (e.getKiller() instanceof RegistryPlayer) {
             searchAbilityUsage((RegistryPlayer) e.getKiller(), e);
         }
     }
 
-    @EventHandler
-    public void onBowShoot(EntityShootBowEvent e) {
-        if (e.getEntity() instanceof Player) {
-            RegistryPlayer registryPlayer = RegistryPlayer.getRegistryPlayer((Player) e.getEntity());
-            if (registryPlayer == null) return;
-            searchAbilityUsage(registryPlayer, e);
+    @EventHandler (priority = EventPriority.LOWEST)
+    public void onBowShoot(ShootBowEvent e) {
+        if (e.getShooter() instanceof RegistryPlayer player) {
+            searchAbilityUsage(player, e);
         }
 
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOWEST)
     public void projectileHit(ProjectileHitEvent e) {
         if (e.getEntity().getShooter() instanceof Player player) {
-            RegistryPlayer registryPlayer = RegistryPlayer.getRegistryPlayer((Player) e.getEntity().getShooter());
+            RegistryPlayer registryPlayer = RegistryPlayer.getRegistryPlayer(player);
             if (registryPlayer == null) return;
             searchAbilityUsage(registryPlayer, e);
         }
 
     }
 
-    @EventHandler
-    public void projectileHit(RegistryHitEvent e) {
+    @EventHandler (priority = EventPriority.LOWEST)
+    public void hit(RegistryHitEvent e) {
         if (e.getDamager() instanceof RegistryPlayer player) {
             searchAbilityUsage(player, e);
         }
@@ -73,29 +71,41 @@ public class PublicAbilityListener implements Listener {
     }
 
 
-    public void searchAbilityUsage(RegistryPlayer registryPlayer, Event e) {
-        if (registryPlayer == null) return;
+    public void searchAbilityUsage(RegistryPlayer registryPlayer, AEvent e) {
         Player player = registryPlayer.player;
-        ItemStack item = player.getInventory().getItemInMainHand();
-        ItemStack[] armor = player.getInventory().getArmorContents();
-        for (ItemStack piece : armor) {
-            if (piece == null) continue;
-            RegistryItem registryPiece = RegistryItem.getItemByItemStack(piece);
-            if (registryPiece == null) continue;
-            for (Ability ability : registryPiece.abilities) {
-                if (ability == null) continue;
-                if (ability.event.contains(e.getClass())) {
-                    ability.handleEvent(e, registryPlayer);
-                }
-            }
+        ItemStack[] vanillaArmor = player.getInventory().getArmorContents();
+        AbilityItem[] armor = Arrays.stream(vanillaArmor).map(AbilityItem::getAbilityItemByItemStack).toList().toArray(new AbilityItem[0]);
+        AbilityItem[] realArmor = Arrays.stream(armor).filter(Objects::nonNull).toList().toArray(new AbilityItem[0]);
+        ItemStack item = registryPlayer.player.getInventory().getItemInMainHand();
+        cacheFullSetAbility(e, registryPlayer);
+        for (AbilityItem piece : realArmor) {
+            cacheAbility(e, registryPlayer, piece.item.getType().getEquipmentSlot());
         }
-        RegistryItem registryItem = RegistryItem.getItemByItemStack(item);
+        AbilityItem registryItem = AbilityItem.getAbilityItemByItemStack(item);
         if (registryItem == null) return;
+        if (registryItem.abilities == null) return;
         for (Ability ability : registryItem.abilities) {
             if (ability == null) continue;
-            if (ability.event.contains(e.getClass())) {
-                ability.handleEvent(e, registryPlayer);
-            }
+            if (!Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace())) continue;
+            if (ability.triggerType != Ability.TriggerType.MAINHAND) continue;
+            ability.handleEvent(e, registryPlayer);
+
         }
+    }
+
+    private void cacheAbility(AEvent e, RegistryPlayer player, EquipmentSlot slot) {
+        List<Ability> list = player.activeEquipmentAbilities.get(slot);
+        list.forEach(ability -> {
+            if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.triggerType == Ability.TriggerType.ARMORSLOT) {
+                ability.handleEvent(e, player);
+            }
+        });
+    }
+    private void cacheFullSetAbility(AEvent e, RegistryPlayer player) {
+        player.activeFullsetAbility.forEach(ability -> {
+            if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.triggerType == Ability.TriggerType.FULL_ARMOR) {
+                ability.handleEvent(e, player);
+            }
+        });
     }
 }

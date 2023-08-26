@@ -1,13 +1,14 @@
 package com.gertoxq.minedom.registry.entity.Entities;
 
 import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.StatSystem;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashMap;
 
@@ -20,13 +21,18 @@ public class Zombie extends RegistryEntity {
     }
 
     @Override
-    public EntityType setType() {
+    public @NonNull Material asItem() {
+        return Material.ZOMBIE_HEAD;
+    }
+
+    @Override
+    public @NonNull EntityType setType() {
         return EntityType.ZOMBIE;
     }
 
     @Override
-    public HashMap<Stats, Double> setStats() {
-        return StatSystem.newActiveStats(20.0, 0.0, 3.5, 0.0);
+    public @NonNull HashMap<Stats, Double> setStats() {
+        return Stats.newActiveStats(20.0, 0.0, 3.5, 0.0);
     }
 
     @Override
@@ -35,22 +41,17 @@ public class Zombie extends RegistryEntity {
     }
 
     @Override
-    public EntityState setState() {
+    public @NonNull EntityState setState() {
         return EntityState.ACTIVE;
     }
 
     @Override
-    public Boolean setPersistent() {
+    public @NonNull Boolean setPersistent() {
         return false;
     }
 
     @Override
-    public double setSpawnChance() {
-        return 1;
-    }
-
-    @Override
-    public Skill setExpType() {
+    public @NonNull Skill setExpType() {
         return Skill.COMBAT;
     }
 
@@ -59,13 +60,4 @@ public class Zombie extends RegistryEntity {
         return 15;
     }
 
-    @Override
-    public EntityType setReplacement() {
-        return EntityType.ZOMBIE;
-    }
-
-    @Override
-    public RegistryEntity setRegistryEntityReplacement() {
-        return null;
-    }
 }

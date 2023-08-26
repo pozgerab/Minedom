@@ -1,9 +1,10 @@
 package com.gertoxq.minedom.registry.item.items.armor.BeastArmor;
 
-import com.gertoxq.minedom.StatSystem.StatSystem;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.ability.abilities.Devour;
+import com.gertoxq.minedom.registry.item.AbilityItem;
+import com.gertoxq.minedom.registry.item.FullsetAbilityItem;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BeastChestplate extends RegistryItem {
+public class BeastChestplate extends FullsetAbilityItem {
 
     @Override
     public Material setMaterial() {
@@ -22,7 +23,7 @@ public class BeastChestplate extends RegistryItem {
 
     @Override
     public HashMap<Stats, Double> setStats() {
-        return StatSystem.newPlayerStats(100.0, 100.0, 0.0, 10.0, 50.0, 0.0, 0.0, 0.0, 20.0);
+        return Stats.newPlayerStats(100.0, -100.0, 0.0, 10.0, 50.0, 0.0, 0.0, 50.0, 50.0, 20.0, 0.0);
     }
 
     @Override
@@ -47,23 +48,18 @@ public class BeastChestplate extends RegistryItem {
 
     @Override
     public ArrayList<Ability> setAbilities() {
-        ArrayList<Ability> abilities = new ArrayList<>();
-        abilities.add(new Devour());
-        return abilities;
-    }
-
-    @Override
-    public Boolean hasRequirement() {
-        return false;
-    }
-
-    @Override
-    public Skill setRequirementType() {
         return null;
     }
 
     @Override
-    public int setRequirementLvl() {
-        return 0;
+    public String setGroupID() {
+        return "beast";
+    }
+
+    @Override
+    public ArrayList<Ability> setFullSetAbilities() {
+        ArrayList<Ability> abilities1 = new ArrayList<>();
+        abilities1.add(new Devour());
+        return abilities1;
     }
 }

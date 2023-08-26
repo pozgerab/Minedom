@@ -23,11 +23,21 @@ public class StrGen {
     public static String abilityName(String abilityName) {
         return ChatColor.GOLD+"Ability: "+ChatColor.RED + abilityName;
     }
+    public static String fullsetAbilityName(String abilityName) {
+        return ChatColor.GOLD+"Full Set Ability: "+ChatColor.RED + abilityName;
+    }
     public static String abilityName(String abilityName, int cooldown) {
         if (cooldown == 0) {
             return abilityName(abilityName);
         }
         return ChatColor.GOLD + "Ability: " + ChatColor.RED + abilityName + ChatColor.DARK_GRAY + " (" + cooldown + "s cooldown)";
+    }
+
+    public static String fullsetAbilityName(String abilityName, int cooldown) {
+        if (cooldown == 0) {
+            return fullsetAbilityName(abilityName);
+        }
+        return ChatColor.GOLD + "Full Set Ability: " + ChatColor.RED + abilityName + ChatColor.DARK_GRAY + " (" + cooldown + "s cooldown)";
     }
 
 }

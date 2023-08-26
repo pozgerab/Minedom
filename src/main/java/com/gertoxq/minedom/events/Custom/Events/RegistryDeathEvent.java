@@ -1,13 +1,13 @@
-package com.gertoxq.minedom.events.Events;
+package com.gertoxq.minedom.events.Custom.Events;
 
+import com.gertoxq.minedom.events.Custom.AEvent;
+import com.gertoxq.minedom.events.Custom.REvent;
+import com.gertoxq.minedom.registry.ability.TriggerFace.DeathAbility;
+import com.gertoxq.minedom.registry.ability.TriggerFace.AbilityInterface;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class RegistryDeathEvent extends Event {
-
-    private static final HandlerList handlers = new HandlerList();
-
+public class RegistryDeathEvent extends REvent implements AEvent {
     private boolean cancelled;
     private final RegistryEntity killer;
     private final RegistryEntity entity;
@@ -47,11 +47,8 @@ public class RegistryDeathEvent extends Event {
     }
 
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
+    @NonNull
+    public Class<? extends AbilityInterface> getTriggerFace() {
+        return DeathAbility.class;
     }
 }

@@ -1,21 +1,24 @@
 package com.gertoxq.minedom.registry.item.items;
 
-import com.gertoxq.minedom.StatSystem.StatSystem;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.ability.abilities.Lightning;
-import com.gertoxq.minedom.registry.ability.abilities.Overwhelm;
-import com.gertoxq.minedom.registry.ability.abilities.QuickShot;
+import com.gertoxq.minedom.registry.item.AbilityItem;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Slayer extends RegistryItem {
+public class Slayer extends AbilityItem {
 
     public Slayer() {
         super();
@@ -28,7 +31,7 @@ public class Slayer extends RegistryItem {
 
     @Override
     public HashMap<Stats, Double> setStats() {
-        return StatSystem.newPlayerStats(0.0, 60.0, 30.0, 10.0, 0.0, 0.0, 0.0, 0.0, 100.0);
+        return Stats.newPlayerStats(0.0, 60.0, 30.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0);
     }
 
     @Override
@@ -48,7 +51,10 @@ public class Slayer extends RegistryItem {
 
     @Override
     public ItemMeta setMeta() {
-        return null;
+        ItemMeta meta = new ItemStack(Material.DIAMOND_SWORD).getItemMeta();
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier("speed", 16, AttributeModifier.Operation.ADD_NUMBER));
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        return meta;
     }
 
     @Override
@@ -56,22 +62,6 @@ public class Slayer extends RegistryItem {
         ArrayList<Ability> abilities = new ArrayList<>();
         abilities.add(new Lightning());
         return abilities;
-    }
-
-
-    @Override
-    public Boolean hasRequirement() {
-        return false;
-    }
-
-    @Override
-    public Skill setRequirementType() {
-        return null;
-    }
-
-    @Override
-    public int setRequirementLvl() {
-        return 0;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.gertoxq.minedom.events.skillListeners;
 
-import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

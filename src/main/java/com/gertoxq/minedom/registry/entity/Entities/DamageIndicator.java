@@ -1,34 +1,43 @@
 package com.gertoxq.minedom.registry.entity.Entities;
 
 import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.StatSystem;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashMap;
 
 public class DamageIndicator extends RegistryEntity {
 
-    public DamageIndicator() {super("damage_indicator");}
-    public DamageIndicator(Entity entity) {
-        super("damage_indicator", entity);
+    public DamageIndicator() {
+        super("damage_indicator");
+    }
+    public DamageIndicator(Double dmg) {
+        super("damage_indicator");
+        this.name = ChatColor.RED + String.valueOf((int) Math.floor(dmg));
     }
 
     @Override
-    public EntityType setType() {
+    public @NonNull Material asItem() {
+        return null;
+    }
+
+    @Override
+    public @NonNull EntityType setType() {
         return EntityType.ARMOR_STAND;
     }
 
     @Override
-    public HashMap<Stats, Double> setStats() {
-        return StatSystem.newPassiveStats(1.0,0.0);
+    public @NonNull HashMap<Stats, Double> setStats() {
+        return Stats.newPassiveStats(1.0,0.0);
     }
 
     @Override
@@ -37,22 +46,17 @@ public class DamageIndicator extends RegistryEntity {
     }
 
     @Override
-    public EntityState setState() {
+    public @NonNull EntityState setState() {
         return EntityState.INDICATOR;
     }
 
     @Override
-    public Boolean setPersistent() {
+    public @NonNull Boolean setPersistent() {
         return true;
     }
 
     @Override
-    public double setSpawnChance() {
-        return 0;
-    }
-
-    @Override
-    public Skill setExpType() {
+    public @NonNull Skill setExpType() {
         return null;
     }
 
@@ -62,32 +66,20 @@ public class DamageIndicator extends RegistryEntity {
     }
 
     @Override
-    public EntityType setReplacement() {
-        return null;
-    }
-
-    @Override
-    public RegistryEntity setRegistryEntityReplacement() {
-        return null;
-    }
-
     public Entity spawn(Location loc) {
-        this.replaceFrom = setReplacement();
-        this.spawnChance = setSpawnChance();
         this.spawnLoc = loc;
         this.spawnWorld = loc.getWorld();
         this.stats = setStats();
         this.state = setState();
         this.type = setType();
-        this.name = setName();
         this.persistent = setPersistent();
         this.entity = (LivingEntity) spawnWorld.spawnEntity(loc, setType());
         entity.setCustomName(name);
+        entity.setCustomNameVisible(true);
         this.uuid = entity.getUniqueId();
         this.entity.setGravity(false);
         entity.setInvisible(true);
         ((ArmorStand) entity).setMarker(true);
-        replacement.put(replaceFrom, this);
         entities.add(this);
         return entity;
     }

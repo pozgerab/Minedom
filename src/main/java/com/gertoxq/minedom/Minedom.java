@@ -1,25 +1,29 @@
 package com.gertoxq.minedom;
 
 import com.gertoxq.minedom.MenuSystem.PlayerMenuUtility;
-import com.gertoxq.minedom.StatSystem.StatSystem;
 import com.gertoxq.minedom.commands.Give.GiveCustomItemCommand;
 import com.gertoxq.minedom.commands.Give.GiveCustomItemCompleter;
+import com.gertoxq.minedom.commands.Spawn.SpawnEntityCommand;
+import com.gertoxq.minedom.commands.Spawn.SpawnEntityCompleter;
 import com.gertoxq.minedom.commands.Stats.GetStatCommand;
 import com.gertoxq.minedom.commands.Stats.GetStatGUICommand;
 import com.gertoxq.minedom.events.*;
+import com.gertoxq.minedom.events.AbilityListeners.InteractListener;
 import com.gertoxq.minedom.events.AbilityListeners.PublicAbilityListener;
 import com.gertoxq.minedom.events.Damage.DamageOut;
-import com.gertoxq.minedom.events.EventExecuter.ExecuteDeath;
-import com.gertoxq.minedom.events.EventExecuter.ExecuteHit;
-import com.gertoxq.minedom.events.EventExecuter.ExecuteMagicHit;
+import com.gertoxq.minedom.events.EventExecuter.*;
+import com.gertoxq.minedom.events.EventTriggers.ProjectileHitEventTrigger;
+import com.gertoxq.minedom.events.EventTriggers.RegenEventTrigger;
 import com.gertoxq.minedom.events.EventTriggers.RegistryDeathEventTrigger;
+import com.gertoxq.minedom.events.EventTriggers.ShootBowEventTrigger;
 import com.gertoxq.minedom.events.UpdateStats.UpdateStats;
+import com.gertoxq.minedom.events.healing.OverrideHeal;
 import com.gertoxq.minedom.events.menuListener.MenuListener;
 import com.gertoxq.minedom.events.skillListeners.CombatExpGainListener;
 import com.gertoxq.minedom.registry.entity.RegisterEntities;
 import com.gertoxq.minedom.registry.item.RegisterItems;
-import com.gertoxq.minedom.tools.GlowingEntities;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,8 +33,6 @@ public final class Minedom extends JavaPlugin {
 
     private static final HashMap<Player, PlayerMenuUtility> playerMenuUtilityMap = new HashMap<>();
     private static Minedom plugin;
-    public static HashMap<LivingEntity,HashMap<StatSystem, Integer>> stats = new HashMap<>();
-    public static GlowingEntities glowingEntities;
     public static Minedom getPlugin() {
         return plugin;
     }
@@ -38,14 +40,11 @@ public final class Minedom extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        glowingEntities = new GlowingEntities(this);
         // Plugin startup logic
         new RegisterItems();
         new RegisterEntities();
         getServer().getPluginManager().registerEvents(new CancelTarget(), this);
-        getServer().getPluginManager().registerEvents(new RegistryEntitySpawnListener(), this);
         getServer().getPluginManager().registerEvents(new IndicateHealth(), this);
-        getServer().getPluginManager().registerEvents(new EntityDeath(), this);
         getServer().getPluginManager().registerEvents(new PlayerStatSetup(), this);
         getServer().getPluginManager().registerEvents(new UpdateStats(), this);
         getServer().getPluginManager().registerEvents(new DamageOut(), this);
@@ -56,17 +55,35 @@ public final class Minedom extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RegistryDeathEventTrigger(), this);
         getServer().getPluginManager().registerEvents(new ExecuteMagicHit(), this);
         getServer().getPluginManager().registerEvents(new ExecuteHit(), this);
+        getServer().getPluginManager().registerEvents(new ExecuteMeleeHit(), this);
         getServer().getPluginManager().registerEvents(new ExecuteDeath(), this);
+        getServer().getPluginManager().registerEvents(new InteractListener(), this);
+        getServer().getPluginManager().registerEvents(new RespawnSetup(), this);
+        getServer().getPluginManager().registerEvents(new OverrideHeal(), this);
+        getServer().getPluginManager().registerEvents(new SpawnOverride(), this);
+        getServer().getPluginManager().registerEvents(new RegenEventTrigger(), this);
+        getServer().getPluginManager().registerEvents(new ExecuteRegen(), this);
+        getServer().getPluginManager().registerEvents(new ShootBowEventTrigger(), this);
+        getServer().getPluginManager().registerEvents(new ProjectileHitEventTrigger(), this);
         getCommand("stats").setExecutor(new GetStatGUICommand());
         getCommand("getstat").setExecutor(new GetStatCommand());
         getCommand("giveitem").setExecutor(new GiveCustomItemCommand());
         getCommand("giveitem").setTabCompleter(new GiveCustomItemCompleter());
+        getCommand("spawn").setExecutor(new SpawnEntityCommand());
+        getCommand("spawn").setTabCompleter(new SpawnEntityCompleter());
 
+        Bukkit.getOnlinePlayers().forEach(PlayerStatSetup::setUp);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        Bukkit.getOnlinePlayers().forEach(PlayerStatSetup::cleanUp);
+        Bukkit.getWorlds().forEach(world -> {
+            world.getEntities().forEach(entity -> {
+                if (!(entity instanceof Player)) entity.remove();
+            });
+        });
     }
 
     public static PlayerMenuUtility getPlayerMenuUtility(Player p) {
@@ -81,6 +98,10 @@ public final class Minedom extends JavaPlugin {
 
             return playerMenuUtility;
         }
+    }
+
+    public static NamespacedKey newKey(String key) {
+        return new NamespacedKey(Minedom.getPlugin(), key);
     }
 
 }

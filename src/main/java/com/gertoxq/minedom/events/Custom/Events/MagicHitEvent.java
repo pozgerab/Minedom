@@ -1,17 +1,15 @@
-package com.gertoxq.minedom.events.Events;
+package com.gertoxq.minedom.events.Custom.Events;
 
+import com.gertoxq.minedom.events.Custom.AEvent;
+import com.gertoxq.minedom.events.Custom.REvent;
+import com.gertoxq.minedom.registry.ability.TriggerFace.MagicHitAbility;
+import com.gertoxq.minedom.registry.ability.TriggerFace.AbilityInterface;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class MagicHitEvent extends Event implements Listener {
+public class MagicHitEvent extends REvent implements AEvent {
 
-    private static final HandlerList handlers = new HandlerList();
-
-    private final RegistryEntity target;
+    private final RegistryEntity entity;
     private final RegistryEntity damager;
     private double damage;
     private final boolean lock;
@@ -19,19 +17,19 @@ public class MagicHitEvent extends Event implements Listener {
 
     public MagicHitEvent(RegistryEntity damager, RegistryEntity target, double damage, boolean lock) {
         this.damager = damager;
-        this.target = target;
+        this.entity = target;
         this.damage = damage;
         this.lock = lock;
     }
     public MagicHitEvent(RegistryEntity damager, RegistryEntity target, double damage) {
         this.damager = damager;
-        this.target = target;
+        this.entity = target;
         this.damage = damage;
         this.lock = false;
     }
 
-    public RegistryEntity getTarget() {
-        return target;
+    public RegistryEntity getEntity() {
+        return entity;
     }
 
     public RegistryEntity getDamager() {
@@ -59,12 +57,8 @@ public class MagicHitEvent extends Event implements Listener {
     }
 
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
+    @NonNull
+    public Class<? extends AbilityInterface> getTriggerFace() {
+        return MagicHitAbility.class;
     }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
 }

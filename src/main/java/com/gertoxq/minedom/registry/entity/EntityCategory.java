@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum EntityCategory {
-    UNDEAD(new RegistryEntity[]{
+    UNDEAD(new RegistryEntity[] {
             new Zombie()
     });
     final List<RegistryEntity> types;

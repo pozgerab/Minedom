@@ -1,30 +1,26 @@
 package com.gertoxq.minedom.registry.ability.abilities;
 
 import com.gertoxq.minedom.Minedom;
-import com.gertoxq.minedom.events.Events.MagicHitEvent;
-import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
-import com.gertoxq.minedom.events.Events.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.AEvent;
+import com.gertoxq.minedom.events.Custom.Events.ProjectileHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.ShootBowEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
+import com.gertoxq.minedom.registry.ability.TriggerFace.ProjectileHitAbility;
+import com.gertoxq.minedom.registry.ability.TriggerFace.ShootBowAbility;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class Overwhelm extends Ability {
-    public Overwhelm() {
-        super(ProjectileHitEvent.class, EntityShootBowEvent.class, EntityDamageByEntityEvent.class);
-    }
+public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbility, ShootBowAbility {
 
     @Override
     public String setName() {
@@ -32,18 +28,28 @@ public class Overwhelm extends Ability {
     }
 
     @Override
-    public Double setBaseDamage() {
+    public String setId() {
+        return "overwhelm";
+    }
+
+    @Override
+    public double setBaseDamage() {
         return 0.0;
     }
 
     @Override
-    public Abilitystate setState() {
-        return Abilitystate.ACTIVE;
+    public AbilityState setState() {
+        return AbilityState.ACTIVE;
     }
 
     @Override
     public int setCooldown() {
         return 0;
+    }
+
+    @Override
+    public TriggerType setTriggerType() {
+        return TriggerType.MAINHAND;
     }
 
     @Override
@@ -57,7 +63,7 @@ public class Overwhelm extends Ability {
     }
 
     @Override
-    public Boolean setHasRequirement() {
+    public boolean setHasRequirement() {
         return false;
     }
 
@@ -72,57 +78,58 @@ public class Overwhelm extends Ability {
     }
 
     @Override
-    public void ability(EntityDamageByEntityEvent e, RegistryPlayer player) {
-        RegistryEntity target = RegistryEntity.getRegistryEntity(e.getEntity());
-        if (target == null) return;
-        if (target.entity.getLocation().distance(player.player.getLocation()) < 20) {
-            e.setDamage(e.getDamage()*0.2);
-        }
+    public HitAbility.AbilityAction ability(RegistryHitEvent e, RegistryPlayer player) {
+        return new HitAbility.AbilityAction() {
+            @Override
+            public void ability(AEvent e, RegistryPlayer player) {
+                RegistryHitEvent event = (RegistryHitEvent) e;
+                if (event.getEntity().entity.getLocation().distance(player.player.getLocation()) < 20) {
+                    event.setDamage(event.getDamage()*0.2);
+                }
+            }
+        };
     }
 
     @Override
-    public void ability(RegistryDeathEvent e, RegistryPlayer player) {
-
-    }
-
-    @Override
-    public void ability(MagicHitEvent e, RegistryPlayer player) {
-
+    public ProjectileHitAbility.AbilityAction ability(ProjectileHitEvent e, RegistryPlayer player) {
+        return new ProjectileHitAbility.AbilityAction() {
+            @Override
+            public void ability(AEvent e, RegistryPlayer player) {
+                ProjectileHitEvent event = (ProjectileHitEvent) e;
+                Bukkit.getScheduler().cancelTask(particleTask);
+                event.getEntity().setGravity(true);
+                if (event.getHitEntity() == null) return;
+                RegistryEntity entity = RegistryEntity.getRegistryEntity(event.getHitEntity());
+                if (entity == null) return;
+                entity.entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 1));
+                entity.entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 255));
+            }
+        };
     }
 
     static int particleTask;
     @Override
-    public void ability(EntityShootBowEvent e, RegistryPlayer player) {
-        RegistryItem item = RegistryItem.getItemByItemStack(e.getBow());
-        if (item == null) return;
-        Entity projectile = e.getProjectile();
-        projectile.setGravity(false);
-        projectile.getWorld().playSound(projectile.getLocation(), Sound.ENTITY_WARDEN_DEATH, 1, 0);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> {
-            if (!projectile.isDead()) projectile.remove();
-        }, 400L);
-        particleTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Minedom.getPlugin(), () -> {
-            if (projectile == null || projectile.isDead()) Bukkit.getScheduler().cancelTask(particleTask);
-            Location location = projectile.getLocation();
-            location.getWorld().spawnParticle(Particle.SCULK_SOUL, location, 5, 0.3, 0.3, 0.3,0);
-            Particle.DustTransition dustTransition = new Particle.DustTransition(Color.PURPLE, Color.BLACK, 10F);
-            location.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, location, 20, 0.5, 0.5, 0.5, 0, dustTransition);
-        },0L, 1L);
-    }
-
-    @Override
-    public void ability(ProjectileHitEvent e, RegistryPlayer player) {
-        Bukkit.getScheduler().cancelTask(particleTask);
-        e.getEntity().setGravity(true);
-        if (e.getHitEntity() == null) return;
-        RegistryEntity entity = RegistryEntity.getRegistryEntity(e.getHitEntity());
-        if (entity == null) return;
-        entity.entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 1));
-        entity.entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 255));
-    }
-
-    @Override
-    public void ability(RegistryHitEvent e, RegistryPlayer player) {
-
+    public ShootBowAbility.AbilityAction ability(ShootBowEvent e, RegistryPlayer player) {
+        return new ShootBowAbility.AbilityAction() {
+            @Override
+            public void ability(AEvent e, RegistryPlayer player) {
+                ShootBowEvent event = (ShootBowEvent) e;
+                RegistryItem item = RegistryItem.getItemByItemStack(event.getBow());
+                if (item == null) return;
+                Entity projectile = event.getProjectile();
+                projectile.setGravity(false);
+                projectile.getWorld().playSound(projectile.getLocation(), Sound.ENTITY_WARDEN_DEATH, 1, 0);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> {
+                    if (!projectile.isDead()) projectile.remove();
+                }, 400L);
+                particleTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Minedom.getPlugin(), () -> {
+                    if (projectile.isDead()) Bukkit.getScheduler().cancelTask(particleTask);
+                    Location location = projectile.getLocation();
+                    location.getWorld().spawnParticle(Particle.SCULK_SOUL, location, 5, 0.3, 0.3, 0.3,0);
+                    Particle.DustTransition dustTransition = new Particle.DustTransition(Color.PURPLE, Color.BLACK, 10F);
+                    location.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, location, 20, 0.5, 0.5, 0.5, 0, dustTransition);
+                },0L, 1L);
+            }
+        };
     }
 }

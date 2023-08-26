@@ -1,23 +1,16 @@
 package com.gertoxq.minedom.registry.ability.abilities;
 
-import com.gertoxq.minedom.events.Events.MagicHitEvent;
-import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
-import com.gertoxq.minedom.events.Events.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.AEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
-import com.gertoxq.minedom.registry.entity.RegistryEntity;
+import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.entity.*;
 
 import java.util.ArrayList;
 
-public class Marksman extends Ability {
-    public Marksman() {
-        super(EntityDamageByEntityEvent.class);
-    }
+public class Marksman extends Ability implements HitAbility {
 
     @Override
     public String setName() {
@@ -25,13 +18,18 @@ public class Marksman extends Ability {
     }
 
     @Override
-    public Double setBaseDamage() {
+    public String setId() {
+        return "marksman";
+    }
+
+    @Override
+    public double setBaseDamage() {
         return 0.0;
     }
 
     @Override
-    public Ability.Abilitystate setState() {
-        return Abilitystate.PASSIVE;
+    public AbilityState setState() {
+        return AbilityState.PASSIVE;
     }
 
 
@@ -41,14 +39,19 @@ public class Marksman extends Ability {
     }
 
     @Override
+    public TriggerType setTriggerType() {
+        return TriggerType.MAINHAND;
+    }
+
+    @Override
     public ArrayList<String> setLore() {
         ArrayList<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY+"Your melee hits deal"+ ChatColor.DARK_RED +" 60%"+ChatColor.GRAY+ " less damage");
+        lore.add(ChatColor.GRAY+"Your melee hits deal"+ ChatColor.DARK_RED +" 80%"+ChatColor.GRAY+ " less damage");
         return lore;
     }
 
     @Override
-    public Boolean setHasRequirement() {
+    public boolean setHasRequirement() {
         return false;
     }
 
@@ -63,35 +66,13 @@ public class Marksman extends Ability {
     }
 
     @Override
-    public void ability(EntityDamageByEntityEvent e, RegistryPlayer player) {
-        if (e.getCause() != EntityDamageEvent.DamageCause.PROJECTILE) return;
-        RegistryEntity entity = RegistryEntity.getRegistryEntity(e.getEntity());
-        if (entity == null) return;
-        e.setDamage(e.getDamage()*0.4);
-    }
-
-    @Override
-    public void ability(RegistryDeathEvent e, RegistryPlayer player) {
-
-    }
-
-    @Override
-    public void ability(MagicHitEvent e, RegistryPlayer player) {
-
-    }
-
-    @Override
-    public void ability(EntityShootBowEvent e, RegistryPlayer player) {
-
-    }
-
-    @Override
-    public void ability(ProjectileHitEvent e, RegistryPlayer player) {
-
-    }
-
-    @Override
-    public void ability(RegistryHitEvent e, RegistryPlayer player) {
-
+    public AbilityAction ability(RegistryHitEvent e, RegistryPlayer player) {
+        return new AbilityAction() {
+            @Override
+            public void ability(AEvent e, RegistryPlayer player) {
+                RegistryHitEvent event = (RegistryHitEvent) e;
+                if (event.getSource() == RegistryHitEvent.DamageSource.MELEE) event.setDamage(event.getDamage()*0.2);
+            }
+        };
     }
 }

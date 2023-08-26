@@ -1,6 +1,5 @@
 package com.gertoxq.minedom.commands.Give;
 
-import com.gertoxq.minedom.registry.item.RegisterItems;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

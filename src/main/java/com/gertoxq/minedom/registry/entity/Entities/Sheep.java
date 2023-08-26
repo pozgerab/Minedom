@@ -1,13 +1,14 @@
 package com.gertoxq.minedom.registry.entity.Entities;
 
 import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.StatSystem;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashMap;
 
@@ -21,13 +22,18 @@ public class Sheep extends RegistryEntity {
     }
 
     @Override
-    public EntityType setType() {
+    public @NonNull Material asItem() {
+        return Material.MUTTON;
+    }
+
+    @Override
+    public @NonNull EntityType setType() {
         return EntityType.SHEEP;
     }
 
     @Override
-    public HashMap<Stats, Double> setStats() {
-        return StatSystem.newPassiveStats(10.0, 0.0);
+    public @NonNull HashMap<Stats, Double> setStats() {
+        return Stats.newPassiveStats(10.0, 0.0);
     }
 
     @Override
@@ -36,38 +42,23 @@ public class Sheep extends RegistryEntity {
     }
 
     @Override
-    public EntityState setState() {
+    public @NonNull EntityState setState() {
         return EntityState.PASSIVE;
     }
 
     @Override
-    public Boolean setPersistent() {
+    public @NonNull Boolean setPersistent() {
         return false;
     }
 
     @Override
-    public double setSpawnChance() {
-        return 1;
-    }
-
-    @Override
-    public Skill setExpType() {
+    public @NonNull Skill setExpType() {
         return Skill.GARDENING;
     }
 
     @Override
     public double setExpDrop() {
         return 10;
-    }
-
-    @Override
-    public EntityType setReplacement() {
-        return EntityType.SHEEP;
-    }
-
-    @Override
-    public RegistryEntity setRegistryEntityReplacement() {
-        return null;
     }
 
 }

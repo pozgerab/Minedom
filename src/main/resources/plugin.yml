@@ -9,3 +9,5 @@ commands:
     description: Get items
   stats:
     description: Opens a GUI with your stats
+  spawn:
+    description: Spawns custom entities

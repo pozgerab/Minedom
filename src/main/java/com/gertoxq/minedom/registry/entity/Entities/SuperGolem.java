@@ -1,13 +1,14 @@
 package com.gertoxq.minedom.registry.entity.Entities;
 
 import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.StatSystem;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashMap;
 
@@ -20,13 +21,18 @@ public class SuperGolem extends RegistryEntity {
     }
 
     @Override
-    public EntityType setType() {
+    public @NonNull Material asItem() {
+        return Material.IRON_CHESTPLATE;
+    }
+
+    @Override
+    public @NonNull EntityType setType() {
         return EntityType.IRON_GOLEM;
     }
 
     @Override
-    public HashMap<Stats, Double> setStats() {
-        return StatSystem.newActiveStats(500.0, 50.0, 20.0, 0.0);
+    public @NonNull HashMap<Stats, Double> setStats() {
+        return Stats.newActiveStats(500.0, 50.0, 20.0, 0.0);
     }
 
     @Override
@@ -35,22 +41,17 @@ public class SuperGolem extends RegistryEntity {
     }
 
     @Override
-    public EntityState setState() {
+    public @NonNull EntityState setState() {
         return EntityState.ACTIVE;
     }
 
     @Override
-    public Boolean setPersistent() {
+    public @NonNull Boolean setPersistent() {
         return false;
     }
 
     @Override
-    public double setSpawnChance() {
-        return 0.02;
-    }
-
-    @Override
-    public Skill setExpType() {
+    public @NonNull Skill setExpType() {
         return Skill.COMBAT;
     }
 
@@ -59,13 +60,4 @@ public class SuperGolem extends RegistryEntity {
         return 180;
     }
 
-    @Override
-    public EntityType setReplacement() {
-        return null;
-    }
-
-    @Override
-    public RegistryEntity setRegistryEntityReplacement() {
-        return RegistryEntity.getRegistryEntityClass(new IronGolem());
-    }
 }

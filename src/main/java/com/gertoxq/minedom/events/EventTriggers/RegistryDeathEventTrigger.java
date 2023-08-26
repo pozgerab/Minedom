@@ -1,24 +1,25 @@
 package com.gertoxq.minedom.events.EventTriggers;
 
-import com.gertoxq.minedom.events.Events.MagicHitEvent;
-import com.gertoxq.minedom.events.Events.RegistryDeathEvent;
-import com.gertoxq.minedom.events.Events.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public class RegistryDeathEventTrigger implements Listener {
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH)
     public void registryDeathTriggerByDamage(RegistryHitEvent e) {
-        if (e.isLock()) return;
-        RegistryEntity entity = e.getTarget();
+        if (e.isLock() || e.isCancelled()) return;
+        RegistryEntity entity = e.getEntity();
         RegistryEntity damager = e.getDamager();
-        if (entity.entity.getHealth() - e.getDamage() < 0) {
+        if (entity.entity.getHealth() - e.getDamage() <= 0) {
+            e.setDeadly(true);
             RegistryDeathEvent event = new RegistryDeathEvent(entity, damager, e.getDamage(), e.getSource());
+            e.setDeathEvent(event);
             Bukkit.getServer().getPluginManager().callEvent(event);
-            e.setCancelled(true);
         }
     }
 

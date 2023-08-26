@@ -10,6 +10,7 @@ public class RegisterEntities {
         new DamageIndicator().register();
         new SuperGolem().register();
         new Zombie().register();
+        new VanillaEntity().register();
     }
 
 }

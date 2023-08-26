@@ -1,10 +1,8 @@
 package com.gertoxq.minedom.math;
 
 import com.gertoxq.minedom.StatSystem.Stats;
-import com.gertoxq.minedom.events.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
-import org.bukkit.Bukkit;
 
 public class DmgCalc {
 
@@ -35,11 +33,15 @@ public class DmgCalc {
         if (dmg < 1) dmg = 1.0;
         if (magicDmg < 1) magicDmg = 1.0;
         if (mana < 1) mana = 1.0;
-        return (dmg/4) * (magicDmg/4) * (mana/100);
+        return (dmg/6) * (magicDmg/2) * (mana/100);
     }
 
     public static double reduceMagicDamage(Double damage, Double magicDef) {
         return (damage - damage * (magicDef / (magicDef+100)));
+    }
+
+    public static double toEntityMagicDmgCalc(RegistryPlayer predator, RegistryEntity target) {
+        return reduceMagicDamage(calcMagicDmg(predator.stats.get(Stats.DAMAGE), predator.stats.get(Stats.MAGIC_DAMAGE), predator.stats.get(Stats.MANA)), target.stats.get(Stats.MAGIC_DEFENSE));
     }
 
     public static double toEntityMagicDmgCalc(Double predDmg, Double predMagicDmg, Double predMana, Double victMagicDef) {
