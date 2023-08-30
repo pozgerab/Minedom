@@ -4,11 +4,16 @@ import com.gertoxq.minedom.registry.item.StatItem;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * List of stats
+ */
 public enum Stats {
 
     DAMAGE("damage", ChatColor.BLUE+"✗ Damage"+ChatColor.GRAY, Material.DIAMOND_SWORD, 0),
@@ -23,9 +28,21 @@ public enum Stats {
     AGILITY("agility", ChatColor.WHITE + "✦ Agility"+ChatColor.GRAY, Material.FEATHER, 9),
     BLESSING("blessing", ChatColor.AQUA+"α Blessing"+ChatColor.GRAY, Material.BEACON, 10);
 
+    /**
+     * Identifier of the stat
+     */
     public final String name;
+    /**
+     * This is how the stat will be displayed in-game
+     */
     public final String displayName;
+    /**
+     * Representative item
+     */
     public final Material asItem;
+    /**
+     * Number identifier
+     */
     public final int id;
     Stats(String name, String displayName, Material material, int id) {
         this.name = name;
@@ -34,18 +51,38 @@ public enum Stats {
         this.id = id;
     }
 
+    /**
+     * Gets stat by name
+     * @param query Name to search
+     * @return Stat found or null
+     */
+    @Nullable
     public static Stats getStatFromName(String query) {
         return Arrays.stream(Stats.values()).filter(stat -> Objects.equals(stat.name, query)).findAny().orElse(null);
     }
 
+    /**
+     * Get stat by representative item
+     * @param query Material to search
+     * @return Found stat | null
+     */
+    @Nullable
     public static Stats getStatFromItem(Material query) {
         return Arrays.stream(Stats.values()).filter(stat -> Objects.equals(stat.asItem, query)).findAny().orElse(null);
     }
 
-    public static HashMap<Stats, Double> newPassiveStats(Double hp, Double def) {
+    /**
+     * @param hp Health
+     * @param def Defense
+     * @return New passive stat map
+     */
+    public static @NonNull HashMap<Stats, Double> newPassiveStats(Double hp, Double def) {
         return newPlayerStats(hp,def,0.0,0.0,0.0,0.0,0.0,0.0, 0.0, 0.0, 0.0);
     }
 
+    /**
+     * @return New player stat map
+     */
     public static HashMap<Stats, Double> newPlayerStats(Double hp, Double def, Double damage, Double strength, Double mana, Double magicDmg, Double magicDef, Double healing, Double vitalis, Double agility, Double blessing) {
         HashMap<Stats, Double> stats = new HashMap<>();
         stats.put(Stats.HEALTH, hp);
@@ -66,16 +103,28 @@ public enum Stats {
         return newPlayerStats(hp,def,damage,0.0,0.0,0.0,magicDef,0.0, 0.0, 0.0, 0.0);
     }
 
+    /**
+     * @return New empty stat map
+     */
     public static HashMap<Stats, Double> newEmptyPlayerStats() {
         return newPlayerStats(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, 0.0, 0.0);
     }
 
+    /**
+     * Adds an item's stats to a stat map
+     * @param statMap Map to be added to
+     * @param item Item to be added
+     */
     public static void addItemStat(HashMap<Stats, Double> statMap, StatItem item) {
         for (Stats stat : Stats.values()) {
             statMap.put(stat, statMap.get(stat) + item.stats.get(stat));
         }
     }
 
+    /**
+     * @param level Regenergy stat level
+     * @return How much seconds it takes to heal to full health from 0
+     */
     private static double calcFullHealTime(double level) {
         return 20 / (0.01 * level + 1);
     }
@@ -88,12 +137,22 @@ public enum Stats {
         return calcHealPerHealing(player.stats.get(REGENERGY), player.stats.get(HEALTH));
     }
 
+    /**
+     * Adds two stat map's values together
+     * @param statMap map1
+     * @param anotherMap map2
+     */
     public static void addStats(HashMap<Stats, Double> statMap, HashMap<Stats, Double> anotherMap) {
         for (Stats stat : anotherMap.keySet()) {
             statMap.put(stat, statMap.get(stat) + anotherMap.get(stat));
         }
     }
 
+    /**
+     * Sums up a player's stats
+     * @param player Player to check
+     * @return Summed up map
+     */
     public static HashMap<Stats, Double> sumStats(RegistryPlayer player) {
         HashMap<Stats, Double> statMap = new HashMap<>();
         for (Stats stat : player.handStats.keySet()) {

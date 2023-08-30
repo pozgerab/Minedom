@@ -6,6 +6,7 @@ import com.gertoxq.minedom.events.Custom.Events.ProjectileHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.ShootBowEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
 import com.gertoxq.minedom.registry.ability.TriggerFace.ProjectileHitAbility;
 import com.gertoxq.minedom.registry.ability.TriggerFace.ShootBowAbility;
@@ -78,8 +79,8 @@ public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbili
     }
 
     @Override
-    public HitAbility.AbilityAction ability(RegistryHitEvent e, RegistryPlayer player) {
-        return new HitAbility.AbilityAction() {
+    public AbilityAction ability(HitAbility classs) {
+        return new AbilityAction("overwhelm_onhit") {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {
                 RegistryHitEvent event = (RegistryHitEvent) e;
@@ -91,8 +92,8 @@ public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbili
     }
 
     @Override
-    public ProjectileHitAbility.AbilityAction ability(ProjectileHitEvent e, RegistryPlayer player) {
-        return new ProjectileHitAbility.AbilityAction() {
+    public AbilityAction ability(ProjectileHitAbility classs) {
+        return new AbilityAction("overwhelm_onarrowhit") {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {
                 ProjectileHitEvent event = (ProjectileHitEvent) e;
@@ -109,8 +110,8 @@ public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbili
 
     static int particleTask;
     @Override
-    public ShootBowAbility.AbilityAction ability(ShootBowEvent e, RegistryPlayer player) {
-        return new ShootBowAbility.AbilityAction() {
+    public AbilityAction ability(ShootBowAbility classs) {
+        return new AbilityAction("overwhelm_onshoot") {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {
                 ShootBowEvent event = (ShootBowEvent) e;

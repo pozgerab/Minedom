@@ -15,6 +15,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+/**
+ * Listens to events and executes abilities
+ */
 public class PublicAbilityListener implements Listener {
 
     @EventHandler (priority = EventPriority.LOWEST)
@@ -94,7 +97,7 @@ public class PublicAbilityListener implements Listener {
     }
 
     private void cacheAbility(AEvent e, RegistryPlayer player, EquipmentSlot slot) {
-        List<Ability> list = player.activeEquipmentAbilities.get(slot);
+        List<Ability> list = player.getActiveEquipmentAbilities().get(slot);
         list.forEach(ability -> {
             if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.triggerType == Ability.TriggerType.ARMORSLOT) {
                 ability.handleEvent(e, player);
@@ -102,7 +105,7 @@ public class PublicAbilityListener implements Listener {
         });
     }
     private void cacheFullSetAbility(AEvent e, RegistryPlayer player) {
-        player.activeFullsetAbility.forEach(ability -> {
+        player.getActiveFullSetAbility().forEach(ability -> {
             if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.triggerType == Ability.TriggerType.FULL_ARMOR) {
                 ability.handleEvent(e, player);
             }

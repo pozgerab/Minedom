@@ -4,6 +4,9 @@ import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 
+/**
+ * Damage Calculations
+ */
 public class DmgCalc {
 
     public static double fromEntityDmgCalc(Double predDmg, Double victDef) {

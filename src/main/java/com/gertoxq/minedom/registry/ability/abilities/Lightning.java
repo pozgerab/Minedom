@@ -3,6 +3,7 @@ package com.gertoxq.minedom.registry.ability.abilities;
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.MeleeHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.MeleeHitAbility;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
@@ -68,8 +69,8 @@ public class Lightning extends Ability implements MeleeHitAbility {
     }
 
     @Override
-    public AbilityAction ability(MeleeHitEvent e, RegistryPlayer player) {
-        return new AbilityAction(5) {
+    public AbilityAction ability(MeleeHitAbility classs) {
+        return new AbilityAction(5, id) {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {
                 MeleeHitEvent event = (MeleeHitEvent) e;

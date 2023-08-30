@@ -14,6 +14,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+/**
+ * Listens to damage events and triggers custom damage events
+ */
 public class DamageOut implements Listener {
 
     @EventHandler (priority = EventPriority.LOWEST)

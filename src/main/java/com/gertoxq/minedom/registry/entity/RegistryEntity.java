@@ -195,7 +195,7 @@ public abstract class RegistryEntity {
      * @return Registry Entity
      */
     public static RegistryEntity getRegistryEntity(Entity entity) {
-        return entities.stream().filter(e -> e.uuid == entity.getUniqueId()).findAny().orElse(null);
+        return entity != null ? entities.stream().filter(e -> e.uuid == entity.getUniqueId()).findAny().orElse(null) : null;
     }
 
     /**

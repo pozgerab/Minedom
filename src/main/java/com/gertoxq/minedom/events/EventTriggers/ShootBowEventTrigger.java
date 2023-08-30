@@ -10,6 +10,7 @@ public class ShootBowEventTrigger implements Listener {
 
     @EventHandler
     public void onShoot(EntityShootBowEvent e) {
+        if (e instanceof ShootBowEvent) return;
         RegistryEntity shooter = RegistryEntity.getRegistryEntity(e.getEntity());
         if (shooter == null) {
             e.setCancelled(true);

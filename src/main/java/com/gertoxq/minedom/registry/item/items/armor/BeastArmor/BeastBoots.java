@@ -2,7 +2,7 @@ package com.gertoxq.minedom.registry.item.items.armor.BeastArmor;
 
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.ability.Ability;
-import com.gertoxq.minedom.registry.ability.abilities.Devour;
+import com.gertoxq.minedom.registry.ability.abilities.devour.Devour;
 import com.gertoxq.minedom.registry.item.FullsetAbilityItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

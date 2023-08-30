@@ -3,9 +3,11 @@ package com.gertoxq.minedom.registry.ability;
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.*;
 import com.gertoxq.minedom.registry.ability.TriggerFace.*;
+import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.string.StrGen;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +18,10 @@ public abstract class Ability implements AbilityInterface {
     public static ArrayList<Ability> defaultAbilities = new ArrayList<>();
     public String name;
     public int cooldown;
-    protected HashMap<UUID, Long> cooldownMap = new HashMap<>();
+    /**
+     * Stores the cooldowns of actions. Every ability have this separately
+     */
+    protected HashMap<String, Long> cooldowns = new HashMap<>();
     @NotNull
     public final Boolean hasRequirement;
     @NotNull
@@ -67,7 +72,7 @@ public abstract class Ability implements AbilityInterface {
     public abstract AbilityState setState();
 
     /**
-     * Specify the displayed cooldown. JUST VISUAL
+     * Specify the displayed initCooldown. JUST VISUAL
      * @return Cooldown in sec
      */
     public abstract int setCooldown();
@@ -96,40 +101,61 @@ public abstract class Ability implements AbilityInterface {
      * @param e Event
      * @param player Player
      */
-    private void handleAbility(AEvent e, RegistryPlayer player) {
+    public void handleAbility(AEvent e, RegistryPlayer player) {
+        AbilityAction action = sortAction(e);
         if (setHasRequirement()) {
             if (player.skillLevels.get(setRequirementType()) < setRequirementLevel()) return;
         }
-        if (cooldownMap.containsKey(player.player.getUniqueId())) {
-            long timeElapsed = System.currentTimeMillis() - cooldownMap.get(player.player.getUniqueId());
-            if (sortAction(e, player).cooldown() != 0) {
-                if (timeElapsed >= sortAction(e, player).cooldown() * 1000L) {
-                    cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
-                    sortAction(e, player).ability(e, player);
-                    return;
-                }
-            }
-            sortAction(e,player).ability(e, player);
+        if (action.initCooldown() == 0) {
+            action.ability(e, player);
             return;
         }
-        sortAction(e, player).ability(e, player);
-        cooldownMap.put(player.player.getUniqueId(), System.currentTimeMillis());
+        cooldowns.values().forEach(aLong -> player.player.sendMessage(String.valueOf(aLong)));
+        if (cooldowns.containsKey(action.getId())) {
+            long timeElapsed = System.currentTimeMillis() - cooldowns.get(action.getId());
+            player.player.sendMessage(String.valueOf(action.cooldown()));
+            if (action.cooldown() != 0) {
+                if (timeElapsed >= action.cooldown() * 1000L) {
+                    cooldowns.put(action.getId(), System.currentTimeMillis());
+                    action.ability(e, player);
+                    return;
+                }
+                return;
+            }
+        }
+        action.ability(e, player);
+        cooldowns.put(action.getId(), System.currentTimeMillis());
     }
 
     /**
      * Checks instance of the event and executes ability
      * @param e Event
-     * @param player Player
      */
-    public AbilityAction sortAction(AEvent e, RegistryPlayer player) {
-        if (e instanceof RegistryDeathEvent event) return  ((DeathAbility) this).ability(event, player);
-        else if (e instanceof MagicHitEvent event) return  ((MagicHitAbility) this).ability(event, player);
-        else if (e instanceof ShootBowEvent event) return  ((ShootBowAbility) this).ability(event, player);
-        else if (e instanceof ProjectileHitEvent event) return  ((ProjectileHitAbility) this).ability(event, player);
-        else if (e instanceof MeleeHitEvent event) return  ((MeleeHitAbility) this).ability(event, player);
-        else if (e instanceof RegistryHitEvent event) return  ((HitAbility) this).ability(event, player);
-        else if (e instanceof InitEvent event) return  ((InitAbility) this).ability(event, player);
+    public AbilityAction sortAction(AEvent e) {
+        if (e instanceof RegistryDeathEvent) return ((DeathAbility) this).ability((DeathAbility) this);
+        else if (e instanceof MagicHitEvent) return ((MagicHitAbility) this).ability((MagicHitAbility) this);
+        else if (e instanceof ShootBowEvent) return ((ShootBowAbility) this).ability((ShootBowAbility) this);
+        else if (e instanceof ProjectileHitEvent) return ((ProjectileHitAbility) this).ability((ProjectileHitAbility) this);
+        else if (e instanceof MeleeHitEvent) return  ((MeleeHitAbility) this).ability((MeleeHitAbility) this);
+        else if (e instanceof RegistryHitEvent) return  ((HitAbility) this).ability((HitAbility) this);
+        else if (e instanceof InitEvent) return ((InitAbility) this).ability((InitAbility) this);
         else throw new RuntimeException("No Event Found");
+    }
+
+    /**
+     * Returns all the ability actions that an ability holds
+     * @return List of ability action
+     */
+    public List<AbilityAction> getActions() {
+        List<AbilityAction> actions = new ArrayList<>();
+        if (this instanceof DeathAbility ability) actions.add(ability.ability(ability));
+        if (this instanceof MagicHitAbility ability) actions.add(ability.ability(ability));
+        if (this instanceof ShootBowAbility ability) actions.add(ability.ability(ability));
+        if (this instanceof ProjectileHitAbility ability) actions.add(ability.ability(ability));
+        if (this instanceof MeleeHitAbility ability) actions.add(ability.ability(ability));
+        if (this instanceof HitAbility ability) actions.add(ability.ability(ability));
+        if (this instanceof InitAbility ability) actions.add(ability.ability(ability));
+        return actions;
     }
 
     /**
