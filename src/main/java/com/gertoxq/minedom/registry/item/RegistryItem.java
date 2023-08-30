@@ -20,13 +20,16 @@ public abstract class RegistryItem {
     public static int UUIDAmount = 0;
     public String id;
     public ItemStack item;
-    public ArrayList<String> lore = new ArrayList<>();
+    public ArrayList<String> lore;
     public ArrayList<String> allLore = new ArrayList<>();
-    public ItemMeta meta = setMeta() != null ? setMeta() : new ItemStack(Material.AIR).getItemMeta();
+    public ItemMeta meta;
     public int uuid;
     public String name;
     public Material material;
 
+    /**
+     * Initiates the item
+     */
     public RegistryItem() {
         this.item = new ItemStack(setMaterial(), 1);
         this.uuid = UUIDAmount;
@@ -50,17 +53,31 @@ public abstract class RegistryItem {
 
     public abstract String setName();
 
+    /**
+     * Unique item identifier
+     * @return ID
+     */
     public abstract String setID();
 
     public abstract ArrayList<String> setLore();
 
     public abstract ItemMeta setMeta();
 
+    /**
+     * Gets the registry item instance from Bukkit item stack
+     * @param itemFrom Bukkit ItemStack
+     * @return Registry item instance
+     */
     public static RegistryItem getItemByItemStack(ItemStack itemFrom) {
         if (itemFrom == null || itemFrom.getItemMeta() == null || itemFrom.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Minedom.getPlugin(), "itemID"), PersistentDataType.INTEGER) == null) return null;
         return registryItems.values().stream().filter(item -> item.uuid == itemFrom.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Minedom.getPlugin(), "itemID"), PersistentDataType.INTEGER)).findAny().orElse(null);
     }
 
+    /**
+     * Gets the registry item instance by id
+     * @param id Searched ID
+     * @return registry item instance
+     */
     public static RegistryItem getItemById(String id) {
         return registryItems.values().stream().filter(item -> Objects.equals(item.id, id)).findAny().orElse(null);
     }

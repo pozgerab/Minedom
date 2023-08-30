@@ -7,37 +7,36 @@ import com.gertoxq.minedom.registry.player.RegistryPlayer;
  * Superinterface of ability interfaces
  */
 public interface AbilityInterface {
-    abstract class AbilityAction {
-        private int cooldown = 0;
 
-        /**
-         * Init of ability action with cooldown
-         * @param cooldown Cooldown
-         */
-        public AbilityAction(int cooldown) {
-            this.cooldown = cooldown;
-        }
-
-        /**
-         * Init of ability action with cooldown of 0
-         */
-        public AbilityAction() {}
-
-        /**
-         * @return The cooldown of the action
-         */
-        public int cooldown() {
-            return this.cooldown;
-        }
-
-        /**
-         * Executes the ability. MAKE SURE to cast the event to the corresponding event
-         * @param e Non cast event
-         * @param player Player
-         */
-        public abstract void ability(AEvent e, RegistryPlayer player);
+    static DeathAbility getDeath(AbilityInterface interfacee) {
+        if (interfacee instanceof DeathAbility ability) return ability;
+        return null;
     }
-    abstract class StateAction extends AbilityAction {
-        public abstract void cleanUp(RegistryPlayer player);
+    static HitAbility getHit(AbilityInterface interfacee) {
+        if (interfacee instanceof HitAbility ability) return ability;
+        return null;
+    }
+    static InitAbility getInit(AbilityInterface interfacee) {
+        if (interfacee instanceof InitAbility ability) return ability;
+        return null;
+    }
+
+    static MagicHitAbility getMagicHit(AbilityInterface interfacee) {
+        if (interfacee instanceof MagicHitAbility ability) return ability;
+        return null;
+    }
+    static MeleeHitAbility getMeleeHit(AbilityInterface interfacee) {
+        if (interfacee instanceof MeleeHitAbility ability) return ability;
+        return null;
+    }
+
+    static ProjectileHitAbility getProjectileHit(AbilityInterface interfacee) {
+        if (interfacee instanceof ProjectileHitAbility ability) return ability;
+        return null;
+    }
+
+    static ShootBowAbility getShootBow(AbilityInterface interfacee) {
+        if (interfacee instanceof ShootBowAbility ability) return ability;
+        return null;
     }
 }

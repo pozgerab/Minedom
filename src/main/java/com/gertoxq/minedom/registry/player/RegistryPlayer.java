@@ -3,9 +3,7 @@ package com.gertoxq.minedom.registry.player;
 import com.gertoxq.minedom.StatSystem.EntityState;
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.ability.Ability;
-import com.gertoxq.minedom.registry.ability.TriggerFace.AbilityInterface;
-import com.gertoxq.minedom.registry.ability.TriggerFace.DeathAbility;
-import com.gertoxq.minedom.registry.ability.abilities.Lightning;
+import com.gertoxq.minedom.registry.ability.action.Statable;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
 import net.md_5.bungee.api.ChatMessageType;
@@ -37,9 +35,13 @@ public class RegistryPlayer extends RegistryEntity {
     public HashMap<Skill, Double> skillLevels;
     public HashMap<Skill, Double> skillExps;
 
-    public HashMap<EquipmentSlot, List<Ability>> activeEquipmentAbilities = new HashMap<>();
-    public List<Ability> activeFullsetAbility = new ArrayList<>();
+    private final HashMap<EquipmentSlot, List<Ability>> activeEquipmentAbilities = new HashMap<>();
+    private final List<Ability> activeFullSetAbility = new ArrayList<>();
 
+    /**
+     * Init of Player
+     * @param player Bukkit Player
+     */
     public RegistryPlayer(Player player) {
         super("player", player);
         this.abilityStats = Stats.newEmptyPlayerStats();
@@ -61,6 +63,12 @@ public class RegistryPlayer extends RegistryEntity {
         players.add(this);
     }
 
+    /**
+     * Gets the player from Bukkit player
+     * @param player Bukkit Player
+     * @return Registry Player
+     */
+
     public static RegistryPlayer getRegistryPlayer(Player player) {
 
         RegistryPlayer registryPlayer = players.stream().filter(e -> e.uuid.compareTo(player.getUniqueId()) == 0).findAny().orElse(null);
@@ -73,16 +81,74 @@ public class RegistryPlayer extends RegistryEntity {
         return registryPlayer;
     }
 
+    /**
+     * Get active equipment abilitites
+     * @return Ability map
+     */
+    public HashMap<EquipmentSlot, List<Ability>> getActiveEquipmentAbilities() {
+        return activeEquipmentAbilities;
+    }
+
+    /**
+     * Gets active full set abilities
+     * @return Ability List
+     */
+    public List<Ability> getActiveFullSetAbility() {
+        return activeFullSetAbility;
+    }
+
+    /**
+     * Adds active equipment ability
+     * @param slot Responsible slot for ability
+     * @param ability Ability
+     */
     public void addActiveAbility(EquipmentSlot slot, Ability ability) {
         activeEquipmentAbilities.get(slot).add(ability);
     }
+
+    /**
+     * Clears active equipment abilities for one slot
+     * @param slot Responsible slot
+     */
     public void clearActiveAbility(EquipmentSlot slot) {
+        List<Ability> abilities = activeEquipmentAbilities.get(slot);
+        abilities.forEach(ability -> {
+            player.sendMessage(String.valueOf(ability.getActions().size()));
+            ability.getActions().forEach(action -> {
+                if (action instanceof Statable stateAction) {
+                    stateAction.cleanUp(this);
+                }
+            });
+        });
         activeEquipmentAbilities.get(slot).clear();
     }
+
+    /**
+     * Adds full set ability
+     * @param ability Ability
+     */
     public void addFullSetAbility(Ability ability) {
-        activeFullsetAbility.add(ability);
+        activeFullSetAbility.add(ability);
     }
 
+    /**
+     * Clears active full set abilities
+     */
+    public void clearFullSetAbility() {
+        activeFullSetAbility.forEach(ability -> {
+            ability.getActions().forEach(action -> {
+                if (action instanceof Statable stateAction) {
+                    player.sendMessage("clean");
+                    stateAction.cleanUp(this);
+                }
+            });
+        });
+        activeFullSetAbility.clear();
+    }
+
+    /**
+     * Refreshes the player's stats
+     */
     public void updateStats() {
         stats = Stats.sumStats(this);
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.get(Stats.HEALTH));
@@ -90,6 +156,10 @@ public class RegistryPlayer extends RegistryEntity {
         player.setHealthScale(40.0);
     }
 
+    /**
+     * Adds and displays exp from a killed entity
+     * @param killedEntity Registry entity
+     */
     public void addExp(RegistryEntity killedEntity) {
         if (killedEntity.expType == null) return;
         Skill.addSkillExp(killedEntity.expType, this, killedEntity.expDrop);
@@ -103,6 +173,12 @@ public class RegistryPlayer extends RegistryEntity {
             this.player.sendMessage(ChatColor.GOLD + killedEntity.expType.displayName + " " + (int) newLevel);
         }
     }
+
+    /**
+     * Adds skill exp
+     * @param skill Improved skill
+     * @param amount Exp amount
+     */
     public void addExp(Skill skill, double amount) {
         Skill.addSkillExp(skill, this, amount);
         this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "+" + amount + " " + skill.displayName + " exp"));

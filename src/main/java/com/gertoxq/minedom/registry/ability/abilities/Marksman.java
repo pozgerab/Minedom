@@ -3,6 +3,7 @@ package com.gertoxq.minedom.registry.ability.abilities;
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
@@ -66,7 +67,7 @@ public class Marksman extends Ability implements HitAbility {
     }
 
     @Override
-    public AbilityAction ability(RegistryHitEvent e, RegistryPlayer player) {
+    public AbilityAction ability(HitAbility classs) {
         return new AbilityAction() {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {

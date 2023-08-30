@@ -4,6 +4,7 @@ import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
@@ -68,7 +69,7 @@ public class Hawkeye extends Ability implements HitAbility {
     }
 
     @Override
-    public AbilityAction ability(RegistryHitEvent e, RegistryPlayer player) {
+    public AbilityAction ability(HitAbility classs) {
         return new AbilityAction(10) {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {

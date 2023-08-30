@@ -30,14 +30,14 @@ public class StrGen {
         if (cooldown == 0) {
             return abilityName(abilityName);
         }
-        return ChatColor.GOLD + "Ability: " + ChatColor.RED + abilityName + ChatColor.DARK_GRAY + " (" + cooldown + "s cooldown)";
+        return ChatColor.GOLD + "Ability: " + ChatColor.RED + abilityName + ChatColor.DARK_GRAY + " (" + cooldown + "s initCooldown)";
     }
 
     public static String fullsetAbilityName(String abilityName, int cooldown) {
         if (cooldown == 0) {
             return fullsetAbilityName(abilityName);
         }
-        return ChatColor.GOLD + "Full Set Ability: " + ChatColor.RED + abilityName + ChatColor.DARK_GRAY + " (" + cooldown + "s cooldown)";
+        return ChatColor.GOLD + "Full Set Ability: " + ChatColor.RED + abilityName + ChatColor.DARK_GRAY + " (" + cooldown + "s initCooldown)";
     }
 
 }
