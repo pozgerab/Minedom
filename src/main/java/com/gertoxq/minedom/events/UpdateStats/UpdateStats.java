@@ -105,8 +105,8 @@ public class UpdateStats implements Listener {
             List<Ability> preActive = registryPlayer.getActiveFullSetAbilities();
             List<Ability> removed = Util.getRemovedElements(preActive, canBe);
             List<Ability> news = Util.getNewElements(preActive, canBe);
-            news.stream().forEach(registryPlayer::addFullSetAbility);
-            removed.stream().forEach(registryPlayer::removeFullSetAbility);
+            news.forEach(registryPlayer::addFullSetAbility);
+            removed.forEach(registryPlayer::removeFullSetAbility);
         }
     }
 
