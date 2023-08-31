@@ -93,7 +93,7 @@ public class RegistryPlayer extends RegistryEntity {
      * Gets active full set abilities
      * @return Ability List
      */
-    public List<Ability> getActiveFullSetAbility() {
+    public List<Ability> getActiveFullSetAbilities() {
         return activeFullSetAbility;
     }
 
@@ -113,7 +113,6 @@ public class RegistryPlayer extends RegistryEntity {
     public void clearActiveAbility(EquipmentSlot slot) {
         List<Ability> abilities = activeEquipmentAbilities.get(slot);
         abilities.forEach(ability -> {
-            player.sendMessage(String.valueOf(ability.getActions().size()));
             ability.getActions().forEach(action -> {
                 if (action instanceof Statable stateAction) {
                     stateAction.cleanUp(this);
@@ -132,18 +131,31 @@ public class RegistryPlayer extends RegistryEntity {
     }
 
     /**
-     * Clears active full set abilities
+     * Clears active full set ability. Runs the {@link Statable#cleanUp(RegistryPlayer player)} on the player.
+     * If throws {@link ConcurrentModificationException}, use {@link #clearFullSetAbility(Ability)} instead and separately remove the abilities from list.
+     * @param ability Ability to be removed.
+     * @throws ConcurrentModificationException if iterates through {@link #activeFullSetAbility}.
      */
-    public void clearFullSetAbility() {
-        activeFullSetAbility.forEach(ability -> {
-            ability.getActions().forEach(action -> {
-                if (action instanceof Statable stateAction) {
-                    player.sendMessage("clean");
-                    stateAction.cleanUp(this);
-                }
-            });
+    public void removeFullSetAbility(Ability ability) {
+        ability.getActions().forEach(action -> {
+            if (action instanceof Statable stateAction) {
+                stateAction.cleanUp(this);
+            }
         });
-        activeFullSetAbility.clear();
+        activeFullSetAbility.remove(ability);
+    }
+
+    /**
+     * Used to avoid {@link ConcurrentModificationException}.
+     * Similar to {@link #removeFullSetAbility(Ability ability)}, but doesn't remove the ability from the ability list, so that needs to be cleared separately.
+     * @param ability Ability to be removed.
+     */
+    public void clearFullSetAbility(Ability ability) {
+        ability.getActions().forEach(action -> {
+            if (action instanceof Statable stateAction) {
+                stateAction.cleanUp(this);
+            }
+        });
     }
 
     /**

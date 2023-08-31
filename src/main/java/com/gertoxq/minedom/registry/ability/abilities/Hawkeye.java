@@ -11,8 +11,12 @@ import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Hawkeye extends Ability implements HitAbility {
 
@@ -74,13 +78,11 @@ public class Hawkeye extends Ability implements HitAbility {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {
                 RegistryHitEvent event = (RegistryHitEvent) e;
-                event.getEntity().entity.getNearbyEntities(10, 10, 10).forEach(entity -> {
-                    if (RegistryEntity.getRegistryEntity(entity) != null && RegistryEntity.getRegistryEntity(entity) != player) {
-                        entity.setGlowing(true);
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> {
-                            entity.setGlowing(false);
-                        }, 60);
-                    }
+                List<Entity> entities = event.getEntity().entity.getNearbyEntities(10, 10, 10);
+                entities.add(event.getEntity().entity);
+                RegistryEntity.filterRegisteredEntities(entities).forEach(entity -> {
+                    if (entity instanceof RegistryPlayer) return;
+                    entity.entity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 60, 1, true, false, false ));
                 });
             }
         };

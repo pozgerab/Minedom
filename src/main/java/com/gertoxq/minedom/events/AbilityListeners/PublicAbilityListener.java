@@ -105,7 +105,7 @@ public class PublicAbilityListener implements Listener {
         });
     }
     private void cacheFullSetAbility(AEvent e, RegistryPlayer player) {
-        player.getActiveFullSetAbility().forEach(ability -> {
+        player.getActiveFullSetAbilities().forEach(ability -> {
             if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.triggerType == Ability.TriggerType.FULL_ARMOR) {
                 ability.handleEvent(e, player);
             }

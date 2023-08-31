@@ -8,6 +8,7 @@ import com.gertoxq.minedom.registry.item.FullsetAbilityItem;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.registry.item.StatItem;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.util.Util;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,7 +59,6 @@ public class UpdateStats implements Listener {
         HashMap<Stats, Double> stats = Stats.newEmptyPlayerStats();
         ItemStack[] defarmor = registryPlayer.player.getEquipment().getArmorContents();
         Arrays.stream(EquipmentSlot.values()).forEach(equipmentSlot -> {
-
             if (equipmentSlot == EquipmentSlot.HAND) return;
             registryPlayer.clearActiveAbility(equipmentSlot);
         });
@@ -83,25 +83,30 @@ public class UpdateStats implements Listener {
         AbilityItem[] armor = Arrays.stream(vanillaArmor).map(AbilityItem::getAbilityItemByItemStack).toList().toArray(new AbilityItem[0]);
         AbilityItem[] realArmor = Arrays.stream(armor).filter(Objects::nonNull).toList().toArray(new AbilityItem[0]);
         boolean canBeFullSet = realArmor.length == 4;
-        FullsetAbilityItem[] fullSet = null;
-        registryPlayer.clearFullSetAbility();
+        FullsetAbilityItem[] fullSet;
+        //registryPlayer.removeFullSetAbility();
         if (canBeFullSet) {
             fullSet = Arrays.stream(realArmor).map(a -> a instanceof FullsetAbilityItem item1 ? item1 : null).filter(Objects::nonNull).toList().toArray(new FullsetAbilityItem[0]);
             canBeFullSet = fullSet.length == 4;
+        } else {
+            List<Ability> preActive = registryPlayer.getActiveFullSetAbilities();
+            preActive.forEach(registryPlayer::clearFullSetAbility);
+            preActive.clear();
+            return;
         }
         if (canBeFullSet) {
-            HashMap<Ability, Boolean> canBe = new HashMap<>();
+            ArrayList<Ability> canBe = new ArrayList<>();
             List<ArrayList<Ability>> abilityList = Arrays.stream(fullSet).map(a -> a.fullSetAbilities).toList();
             for (Ability ability : abilityList.get(0)) {
                 if (ability.triggerType != Ability.TriggerType.FULL_ARMOR) continue;
                 canBeFullSet = Arrays.stream(fullSet).allMatch(fullsetAbilityItem -> fullsetAbilityItem.fullSetAbilities.stream().filter(ability1 -> ability1.id.equals(ability.id)).findAny().orElse(null) != null);
-                canBe.put(ability, canBeFullSet);
+                if (canBeFullSet) canBe.add(ability);
             }
-            canBe.forEach((ability, can) -> {
-                if (can) {
-                    registryPlayer.addFullSetAbility(ability);
-                }
-            });
+            List<Ability> preActive = registryPlayer.getActiveFullSetAbilities();
+            List<Ability> removed = Util.getRemovedElements(preActive, canBe);
+            List<Ability> news = Util.getNewElements(preActive, canBe);
+            news.stream().forEach(registryPlayer::addFullSetAbility);
+            removed.stream().forEach(registryPlayer::removeFullSetAbility);
         }
     }
 

@@ -110,10 +110,8 @@ public abstract class Ability implements AbilityInterface {
             action.ability(e, player);
             return;
         }
-        cooldowns.values().forEach(aLong -> player.player.sendMessage(String.valueOf(aLong)));
         if (cooldowns.containsKey(action.getId())) {
             long timeElapsed = System.currentTimeMillis() - cooldowns.get(action.getId());
-            player.player.sendMessage(String.valueOf(action.cooldown()));
             if (action.cooldown() != 0) {
                 if (timeElapsed >= action.cooldown() * 1000L) {
                     cooldowns.put(action.getId(), System.currentTimeMillis());

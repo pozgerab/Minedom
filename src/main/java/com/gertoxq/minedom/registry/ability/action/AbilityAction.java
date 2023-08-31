@@ -4,10 +4,13 @@ import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 
 /**
- * Class for ability actions. One instanced cannot be initiated more than once or else the cooldowns won't work, instead create a static field with the only once initiated instance and reference that.
+ * Class for ability actions. Keep in mind that if you use this as an anonymous class, every time the ability triggers, the class gets recreated,
+ * so it can't hold any persistent data and the cooldown cannot be modified mid-action.
+ * If you want to avoid this, you need to create a static field with the only once initiated instance and reference that when initiating the ability.
  * {@snippet :
  * public static MyAction action = new MyAction();
  * }
+ * Another approach is to create static hashmaps with keys of players and store the persistent value that way.
  */
 public abstract class AbilityAction {
     private final int initCooldown;

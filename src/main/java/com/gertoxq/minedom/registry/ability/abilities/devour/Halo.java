@@ -25,15 +25,15 @@ public class Halo extends AbilityAction implements Statable {
     @Override
     public void cleanUp(RegistryPlayer player) {
         if (haloMap.containsKey(player)) {
-            player.player.sendMessage(String.valueOf(Bukkit.getScheduler().isCurrentlyRunning(haloMap.get(player))));
             Bukkit.getScheduler().cancelTask(haloMap.get(player));
-            player.player.sendMessage(String.valueOf(Bukkit.getScheduler().isCurrentlyRunning(haloMap.get(player))));
             haloMap.remove(player);
         }
     }
 
     @Override
     public void ability(AEvent e, RegistryPlayer player) {
+
+        if (haloMap.containsKey(player)) return;
 
         if (!upOffset.containsKey(player)) {
             upOffset.put(player, new Vector(0,0,0));
