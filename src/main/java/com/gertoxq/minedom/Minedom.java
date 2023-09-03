@@ -1,5 +1,7 @@
 package com.gertoxq.minedom;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.gertoxq.minedom.MenuSystem.PlayerMenuUtility;
 import com.gertoxq.minedom.commands.Give.GiveCustomItemCommand;
 import com.gertoxq.minedom.commands.Give.GiveCustomItemCompleter;

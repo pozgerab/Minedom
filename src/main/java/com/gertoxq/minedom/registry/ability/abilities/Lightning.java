@@ -16,55 +16,55 @@ import java.util.List;
 
 public class Lightning extends Ability implements MeleeHitAbility {
     @Override
-    public String setName() {
+    public String getName() {
         return "Lightning";
     }
 
     @Override
-    public String setId() {
+    public String getId() {
         return "lightning";
     }
 
     @Override
-    public double setBaseDamage() {
+    public double getBaseDamage() {
         return 20.0;
     }
 
     @Override
-    public AbilityState setState() {
+    public AbilityState getState() {
         return AbilityState.ACTIVE;
     }
 
     @Override
-    public int setCooldown() {
+    public int getCooldown() {
         return 5;
     }
 
     @Override
-    public TriggerType setTriggerType() {
+    public TriggerType getTriggerType() {
         return TriggerType.MAINHAND;
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         ArrayList<String> lore = new ArrayList<>();
         lore.add(StrGen.loreString("Strike nearby enemies with a lightning bolt"));
-        lore.add(StrGen.loreString("dealing " + setBaseDamage() + " damage."));
+        lore.add(StrGen.loreString("dealing " + getBaseDamage() + " damage."));
         return lore;
     }
 
     @Override
-    public boolean setHasRequirement() {
+    public boolean getHasRequirement() {
         return false;
     }
 
     @Override
-    public Skill setRequirementType() {
+    public Skill getRequirementType() {
         return null;
     }
 
     @Override
-    public int setRequirementLevel() {
+    public int getRequirementLevel() {
         return 0;
     }
 
@@ -78,7 +78,7 @@ public class Lightning extends Ability implements MeleeHitAbility {
                 List<Entity> entities = target.entity.getNearbyEntities(4,4,4);
                 for (RegistryEntity entity: RegistryEntity.filterRegisteredEntities(entities)) {
                     if (entity instanceof RegistryPlayer) continue;
-                    entity.magicdamage(setBaseDamage(), player);
+                    entity.magicdamage(getBaseDamage(), player);
                     entity.entity.getLocation().getWorld().strikeLightning(entity.entity.getLocation());
                 }
                 target.entity.getLocation().getWorld().strikeLightning(target.entity.getLocation());

@@ -7,9 +7,9 @@ import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.string.StrGen;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.gertoxq.minedom.registry.entity.RegistryEntity;
 
 import java.util.*;
 
@@ -22,70 +22,122 @@ public abstract class Ability implements AbilityInterface {
      * Stores the cooldowns of actions. Every ability have this separately
      */
     protected HashMap<String, Long> cooldowns = new HashMap<>();
+    /**
+     * Whether the ability has requirement
+     */
     @NotNull
     public final Boolean hasRequirement;
+    /**
+     * Unique identifier
+     */
     @NotNull
     public final String id;
+    /**
+     * Requirement skill type
+     */
     @Nullable
     public final Skill requirementType;
+    /**
+     * Requirement level
+     */
     public final int requirementLevel;
+    /**
+     * Lore
+     */
     @Nullable
     public final ArrayList<String> lore;
+    /**
+     * Base damage, used in ability damage calculations
+     */
     @NotNull
     public final Double baseDamage;
+    /**
+     * State, represents how an ability is displayed on an item
+     */
     @NotNull
     public final AbilityState state;
+    /**
+     * Trigger type, represents when to trigger the ability
+     */
     @NotNull
     public final TriggerType triggerType;
 
+    /**
+     * New instance of ability
+     */
     public Ability() {
-        this.id = setId();
-        this.name = setName();
-        this.state = setState();
-        this.triggerType = setTriggerType();
-        this.cooldown = setCooldown();
+        this.id = getId();
+        this.name = getName();
+        this.state = getState();
+        this.triggerType = getTriggerType();
+        this.cooldown = getCooldown();
         this.lore = new ArrayList<>();
         if (state == AbilityState.PASSIVE) {
-            lore.addAll(setLore());
+            lore.addAll(getLore());
         } else if (state == AbilityState.ACTIVE) {
-            lore.add(StrGen.abilityName(setName(), setCooldown()));
-            if (setLore() != null) lore.addAll(setLore());
+            lore.add(StrGen.abilityName(getName(), getCooldown()));
+            if (getLore() != null) lore.addAll(getLore());
         } else if (state == AbilityState.FULL_ARMOR) {
-            lore.add(StrGen.fullsetAbilityName(setName(), setCooldown()));
-            if (setLore() != null) lore.addAll(setLore());
+            lore.add(StrGen.fullsetAbilityName(getName(), getCooldown()));
+            if (getLore() != null) lore.addAll(getLore());
         } else {
             lore.add("");
         }
-        this.hasRequirement = setHasRequirement();
-        this.requirementType = setRequirementType();
-        this.requirementLevel = setRequirementLevel();
-        this.baseDamage = setBaseDamage();
+        this.hasRequirement = getHasRequirement();
+        this.requirementType = getRequirementType();
+        this.requirementLevel = getRequirementLevel();
+        this.baseDamage = getBaseDamage();
         if (!hasRequirement) defaultAbilities.add(this);
     }
-
-    public abstract String setName();
-
-    public abstract String setId();
-
-    public abstract double setBaseDamage();
-
-    public abstract AbilityState setState();
+    /**
+     * @return The ability display name
+     */
+    public abstract String getName();
+    /**
+     * @return The unique id of the ability
+     */
+    public abstract String getId();
 
     /**
-     * Specify the displayed initCooldown. JUST VISUAL
+     * @return The base ability damage, used in {@link RegistryEntity#abilitydamage(Ability, RegistryPlayer)}
+     */
+    public abstract double getBaseDamage();
+
+    /**
+     * @return The ability state
+     */
+    public abstract AbilityState getState();
+
+    /**
+     * Specify the displayed cooldown. JUST VISUAL
      * @return Cooldown in sec
      */
-    public abstract int setCooldown();
+    public abstract int getCooldown();
 
-    public abstract TriggerType setTriggerType();
+    /**
+     * @return Ability trigger type
+     */
+    public abstract TriggerType getTriggerType();
 
-    public abstract ArrayList<String> setLore();
+    /**
+     * @return The lore of the ability
+     */
+    public abstract ArrayList<String> getLore();
 
-    public abstract boolean setHasRequirement();
+    /**
+     * @return Whether the ability has skill requirement
+     */
+    public abstract boolean getHasRequirement();
 
-    public abstract Skill setRequirementType();
+    /**
+     * @return The requirement skill type
+     */
+    public abstract Skill getRequirementType();
 
-    public abstract int setRequirementLevel();
+    /**
+     * @return  The required skill level of the required skill type
+     */
+    public abstract int getRequirementLevel();
 
     /**
      * Handles an event passed to a player
@@ -103,8 +155,8 @@ public abstract class Ability implements AbilityInterface {
      */
     public void handleAbility(AEvent e, RegistryPlayer player) {
         AbilityAction action = sortAction(e);
-        if (setHasRequirement()) {
-            if (player.skillLevels.get(setRequirementType()) < setRequirementLevel()) return;
+        if (getHasRequirement()) {
+            if (player.skillLevels.get(getRequirementType()) < getRequirementLevel()) return;
         }
         if (action.initCooldown() == 0) {
             action.ability(e, player);

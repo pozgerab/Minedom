@@ -6,8 +6,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+/**
+ * Listens to click events for {@link ClickableItem}s
+ */
 public class InteractListener implements Listener {
 
+    /**
+     * Executes the click action on the {@link ClickableItem}
+     * @param e Click event
+     */
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         RegistryItem item = RegistryItem.getItemByItemStack(e.getItem());

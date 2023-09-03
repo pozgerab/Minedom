@@ -73,7 +73,11 @@ public class PublicAbilityListener implements Listener {
 
     }
 
-
+    /**
+     * Searches and executes abilities based on the passed event.
+     * @param registryPlayer Player to check
+     * @param e Event
+     */
     public void searchAbilityUsage(RegistryPlayer registryPlayer, AEvent e) {
         Player player = registryPlayer.player;
         ItemStack[] vanillaArmor = player.getInventory().getArmorContents();
@@ -96,6 +100,12 @@ public class PublicAbilityListener implements Listener {
         }
     }
 
+    /**
+     * Executes abilities in a specific slot (only armor slots)
+     * @param e Event
+     * @param player Checked player
+     * @param slot Equipment slot
+     */
     private void cacheAbility(AEvent e, RegistryPlayer player, EquipmentSlot slot) {
         List<Ability> list = player.getActiveEquipmentAbilities().get(slot);
         list.forEach(ability -> {
@@ -104,6 +114,12 @@ public class PublicAbilityListener implements Listener {
             }
         });
     }
+
+    /**
+     * Executes a player's full set ability
+     * @param e Event
+     * @param player Checked player
+     */
     private void cacheFullSetAbility(AEvent e, RegistryPlayer player) {
         player.getActiveFullSetAbilities().forEach(ability -> {
             if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.triggerType == Ability.TriggerType.FULL_ARMOR) {

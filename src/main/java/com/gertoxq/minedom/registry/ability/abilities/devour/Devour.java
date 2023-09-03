@@ -19,37 +19,37 @@ import java.util.HashMap;
 public class Devour extends Ability implements DeathAbility, InitAbility {
 
     @Override
-    public String setName() {
+    public String getName() {
         return "Devour";
     }
 
     @Override
-    public String setId() {
+    public String getId() {
         return "devour";
     }
 
     @Override
-    public double setBaseDamage() {
+    public double getBaseDamage() {
         return 0.0;
     }
 
     @Override
-    public AbilityState setState() {
+    public AbilityState getState() {
         return AbilityState.FULL_ARMOR;
     }
 
     @Override
-    public int setCooldown() {
+    public int getCooldown() {
         return 12;
     }
 
     @Override
-    public TriggerType setTriggerType() {
+    public TriggerType getTriggerType() {
         return TriggerType.FULL_ARMOR;
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "On killing an enemy, get 20 " + Stats.AGILITY.displayName);
         lore.add(ChatColor.GRAY + "and 10 " + Stats.STRENGTH.displayName + " for 4 seconds.");
@@ -60,17 +60,17 @@ public class Devour extends Ability implements DeathAbility, InitAbility {
     }
 
     @Override
-    public boolean setHasRequirement() {
+    public boolean getHasRequirement() {
         return false;
     }
 
     @Override
-    public Skill setRequirementType() {
+    public Skill getRequirementType() {
         return null;
     }
 
     @Override
-    public int setRequirementLevel() {
+    public int getRequirementLevel() {
         return 0;
     }
 

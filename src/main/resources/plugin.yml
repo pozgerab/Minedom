@@ -2,6 +2,7 @@ name: Minedom
 version: '${project.version}'
 main: com.gertoxq.minedom.Minedom
 api-version: 1.19
+depend: [ ProtocolLib ]
 commands:
   getstat:
     description: Get the value of a stat of yours

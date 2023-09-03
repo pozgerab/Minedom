@@ -10,6 +10,8 @@ import com.gertoxq.minedom.events.AbilityListeners.PublicAbilityListener;
  * Registration needed in {@link Ability} and {@link PublicAbilityListener}
  */
 public interface AEvent {
-
+    /**
+     * @return The ability interface (event) that is responsible for running the ability
+     */
     @NotNull Class<? extends AbilityInterface> getTriggerFace();
 }

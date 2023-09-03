@@ -14,55 +14,55 @@ import java.util.ArrayList;
 public class Marksman extends Ability implements HitAbility {
 
     @Override
-    public String setName() {
+    public String getName() {
         return "";
     }
 
     @Override
-    public String setId() {
+    public String getId() {
         return "marksman";
     }
 
     @Override
-    public double setBaseDamage() {
+    public double getBaseDamage() {
         return 0.0;
     }
 
     @Override
-    public AbilityState setState() {
+    public AbilityState getState() {
         return AbilityState.PASSIVE;
     }
 
 
     @Override
-    public int setCooldown() {
+    public int getCooldown() {
         return 0;
     }
 
     @Override
-    public TriggerType setTriggerType() {
+    public TriggerType getTriggerType() {
         return TriggerType.MAINHAND;
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY+"Your melee hits deal"+ ChatColor.DARK_RED +" 80%"+ChatColor.GRAY+ " less damage");
         return lore;
     }
 
     @Override
-    public boolean setHasRequirement() {
+    public boolean getHasRequirement() {
         return false;
     }
 
     @Override
-    public Skill setRequirementType() {
+    public Skill getRequirementType() {
         return null;
     }
 
     @Override
-    public int setRequirementLevel() {
+    public int getRequirementLevel() {
         return 0;
     }
 

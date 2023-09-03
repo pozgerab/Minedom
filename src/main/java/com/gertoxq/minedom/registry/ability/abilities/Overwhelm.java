@@ -24,37 +24,37 @@ import java.util.ArrayList;
 public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbility, ShootBowAbility {
 
     @Override
-    public String setName() {
+    public String getName() {
         return "Overwhelm";
     }
 
     @Override
-    public String setId() {
+    public String getId() {
         return "overwhelm";
     }
 
     @Override
-    public double setBaseDamage() {
+    public double getBaseDamage() {
         return 0.0;
     }
 
     @Override
-    public AbilityState setState() {
+    public AbilityState getState() {
         return AbilityState.ACTIVE;
     }
 
     @Override
-    public int setCooldown() {
+    public int getCooldown() {
         return 0;
     }
 
     @Override
-    public TriggerType setTriggerType() {
+    public TriggerType getTriggerType() {
         return TriggerType.MAINHAND;
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY+"Shoot in a straight line.");
         lore.add(ChatColor.GRAY+"On hitting en enemy, blind and froze them for 3s.");
@@ -64,17 +64,17 @@ public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbili
     }
 
     @Override
-    public boolean setHasRequirement() {
+    public boolean getHasRequirement() {
         return false;
     }
 
     @Override
-    public Skill setRequirementType() {
+    public Skill getRequirementType() {
         return null;
     }
 
     @Override
-    public int setRequirementLevel() {
+    public int getRequirementLevel() {
         return 0;
     }
 

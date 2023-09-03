@@ -4,16 +4,16 @@ import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
-import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
+import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
+import com.gertoxq.minedom.util.Glow;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,54 +21,54 @@ import java.util.List;
 public class Hawkeye extends Ability implements HitAbility {
 
     @Override
-    public String setName() {
+    public String getName() {
         return "Hawkeye";
     }
 
     @Override
-    public String setId() {
+    public String getId() {
         return "hawkeye";
     }
 
     @Override
-    public double setBaseDamage() {
+    public double getBaseDamage() {
         return 0.0;
     }
 
     @Override
-    public AbilityState setState() {
+    public AbilityState getState() {
         return AbilityState.PASSIVE;
     }
 
     @Override
-    public int setCooldown() {
+    public int getCooldown() {
         return 0;
     }
 
     @Override
-    public TriggerType setTriggerType() {
+    public TriggerType getTriggerType() {
         return TriggerType.ARMORSLOT;
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Reveals near enemies on hit.");
         return lore;
     }
 
     @Override
-    public boolean setHasRequirement() {
+    public boolean getHasRequirement() {
         return false;
     }
 
     @Override
-    public Skill setRequirementType() {
+    public Skill getRequirementType() {
         return null;
     }
 
     @Override
-    public int setRequirementLevel() {
+    public int getRequirementLevel() {
         return 0;
     }
 
@@ -82,9 +82,10 @@ public class Hawkeye extends Ability implements HitAbility {
                 entities.add(event.getEntity().entity);
                 RegistryEntity.filterRegisteredEntities(entities).forEach(entity -> {
                     if (entity instanceof RegistryPlayer) return;
-                    entity.entity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 60, 1, true, false, false ));
+                    Glow glow = new Glow(player.player);
+                    glow.setEntityGlowDuration(entity.entity, ChatColor.BLUE, 200);
+                    glow.setBlockGlowDuration(entity.entity.getLocation().add(new Vector(0,-1,0)), ChatColor.DARK_AQUA, 200);
                 });
             }
-        };
-    }
-}
+    };
+}}
