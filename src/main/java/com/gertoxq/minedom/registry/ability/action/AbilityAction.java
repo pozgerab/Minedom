@@ -1,7 +1,7 @@
 package com.gertoxq.minedom.registry.ability.action;
 
 import com.gertoxq.minedom.events.Custom.AEvent;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 
 /**
  * Class for ability actions. Keep in mind that if you use this as an anonymous class, every time the ability triggers, the class gets recreated,

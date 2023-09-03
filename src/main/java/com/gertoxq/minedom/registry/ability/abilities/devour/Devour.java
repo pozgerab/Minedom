@@ -1,20 +1,13 @@
 package com.gertoxq.minedom.registry.ability.abilities.devour;
 
-import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.StatSystem.Stats;
-import com.gertoxq.minedom.events.Custom.AEvent;
-import com.gertoxq.minedom.events.Custom.Events.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.ability.TriggerFace.*;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Devour extends Ability implements DeathAbility, InitAbility {
 

@@ -1,4 +1,4 @@
-package com.gertoxq.minedom.registry.player;
+package com.gertoxq.minedom.registry;
 
 import com.gertoxq.minedom.StatSystem.EntityState;
 import com.gertoxq.minedom.StatSystem.Stats;
@@ -18,24 +18,66 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.*;
 
+/**
+ * Custom player class
+ */
 public class RegistryPlayer extends RegistryEntity {
-
+    /**
+     * List of players
+     */
     public static ArrayList<RegistryPlayer> players = new ArrayList<>();
 
+    /**
+     * Bukkit player
+     */
     public Player player;
+    /**
+     * Stats gained from {@link EquipmentSlot#HAND} slot
+     */
     public HashMap<Stats, Double> handStats;
+    /**
+     * Stats gained from armor slots
+     */
     public HashMap<Stats, Double> armorStats;
+    /**
+     * Stats gained from other sources
+     */
     public HashMap<Stats, Double> profileStats;
+    /**
+     * Stats gained by abilities
+     */
     public HashMap<Stats, Double> abilityStats;
+    /**
+     * Stats sum
+     */
     public HashMap<Stats, Double> stats;
+    /**
+     * Player UUID
+     */
     public UUID uuid;
+    /**
+     * Whether the player joined before
+     */
     public Boolean joined;
+    /**
+     * Player entity state ({@link EntityState#PLAYER})
+     */
     public EntityState state;
-    public ArrayList<Ability> abilities;
+    /**
+     * Player skill level container
+     */
     public HashMap<Skill, Double> skillLevels;
+    /**
+     * Player skill exp container
+     */
     public HashMap<Skill, Double> skillExps;
-
+    /**
+     * Player's active abilities from their armor
+     */
     private final HashMap<EquipmentSlot, List<Ability>> activeEquipmentAbilities = new HashMap<>();
+    /**
+     * Player's active full set abilities
+     */
     private final List<Ability> activeFullSetAbility = new ArrayList<>();
 
     /**
@@ -45,9 +87,8 @@ public class RegistryPlayer extends RegistryEntity {
     public RegistryPlayer(Player player) {
         super("player", player);
         this.abilityStats = Stats.newEmptyPlayerStats();
-        this.abilities = Ability.defaultAbilities;
-        this.skillLevels = Skill.getNewSkills();
-        this.skillExps = Skill.getNewSkills();
+        this.skillLevels = Skill.newEmptySkills();
+        this.skillExps = Skill.newEmptySkills();
         this.profileStats = setStats();
         this.armorStats = Stats.newEmptyPlayerStats();
         this.handStats = Stats.newEmptyPlayerStats();

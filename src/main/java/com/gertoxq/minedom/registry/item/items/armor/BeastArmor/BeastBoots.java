@@ -14,47 +14,47 @@ import java.util.HashMap;
 public class BeastBoots extends FullsetAbilityItem {
 
     @Override
-    public Material setMaterial() {
+    public Material getMaterial() {
         return Material.DIAMOND_BOOTS;
     }
 
     @Override
-    public HashMap<Stats, Double> setStats() {
+    public HashMap<Stats, Double> getStats() {
         return Stats.newPlayerStats(60.0, -100.0, 0.0, 10.0, 50.0, 0.0, 0.0, 0.0, 0.0, 20.0, 0.0);
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return ChatColor.RESET + "" + ChatColor.DARK_RED + "Beast Boots";
     }
 
     @Override
-    public String setID() {
+    public String getID() {
         return "beast_boots";
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         return null;
     }
 
     @Override
-    public ItemMeta setMeta() {
+    public ItemMeta getMeta() {
         return null;
     }
 
     @Override
-    public ArrayList<Ability> setAbilities() {
+    public ArrayList<Ability> getAbilities() {
         return null;
     }
 
     @Override
-    public String setGroupID() {
+    public String getGroupId() {
         return "beast";
     }
 
     @Override
-    public ArrayList<Ability> setFullSetAbilities() {
+    public ArrayList<Ability> getFullSetAbilities() {
         ArrayList<Ability> abilities1 = new ArrayList<>();
         abilities1.add(new Devour());
         return abilities1;

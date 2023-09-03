@@ -7,7 +7,7 @@ import com.gertoxq.minedom.registry.item.AbilityItem;
 import com.gertoxq.minedom.registry.item.FullsetAbilityItem;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.registry.item.StatItem;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.util.Util;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -4,7 +4,7 @@ import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.action.Statable;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.*;
 import org.bukkit.util.Vector;
 

@@ -5,7 +5,7 @@ import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;

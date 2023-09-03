@@ -5,7 +5,7 @@ import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
 

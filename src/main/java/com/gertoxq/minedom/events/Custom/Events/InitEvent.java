@@ -4,7 +4,7 @@ import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.REvent;
 import com.gertoxq.minedom.registry.ability.TriggerFace.InitAbility;
 import com.gertoxq.minedom.registry.ability.TriggerFace.AbilityInterface;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public class InitEvent extends REvent implements AEvent {

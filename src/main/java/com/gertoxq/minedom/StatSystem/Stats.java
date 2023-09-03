@@ -1,7 +1,7 @@
 package com.gertoxq.minedom.StatSystem;
 
 import com.gertoxq.minedom.registry.item.StatItem;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -15,7 +15,6 @@ import java.util.Objects;
  * List of stats
  */
 public enum Stats {
-
     DAMAGE("damage", ChatColor.BLUE+"✗ Damage"+ChatColor.GRAY, Material.DIAMOND_SWORD, 0),
     STRENGTH("strength", ChatColor.DARK_RED+"₪ Strength"+ChatColor.GRAY, Material.REDSTONE_BLOCK, 1),
     MANA("mana", ChatColor.DARK_AQUA+"✿ Mana"+ChatColor.GRAY, Material.LAPIS_LAZULI, 2),
@@ -44,6 +43,14 @@ public enum Stats {
      * Number identifier
      */
     public final int id;
+
+    /**
+     * Stat init
+     * @param name Identifier
+     * @param displayName Display name
+     * @param material Representative material
+     * @param id Number identifier
+     */
     Stats(String name, String displayName, Material material, int id) {
         this.name = name;
         this.displayName = displayName;

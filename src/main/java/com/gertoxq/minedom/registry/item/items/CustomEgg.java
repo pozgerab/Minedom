@@ -23,29 +23,29 @@ public class CustomEgg extends RegistryItem implements ClickableItem {
     public static final NamespacedKey dmgKey = Minedom.newKey("admineggdmgKey");
     public static final NamespacedKey idKey = Minedom.newKey("admineggidKey");
     @Override
-    public Material setMaterial() {
+    public Material getMaterial() {
         return Material.ALLAY_SPAWN_EGG;
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return ChatColor.RESET + "" + ChatColor.GOLD + "CUSTOM EGG";
     }
 
     @Override
-    public String setID() {
+    public String getID() {
         return "adminex-egg";
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         ArrayList<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY+"Right Click to customize");
         return lore;
     }
 
     @Override
-    public ItemMeta setMeta() {
+    public ItemMeta getMeta() {
         SpawnEggMeta meta = (SpawnEggMeta) new ItemStack(Material.ALLAY_SPAWN_EGG).getItemMeta();
         meta.setCustomSpawnedType(null);
         PersistentDataContainer container = meta.getPersistentDataContainer();

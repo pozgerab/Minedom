@@ -33,8 +33,19 @@ import java.util.HashMap;
 
 public final class Minedom extends JavaPlugin {
 
+    /**
+     * Used to assign {@link PlayerMenuUtility} to players. Used in custom menu system.
+     */
     private static final HashMap<Player, PlayerMenuUtility> playerMenuUtilityMap = new HashMap<>();
+    /**
+     * The instance of the plugin
+     */
     private static Minedom plugin;
+
+    /**
+     * Gets the instance of the plugin
+     * @return Plugin
+     */
     public static Minedom getPlugin() {
         return plugin;
     }
@@ -88,6 +99,11 @@ public final class Minedom extends JavaPlugin {
         });
     }
 
+    /**
+     * Gets {@link PlayerMenuUtility} by Player
+     * @param p Player
+     * @return Player's {@link PlayerMenuUtility}
+     */
     public static PlayerMenuUtility getPlayerMenuUtility(Player p) {
         PlayerMenuUtility playerMenuUtility;
 
@@ -102,6 +118,11 @@ public final class Minedom extends JavaPlugin {
         }
     }
 
+    /**
+     * Generates a new namespaced key
+     * @param key Key name
+     * @return Namespaced key
+     */
     public static NamespacedKey newKey(String key) {
         return new NamespacedKey(Minedom.getPlugin(), key);
     }

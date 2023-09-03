@@ -17,37 +17,37 @@ import java.util.HashMap;
 
 public class SoulCountrol extends AbilityItem {
     @Override
-    public Material setMaterial() {
+    public Material getMaterial() {
         return Material.CROSSBOW;
     }
 
     @Override
-    public HashMap<Stats, Double> setStats() {
+    public HashMap<Stats, Double> getStats() {
         return Stats.newPlayerStats(0.0,0.0,40.0,30.0,0.0,0.0,0.0,0.0, 0.0,0.0, 0.0);
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return ChatColor.BLUE+"Soul Control";
     }
 
     @Override
-    public String setID() {
+    public String getID() {
         return "soul_control";
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         return null;
     }
 
     @Override
-    public ItemMeta setMeta() {
+    public ItemMeta getMeta() {
         return null;
     }
 
     @Override
-    public ArrayList<Ability> setAbilities() {
+    public ArrayList<Ability> getAbilities() {
         ArrayList<Ability> abilities = new ArrayList<>();
         abilities.add(new Marksman());
         abilities.add(new Overwhelm());

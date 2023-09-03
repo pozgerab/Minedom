@@ -1,11 +1,9 @@
 package com.gertoxq.minedom.events;
 
 import com.gertoxq.minedom.Minedom;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

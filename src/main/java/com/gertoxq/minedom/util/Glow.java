@@ -23,6 +23,9 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
+/**
+ * Glow packet manager
+ */
 public class Glow {
     ProtocolManager manager = ProtocolLibrary.getProtocolManager();
     /**

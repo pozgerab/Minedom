@@ -1,7 +1,7 @@
 package com.gertoxq.minedom.commands.Stats;
 
 import com.gertoxq.minedom.StatSystem.Stats;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

@@ -6,7 +6,7 @@ import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.MeleeHitAbility;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.string.StrGen;
 import org.bukkit.entity.Entity;

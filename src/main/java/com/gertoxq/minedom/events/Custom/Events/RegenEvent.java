@@ -1,10 +1,7 @@
 package com.gertoxq.minedom.events.Custom.Events;
 
 import com.gertoxq.minedom.events.Custom.REvent;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 
 public class RegenEvent extends REvent {
     private final RegenCause cause;

@@ -25,32 +25,32 @@ public class Slayer extends AbilityItem {
     }
 
     @Override
-    public Material setMaterial() {
+    public Material getMaterial() {
         return Material.DIAMOND_SWORD;
     }
 
     @Override
-    public HashMap<Stats, Double> setStats() {
+    public HashMap<Stats, Double> getStats() {
         return Stats.newPlayerStats(0.0, 60.0, 30.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0);
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return ChatColor.RESET + "" + ChatColor.LIGHT_PURPLE + "Slayer";
     }
 
     @Override
-    public String setID() {
+    public String getID() {
         return "slayer";
     }
 
     @Override
-    public ArrayList<String> setLore() {
+    public ArrayList<String> getLore() {
         return null;
     }
 
     @Override
-    public ItemMeta setMeta() {
+    public ItemMeta getMeta() {
         ItemMeta meta = new ItemStack(Material.DIAMOND_SWORD).getItemMeta();
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier("speed", 16, AttributeModifier.Operation.ADD_NUMBER));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -58,7 +58,7 @@ public class Slayer extends AbilityItem {
     }
 
     @Override
-    public ArrayList<Ability> setAbilities() {
+    public ArrayList<Ability> getAbilities() {
         ArrayList<Ability> abilities = new ArrayList<>();
         abilities.add(new Lightning());
         return abilities;

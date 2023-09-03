@@ -2,7 +2,7 @@ package com.gertoxq.minedom.math;
 
 import com.gertoxq.minedom.StatSystem.Stats;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 
 /**
  * Damage Calculations

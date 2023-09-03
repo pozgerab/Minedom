@@ -12,7 +12,7 @@ import com.gertoxq.minedom.registry.ability.TriggerFace.ProjectileHitAbility;
 import com.gertoxq.minedom.registry.ability.TriggerFace.ShootBowAbility;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.RegistryItem;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;

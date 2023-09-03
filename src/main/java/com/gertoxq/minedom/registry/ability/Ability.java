@@ -4,7 +4,7 @@ import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.*;
 import com.gertoxq.minedom.registry.ability.TriggerFace.*;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.string.StrGen;
 import org.jetbrains.annotations.NotNull;

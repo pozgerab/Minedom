@@ -3,7 +3,7 @@ package com.gertoxq.minedom.registry.ability.TriggerFace;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.Ability;
 
-/**
+ /**
  * Superinterface of ability interfaces.
  * Subclasses of this class should look like this
  * {@snippet :

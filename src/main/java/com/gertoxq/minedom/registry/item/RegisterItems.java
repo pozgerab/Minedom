@@ -9,7 +9,13 @@ import com.gertoxq.minedom.registry.item.items.armor.BeastArmor.BeastHelmet;
 import com.gertoxq.minedom.registry.item.items.armor.BeastArmor.BeastLeggings;
 import com.gertoxq.minedom.registry.item.items.armor.HawkArmor.HawkChestplate;
 
+/**
+ * Registers custom items
+ */
 public class RegisterItems {
+    /**
+     * Registers items. (Insert them in this method)
+     */
     public RegisterItems() {
         new BeastBoots();
         new BeastLeggings();

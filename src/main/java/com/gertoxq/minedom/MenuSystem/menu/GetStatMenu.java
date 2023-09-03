@@ -3,7 +3,7 @@ package com.gertoxq.minedom.MenuSystem.menu;
 import com.gertoxq.minedom.MenuSystem.Menu;
 import com.gertoxq.minedom.MenuSystem.PlayerMenuUtility;
 import com.gertoxq.minedom.StatSystem.Stats;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;

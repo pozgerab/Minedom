@@ -2,8 +2,14 @@ package com.gertoxq.minedom.registry.entity;
 
 import com.gertoxq.minedom.registry.entity.Entities.*;
 
+/**
+ * Registers custom entities
+ */
 public class RegisterEntities {
 
+    /**
+     * Registers custom entities (Insert yours here)
+     */
     public RegisterEntities() {
         new Sheep().register();
         new IronGolem().register();

@@ -1,7 +1,7 @@
 package com.gertoxq.minedom.events.EventTriggers;
 
 import com.gertoxq.minedom.events.Custom.Events.RegenEvent;
-import com.gertoxq.minedom.registry.player.RegistryPlayer;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
