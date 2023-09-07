@@ -8,7 +8,12 @@ import com.gertoxq.minedom.registry.RegistryPlayer;
  * Damage Calculations
  */
 public class DmgCalc {
-
+    /**
+     * Calculates final damage from
+     * @param predDmg Attacker damage stat
+     * @param victDef Attacked entity def stat
+     * @return final damage
+     */
     public static double fromEntityDmgCalc(Double predDmg, Double victDef) {
         return (predDmg-predDmg*(victDef/(victDef+60)));
     }

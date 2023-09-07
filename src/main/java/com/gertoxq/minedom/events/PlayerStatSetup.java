@@ -13,14 +13,25 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+/**
+ * Player data setup class
+ */
 public class PlayerStatSetup implements Listener {
 
+    /**
+     * Listens to join events and sets up player data
+     * @param e {@link PlayerJoinEvent}
+     */
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         setUp(player);
     }
 
+    /**
+     * Sets up player data
+     * @param player Player to be set up
+     */
     public static void setUp(Player player) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, -1, 25, false, false, false));
         RegistryPlayer registryPlayer = new RegistryPlayer(player);
@@ -33,12 +44,20 @@ public class PlayerStatSetup implements Listener {
         }
     }
 
+    /**
+     * Listens for quit events and cleans up player data
+     * @param e {@link PlayerQuitEvent}
+     */
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
         cleanUp(player);
     }
 
+    /**
+     * Cleans up player data
+     * @param player Player to be cleaned
+     */
     public static void cleanUp(Player player) {
         player.setAbsorptionAmount(0);
         RegistryPlayer registryPlayer = RegistryPlayer.getRegistryPlayer(player);

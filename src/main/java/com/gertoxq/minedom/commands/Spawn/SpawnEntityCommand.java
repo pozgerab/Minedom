@@ -13,7 +13,13 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
+/**
+ * Spawn custom entity command executor
+ */
 public class SpawnEntityCommand implements CommandExecutor {
+    /**
+     * Spawns a new custom entity by id, or id arg no.1 is #def (vanilla entity), spawns a vanilla entity by id on arg no.2
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NonNull @NotNull String[] args) {
         if (sender instanceof Player player && args.length == 1) {

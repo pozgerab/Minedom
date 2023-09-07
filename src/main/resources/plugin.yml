@@ -7,8 +7,8 @@ commands:
   getstat:
     description: Get the value of a stat of yours
   giveitem:
-    description: Get items
+    description: Give yourself custom items
   stats:
-    description: Opens a GUI with your stats
+    description: Opens a GUI with your stats displayed
   spawn:
     description: Spawns custom entities

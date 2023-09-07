@@ -26,37 +26,37 @@ public class Zombie extends RegistryEntity {
     }
 
     @Override
-    public @NonNull EntityType setType() {
+    public @NonNull EntityType getType() {
         return EntityType.ZOMBIE;
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> setStats() {
+    public @NonNull HashMap<Stats, Double> getStats() {
         return Stats.newActiveStats(20.0, 0.0, 3.5, 0.0);
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return ChatColor.DARK_GRAY+"Zombie";
     }
 
     @Override
-    public @NonNull EntityState setState() {
+    public @NonNull EntityState getState() {
         return EntityState.ACTIVE;
     }
 
     @Override
-    public @NonNull Boolean setPersistent() {
+    public @NonNull Boolean getPersistent() {
         return false;
     }
 
     @Override
-    public @NonNull Skill setExpType() {
+    public @NonNull Skill getExpType() {
         return Skill.COMBAT;
     }
 
     @Override
-    public double setExpDrop() {
+    public double getExpDrop() {
         return 15;
     }
 

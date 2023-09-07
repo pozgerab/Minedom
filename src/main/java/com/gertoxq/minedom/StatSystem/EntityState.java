@@ -1,7 +1,7 @@
 package com.gertoxq.minedom.StatSystem;
 
 /**
- * Represents the state of an entity
+ * Represents the behaviour of an entity
  */
 public enum EntityState {
 

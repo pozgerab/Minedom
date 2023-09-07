@@ -14,8 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Listens for entity spawn event. If an entity isn't a custom entity, it gets converted to custom one.
+ */
 public class SpawnOverride implements Listener {
 
+    /**
+     * Override the entity if it's not a custom type
+     * @param e Entity spawn event
+     */
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent e) {
         Bukkit.getScheduler().runTaskLater(Minedom.getPlugin(), () -> {

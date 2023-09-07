@@ -7,8 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class DeathMsgFix implements Listener {
+import java.util.Objects;
 
+/**
+ * Fixes death msg
+ */
+public class DeathMsgFix implements Listener {
+    /**
+     * Listens to player death events and displays the death msg correctly
+     * @param e {@link PlayerDeathEvent}
+     */
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
@@ -16,7 +24,7 @@ public class DeathMsgFix implements Listener {
         Entity killer = player.getLastDamageCause().getEntity();
         RegistryEntity entity = RegistryEntity.getRegistryEntity(killer);
         if (entity == null) return;
-        e.setDeathMessage(player.getName() + "was killed by " + entity.name);
+        e.setDeathMessage(player.getName() + " was killed by " + entity.name);
     }
 
 }

@@ -75,37 +75,37 @@ public class VanillaEntity extends RegistryEntity {
     }
 
     @Override
-    public @NonNull EntityType setType() {
+    public @NonNull EntityType getType() {
         return EntityType.BAT;
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> setStats() {
+    public @NonNull HashMap<Stats, Double> getStats() {
         return Stats.newEmptyPlayerStats();
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return null;
     }
 
     @Override
-    public @NonNull EntityState setState() {
+    public @NonNull EntityState getState() {
         return EntityState.ACTIVE;
     }
 
     @Override
-    public @NonNull Boolean setPersistent() {
+    public @NonNull Boolean getPersistent() {
         return false;
     }
 
     @Override
-    public Skill setExpType() {
+    public Skill getExpType() {
         return null;
     }
 
     @Override
-    public double setExpDrop() {
+    public double getExpDrop() {
         return 0;
     }
 }

@@ -31,37 +31,37 @@ public class DamageIndicator extends RegistryEntity {
     }
 
     @Override
-    public @NonNull EntityType setType() {
+    public @NonNull EntityType getType() {
         return EntityType.ARMOR_STAND;
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> setStats() {
+    public @NonNull HashMap<Stats, Double> getStats() {
         return Stats.newPassiveStats(1.0,0.0);
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return "";
     }
 
     @Override
-    public @NonNull EntityState setState() {
+    public @NonNull EntityState getState() {
         return EntityState.INDICATOR;
     }
 
     @Override
-    public @NonNull Boolean setPersistent() {
+    public @NonNull Boolean getPersistent() {
         return true;
     }
 
     @Override
-    public @NonNull Skill setExpType() {
+    public @NonNull Skill getExpType() {
         return null;
     }
 
     @Override
-    public double setExpDrop() {
+    public double getExpDrop() {
         return 0;
     }
 
@@ -69,11 +69,11 @@ public class DamageIndicator extends RegistryEntity {
     public Entity spawn(Location loc) {
         this.spawnLoc = loc;
         this.spawnWorld = loc.getWorld();
-        this.stats = setStats();
-        this.state = setState();
-        this.type = setType();
-        this.persistent = setPersistent();
-        this.entity = (LivingEntity) spawnWorld.spawnEntity(loc, setType());
+        this.stats = getStats();
+        this.state = getState();
+        this.type = getType();
+        this.persistent = getPersistent();
+        this.entity = (LivingEntity) spawnWorld.spawnEntity(loc, getType());
         entity.setCustomName(name);
         entity.setCustomNameVisible(true);
         this.uuid = entity.getUniqueId();

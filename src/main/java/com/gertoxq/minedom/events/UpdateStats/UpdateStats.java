@@ -23,18 +23,33 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+/**
+ * Used to update the stats of players
+ */
 public class UpdateStats implements Listener {
 
+    /**
+     * Listens to hand change and updates hand
+     * @param e {@link PlayerItemHeldEvent}
+     */
     @EventHandler
     public void onHandChange(PlayerItemHeldEvent e) {
         updateHand(e.getPlayer(), e.getPlayer().getInventory().getItem(e.getNewSlot()));
     }
 
+    /**
+     * Listens to player join events and updates all stats
+     * @param e {@link PlayerJoinEvent}
+     */
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent e) {
         updateStats(e.getPlayer(), e.getPlayer().getInventory().getItemInMainHand());
     }
 
+    /**
+     * Listens to inventory close events and updates all stats
+     * @param e {@link InventoryCloseEvent}
+     */
     @EventHandler
     public void onInventoryChange(InventoryCloseEvent e) {
         RegistryPlayer registryPlayer = RegistryPlayer.getRegistryPlayer((Player) e.getPlayer());
@@ -42,6 +57,11 @@ public class UpdateStats implements Listener {
         Player player = registryPlayer.player;
         updateStats(player, player.getInventory().getItemInMainHand());
     }
+
+    /**
+     * Listens to player interact events and updates hand or +armor
+     * @param e {@link PlayerInteractEvent}
+     */
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         RegistryPlayer player = RegistryPlayer.getRegistryPlayer(e.getPlayer());

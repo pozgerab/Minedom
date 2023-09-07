@@ -13,10 +13,18 @@ import com.gertoxq.minedom.registry.entity.RegistryEntity;
 
 import java.util.*;
 
+/**
+ * Custom abilities. One ability can hold multiple {@link AbilityAction}s by implementing extensions of {@link AbilityInterface}. One item can hold multiple abilities
+ */
 public abstract class Ability implements AbilityInterface {
 
-    public static ArrayList<Ability> defaultAbilities = new ArrayList<>();
+    /**
+     * Ability display name
+     */
     public String name;
+    /**
+     * Ability display cooldown (just visual, displayed on items)
+     */
     public int cooldown;
     /**
      * Stores the cooldowns of actions. Every ability have this separately
@@ -87,7 +95,6 @@ public abstract class Ability implements AbilityInterface {
         this.requirementType = getRequirementType();
         this.requirementLevel = getRequirementLevel();
         this.baseDamage = getBaseDamage();
-        if (!hasRequirement) defaultAbilities.add(this);
     }
     /**
      * @return The ability display name

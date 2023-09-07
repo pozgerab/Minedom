@@ -26,7 +26,7 @@ public class KillBuff extends AbilityAction {
     @Override
     public void ability(AEvent e, RegistryPlayer player) {
         RegistryDeathEvent event = (RegistryDeathEvent) e;
-        setCurrentCooldown(0);
+        setCooldown(0);
         player.player.sendMessage(String.valueOf(this.cooldown()));
         if (!playerCastMap.containsKey(player)) {
             playerCastMap.put(player, 1);

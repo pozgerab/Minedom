@@ -14,7 +14,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -89,7 +89,7 @@ public class RegistryPlayer extends RegistryEntity {
         this.abilityStats = Stats.newEmptyPlayerStats();
         this.skillLevels = Skill.newEmptySkills();
         this.skillExps = Skill.newEmptySkills();
-        this.profileStats = setStats();
+        this.profileStats = getStats();
         this.armorStats = Stats.newEmptyPlayerStats();
         this.handStats = Stats.newEmptyPlayerStats();
         this.stats = Stats.sumStats(this);
@@ -246,43 +246,49 @@ public class RegistryPlayer extends RegistryEntity {
     }
 
 
+    @NotNull
     @Override
-    public @NonNull Material asItem() {
+    public Material asItem() {
         return Material.PLAYER_HEAD;
     }
 
+    @NotNull
     @Override
-    public @NonNull EntityType setType() {
+    public EntityType getType() {
         return EntityType.PLAYER;
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> setStats() {
+    @NotNull
+    public HashMap<Stats, Double> getStats() {
         return Stats.newPlayerStats(20.0, 0.0, 5.0, 0.0, 100.0, 20.0, 0.0, 100.0, 100.0, 100.0, 100.0);
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return null;
     }
 
+    @NotNull
     @Override
-    public @NonNull EntityState setState() {
+    public EntityState getState() {
         return EntityState.PLAYER;
     }
 
+    @NotNull
     @Override
-    public @NonNull Boolean setPersistent() {
+    public Boolean getPersistent() {
         return false;
     }
 
+    @NotNull
     @Override
-    public @NonNull Skill setExpType() {
+    public Skill getExpType() {
         return null;
     }
 
     @Override
-    public double setExpDrop() {
+    public double getExpDrop() {
         return 0;
     }
 

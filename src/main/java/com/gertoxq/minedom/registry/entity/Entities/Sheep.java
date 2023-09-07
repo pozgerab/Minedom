@@ -27,37 +27,37 @@ public class Sheep extends RegistryEntity {
     }
 
     @Override
-    public @NonNull EntityType setType() {
+    public @NonNull EntityType getType() {
         return EntityType.SHEEP;
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> setStats() {
+    public @NonNull HashMap<Stats, Double> getStats() {
         return Stats.newPassiveStats(10.0, 0.0);
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return ChatColor.WHITE + "Sheep";
     }
 
     @Override
-    public @NonNull EntityState setState() {
+    public @NonNull EntityState getState() {
         return EntityState.PASSIVE;
     }
 
     @Override
-    public @NonNull Boolean setPersistent() {
+    public @NonNull Boolean getPersistent() {
         return false;
     }
 
     @Override
-    public @NonNull Skill setExpType() {
+    public @NonNull Skill getExpType() {
         return Skill.GARDENING;
     }
 
     @Override
-    public double setExpDrop() {
+    public double getExpDrop() {
         return 10;
     }
 

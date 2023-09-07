@@ -6,8 +6,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 
+/**
+ * Cancels passive mob aggro
+ */
 public class CancelTarget implements Listener {
-
+    /**
+     * Listens to entity target livingentity event and cancels if state is {@link EntityState#PASSIVE}
+     * @param e {@link EntityTargetLivingEntityEvent}
+     */
     @EventHandler
     public void onEntityTarget(EntityTargetLivingEntityEvent e) {
 

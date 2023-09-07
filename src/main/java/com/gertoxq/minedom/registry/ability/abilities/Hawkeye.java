@@ -2,16 +2,15 @@ package com.gertoxq.minedom.registry.ability.abilities;
 
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
+import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
-import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.util.Glow;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +81,6 @@ public class Hawkeye extends Ability implements HitAbility {
                     if (entity instanceof RegistryPlayer) return;
                     Glow glow = new Glow(player.player);
                     glow.setEntityGlowDuration(entity.entity, ChatColor.BLUE, 200);
-                    glow.setBlockGlowDuration(entity.entity.getLocation().add(new Vector(0,-1,0)), ChatColor.DARK_AQUA, 200);
                 });
             }
     };

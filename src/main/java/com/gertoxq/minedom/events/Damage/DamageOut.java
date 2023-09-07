@@ -18,7 +18,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
  * Listens to damage events and triggers custom damage events
  */
 public class DamageOut implements Listener {
-
+    /**
+     * Listens to bukkit damage event and triggers the custom damage events. Cancels the bukkit event, so no knockback is happening
+     * @Triggers {@link RegistryEntity#damage(double, RegistryEntity, RegistryHitEvent.DamageSource)}
+     * @param e {@link EntityDamageByEntityEvent}
+     */
     @EventHandler (priority = EventPriority.LOWEST)
     public void onMeleeDamageOut(EntityDamageByEntityEvent e) {
         e.setCancelled(true);

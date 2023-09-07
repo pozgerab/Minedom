@@ -26,37 +26,37 @@ public class IronGolem extends RegistryEntity {
     }
 
     @Override
-    public @NonNull EntityType setType() {
+    public @NonNull EntityType getType() {
         return EntityType.IRON_GOLEM;
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> setStats() {
+    public @NonNull HashMap<Stats, Double> getStats() {
         return Stats.newActiveStats(200.0, 10.0, 18.0, 0.0);
     }
 
     @Override
-    public String setName() {
+    public String getName() {
         return ChatColor.BLACK + "Iron Golem";
     }
 
     @Override
-    public @NonNull EntityState setState() {
+    public @NonNull EntityState getState() {
         return EntityState.ACTIVE;
     }
 
     @Override
-    public @NonNull Boolean setPersistent() {
+    public @NonNull Boolean getPersistent() {
         return false;
     }
 
     @Override
-    public @NonNull Skill setExpType() {
+    public @NonNull Skill getExpType() {
         return Skill.COMBAT;
     }
 
     @Override
-    public double setExpDrop() {
+    public double getExpDrop() {
         return 50;
     }
 

@@ -12,8 +12,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
+/**
+ * Class for indicating entities' hp and hp change
+ */
 public class IndicateHealth implements Listener {
-
+    /**
+     * Listens to entity spawn events and gives them a name and health tag
+     * @param e {@link EntitySpawnEvent}
+     */
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent e) {
 
@@ -29,6 +35,10 @@ public class IndicateHealth implements Listener {
         }, 2L);
     }
 
+    /**
+     * Listens to hits and displays damage and updates health tag
+     * @param e {@link RegistryHitEvent}
+     */
     @EventHandler
     public void onDamage(RegistryHitEvent e) {
         RegistryEntity entity = e.getEntity();

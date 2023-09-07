@@ -13,8 +13,19 @@ import com.gertoxq.minedom.registry.RegistryPlayer;
  * Another approach is to create static hashmaps with keys of players and store the persistent value that way.
  */
 public abstract class AbilityAction {
+    /**
+     * Initial cooldown, cannot be edited
+     */
     private final int initCooldown;
+    /**
+     * Actual cooldown, this gets checked when a player tries to cast an ability, this can be modified in the {@link #ability(AEvent, RegistryPlayer)}
+     * if you want to reset or modify the cooldown.
+     * You can reset it (to the initial value) with {@link #resetCooldown()}
+     */
     private int cooldown = 0;
+    /**
+     * Unique identifier
+     */
     private final String id;
 
     /**
@@ -52,16 +63,16 @@ public abstract class AbilityAction {
         return this.initCooldown;
     }
     /**
-     * @return The mid-action cooldown. Use case specified in {@link #setCurrentCooldown(int cooldown)}
+     * @return The mid-action cooldown. Use case specified in {@link #setCooldown(int cooldown)}
      */
     public int cooldown() {
         return this.cooldown;
     }
     /**
-     * Sets an executing ability's cooldown. This determinates how much time have to pass before the action can be executed again. Used to reset and modifiy cooldown mid-action. Make sure to reset this to the initial cooldown using {@link #resetCooldown()}.
+     * Sets an executing ability's cooldown. This determinates how much time have to pass before the action can be executed again. Used to reset and modifiy cooldown mid-action. Make sure to reset this to the initial value using {@link #resetCooldown()}.
      * @param cooldown Cooldown in seconds
      */
-    public void setCurrentCooldown(int cooldown) {
+    public void setCooldown(int cooldown) {
         this.cooldown = cooldown;
     }
 
@@ -72,7 +83,7 @@ public abstract class AbilityAction {
         this.cooldown = initCooldown;
     }
     /**
-     * Executes the ability. MAKE SURE to cast the event to the corresponding event
+     * Executes the ability. MAKE SURE to cast the {@link AEvent} to the corresponding event
      * @param e Non cast event
      * @param player Player
      */

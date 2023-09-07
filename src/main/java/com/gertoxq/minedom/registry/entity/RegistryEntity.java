@@ -26,52 +26,103 @@ import java.util.stream.Collectors;
 import static com.gertoxq.minedom.math.DmgCalc.calcMagicDmg;
 import static com.gertoxq.minedom.math.DmgCalc.reduceMagicDamage;
 
+/**
+ * Custom entity class. The extensions of this class represents custom entity types, and the instances of those classes represent custom entities.
+ */
 public abstract class RegistryEntity {
+    /**
+     * List of all living custom entities
+     */
     public static ArrayList<RegistryEntity> entities = new ArrayList<>();
+    /**
+     * Instances of all registered entities
+     */
     public static ArrayList<RegistryEntity> registeredEntityClasses = new ArrayList<>();
 
+    /**
+     * Skill type that the mob's killer receives
+     */
     public Skill expType;
+    /**
+     * Skill exp that the mob's killer receives
+     */
     public double expDrop;
+    /**
+     * Unique identifier
+     */
     public String ID;
+    /**
+     * Bukkit living entity
+     */
     public LivingEntity entity;
+    /**
+     * Entity type
+     */
     public EntityType type;
+    /**
+     * World that the entity spawns in
+     */
     public World spawnWorld;
+    /**
+     * Location that the entity spawn on
+     */
     public Location spawnLoc;
+    /**
+     * Entities custom stats
+     */
     public HashMap<Stats, Double> stats;
+    /**
+     * Custom entity state, represents behaviour
+     */
     public EntityState state;
+    /**
+     * Entity display name
+     */
     public String name;
+    /**
+     * Entity UUID
+     */
     public UUID uuid;
+    /**
+     * Whether the entity is persistent (unattainable)
+     */
     public Boolean persistent;
-
+    /**
+     * Entity's material representation
+     */
     public final Material asItem;
 
+    /**
+     * Create a new instance of a custom entity type with an entity type id (same custom entity types share the same id)
+     * @param ID Unique custom entity type identifier
+     */
     public RegistryEntity(String ID) {
         this.ID = ID;
         this.asItem = asItem();
-        this.expType = setExpType();
-        this.expDrop = setExpDrop();
-        this.stats = setStats();
-        this.state = setState();
-        this.type = setType();
-        this.name = setName();
-        this.persistent = setPersistent();
+        this.expType = getExpType();
+        this.expDrop = getExpDrop();
+        this.stats = getStats();
+        this.state = getState();
+        this.type = getType();
+        this.name = getName();
+        this.persistent = getPersistent();
     }
 
     /**
-     * Creates an entity from an existing bukkit entity
-     * @param ID RegistryEntity id
+     * Creates a new entity from an existing bukkit entity
+     * @param ID Unique custom entity type identifier, this is going to be the entity's type
      * @param entity Bukkit entity
      */
     public RegistryEntity(String ID, Entity entity) {
         this.ID = ID;
         this.asItem = asItem();
-        this.expType = setExpType();
-        this.expDrop = setExpDrop();
-        this.stats = setStats();
-        this.state = setState();
-        this.type = setType();
-        this.name = setName();
-        this.persistent = setPersistent();
+        this.expType = getExpType();
+        this.expDrop = getExpDrop();
+        this.stats = getStats();
+        this.state = getState();
+        this.type = getType();
+        this.name = getName();
+        this.persistent = getPersistent();
         if (name != null) {
             entity.setCustomName(name);
         }
@@ -80,27 +131,51 @@ public abstract class RegistryEntity {
         entities.add(this);
     }
 
+    /**
+     * @return This entity type's Representative material
+     */
     @NotNull
     public abstract Material asItem();
 
+    /**
+     * @return This custom entity type's Bukkit entity type
+     */
     @NotNull
-    public abstract EntityType setType();
+    public abstract EntityType getType();
 
+    /**
+     * @return The entity's stats
+     */
     @NotNull
-    public abstract HashMap<Stats, Double> setStats();
+    public abstract HashMap<Stats, Double> getStats();
 
-    public abstract String setName();
+    /**
+     * @return Entity's display name
+     */
+    public abstract String getName();
 
+    /**
+     * @return Entity's behaviour
+     */
     @NotNull
-    public abstract EntityState setState();
+    public abstract EntityState getState();
 
+    /**
+     * @return Whether the entity is unattainable
+     */
     @NotNull
-    public abstract Boolean setPersistent();
+    public abstract Boolean getPersistent();
 
+    /**
+     * @return Entity's exp gained upon killing it
+     */
     @Nullable
-    public abstract Skill setExpType();
+    public abstract Skill getExpType();
 
-    public abstract double setExpDrop();
+    /**
+     * @return Entity's exp amount gained upon killing it
+     */
+    public abstract double getExpDrop();
 
     /**
      * Used to register the entity
@@ -118,7 +193,7 @@ public abstract class RegistryEntity {
     public Entity spawn(Location loc) {
         this.spawnLoc = loc;
         this.spawnWorld = loc.getWorld();
-        this.entity = (LivingEntity) spawnWorld.spawnEntity(loc, setType());
+        this.entity = (LivingEntity) spawnWorld.spawnEntity(loc, getType());
         entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.get(Stats.HEALTH));
         entity.setHealth(stats.get(Stats.HEALTH));
         if (name != null) {
@@ -248,7 +323,7 @@ public abstract class RegistryEntity {
 
     /**
      * Checks if an entity is in a category
-     * @param category
+     * @param category Category to check
      */
     public boolean isInCategory(EntityCategory category) {
         return category.types.contains(this);
