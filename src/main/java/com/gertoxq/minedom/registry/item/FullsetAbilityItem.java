@@ -1,6 +1,6 @@
 package com.gertoxq.minedom.registry.item;
 
-import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public abstract class FullsetAbilityItem extends AbilityItem {
     /**
      * Full set abilities
      */
-    public ArrayList<Ability> fullSetAbilities;
+    public ArrayList<ItemAbility> fullSetAbilities;
     /**
      * Full set abilities' lore
      */
@@ -33,7 +33,7 @@ public abstract class FullsetAbilityItem extends AbilityItem {
      * Gets the full set abilities
      * @return Item's full set abilities
      */
-    public abstract ArrayList<Ability> getFullSetAbilities();
+    public abstract ArrayList<ItemAbility> getFullSetAbilities();
 
     /**
      * Item constructor
@@ -44,7 +44,7 @@ public abstract class FullsetAbilityItem extends AbilityItem {
         this.groupId = getGroupId();
         this.fullSetAbilityLore = new ArrayList<>();
         if (getFullSetAbilities() != null) {
-            for (Ability ability : getFullSetAbilities()) {
+            for (ItemAbility ability : getFullSetAbilities()) {
                 fullSetAbilityLore.addAll(ability.lore);
             }
             allLore.add("");

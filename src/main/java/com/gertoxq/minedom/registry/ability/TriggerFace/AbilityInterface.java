@@ -1,7 +1,7 @@
 package com.gertoxq.minedom.registry.ability.TriggerFace;
 
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
-import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 
  /**
  * Superinterface of ability interfaces.
@@ -13,7 +13,7 @@ import com.gertoxq.minedom.registry.ability.Ability;
  * }
  * This returns an {@link AbilityAction}. Please read the doc on {@link AbilityAction} too, it has crucial information.
  * The #ability method's argument is required, so an ability can implement multiple interfaces with this structure.
- * If we want to get the ability action, just pass in the interface itself like the {@link Ability#getActions()} method does.
+ * If we want to get the ability action, just pass in the interface itself like the {@link ItemAbility#getActions()} method does.
  */
 public interface AbilityInterface {
 }

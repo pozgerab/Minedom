@@ -1,14 +1,12 @@
 package com.gertoxq.minedom.registry.entity;
 
-import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.Stats;
-import com.gertoxq.minedom.events.Custom.Events.MagicHitEvent;
-import com.gertoxq.minedom.events.Custom.Events.MeleeHitEvent;
-import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
-import com.gertoxq.minedom.math.DmgCalc;
-import com.gertoxq.minedom.registry.ability.Ability;
-import com.gertoxq.minedom.registry.RegistryPlayer;
+import com.gertoxq.minedom.Stats.EntityState;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.MagicHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.MeleeHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.Regen.RegenEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
 import com.gertoxq.minedom.skill.Skill;
+import com.gertoxq.minedom.util.StatContainter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,9 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.gertoxq.minedom.math.DmgCalc.calcMagicDmg;
-import static com.gertoxq.minedom.math.DmgCalc.reduceMagicDamage;
 
 /**
  * Custom entity class. The extensions of this class represents custom entity types, and the instances of those classes represent custom entities.
@@ -70,7 +65,7 @@ public abstract class RegistryEntity {
     /**
      * Entities custom stats
      */
-    public HashMap<Stats, Double> stats;
+    public StatContainter stats = new StatContainter();
     /**
      * Custom entity state, represents behaviour
      */
@@ -147,7 +142,7 @@ public abstract class RegistryEntity {
      * @return The entity's stats
      */
     @NotNull
-    public abstract HashMap<Stats, Double> getStats();
+    public abstract StatContainter getStats();
 
     /**
      * @return Entity's display name
@@ -194,8 +189,8 @@ public abstract class RegistryEntity {
         this.spawnLoc = loc;
         this.spawnWorld = loc.getWorld();
         this.entity = (LivingEntity) spawnWorld.spawnEntity(loc, getType());
-        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.get(Stats.HEALTH));
-        entity.setHealth(stats.get(Stats.HEALTH));
+        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.getHEALTH());
+        entity.setHealth(stats.getHEALTH());
         if (name != null) {
             entity.setCustomName(name);
         }
@@ -223,32 +218,6 @@ public abstract class RegistryEntity {
     }
 
     /**
-     * Deals magic damage
-     * @param rawDamage Base Damage
-     * @param entity Attacker
-     * @Triggers {@link MagicHitEvent}
-     */
-    public void magicdamage(double rawDamage, RegistryEntity entity) {
-        double magicDef = 0;
-        if (this.stats.get(Stats.MAGIC_DEFENSE) != null) {
-            magicDef = this.stats.get(Stats.MAGIC_DEFENSE);
-        }
-        double finalDamage = DmgCalc.toEntityMagicDmgCalc(rawDamage, entity.stats.get(Stats.MAGIC_DAMAGE), entity.stats.get(Stats.MANA), magicDef);
-        new MagicHitEvent(entity, this, finalDamage).callEvent();
-    }
-
-    /**
-     * Deals magic damage
-     * @param ability Ability the player attacked with
-     * @param player Player that attacked
-     * @Triggers {@link MagicHitEvent}
-     */
-    public void abilitydamage(Ability ability, RegistryPlayer player) {
-        double dmg = reduceMagicDamage(calcMagicDmg(player.stats.get(Stats.DAMAGE), player.stats.get(Stats.MAGIC_DAMAGE)+ability.baseDamage, player.stats.get(Stats.MANA)), this.stats.get(Stats.MAGIC_DEFENSE));
-        damage(dmg, player, RegistryHitEvent.DamageSource.MAGIC);
-    }
-
-    /**
      * Damages the entity
      * @param damage Damage Amount
      * @param damager Damager Entity
@@ -257,11 +226,19 @@ public abstract class RegistryEntity {
      */
 
     public void damage(double damage, RegistryEntity damager, RegistryHitEvent.DamageSource source) {
-        if (source == RegistryHitEvent.DamageSource.MELEE) {
-            new MeleeHitEvent(damager, this, damage).callEvent();
-        } else {
-            new RegistryHitEvent(damager, this, damage, source).callEvent();
-        }
+        (switch (source) {
+            case MELEE -> new MeleeHitEvent(damager, this, damage);
+            case MAGIC -> new MagicHitEvent(damager, this, damage);
+            default -> new RegistryHitEvent(damager, this, damage, source);
+        }).callEvent();
+    }
+
+    public void heal(double amount, RegenEvent.RegenCause source) {
+        new RegenEvent(this, amount, source).callEvent();
+    }
+
+    public void healByEntity(double amount, RegistryEntity healer) {
+        new RegenEvent(this, amount, healer).callEvent();
     }
 
     /**

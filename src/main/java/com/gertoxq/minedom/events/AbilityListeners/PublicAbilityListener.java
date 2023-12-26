@@ -1,9 +1,15 @@
 package com.gertoxq.minedom.events.AbilityListeners;
 
-import com.gertoxq.minedom.events.Custom.Events.*;
 import com.gertoxq.minedom.events.Custom.AEvent;
-import com.gertoxq.minedom.events.Custom.Events.ProjectileHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.Init.InitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.MagicHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.MeleeHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.ProjectileHit.ProjectileHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.ShootBow.ShootBowEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 import com.gertoxq.minedom.registry.item.AbilityItem;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.entity.Player;
@@ -92,9 +98,10 @@ public class PublicAbilityListener implements Listener {
         if (registryItem == null) return;
         if (registryItem.abilities == null) return;
         for (Ability ability : registryItem.abilities) {
+            if (!(ability instanceof ItemAbility)) continue;
             if (ability == null) continue;
             if (!Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace())) continue;
-            if (ability.triggerType != Ability.TriggerType.MAINHAND) continue;
+            if (ability.getTriggerType() != ItemAbility.TriggerType.MAINHAND) continue;
             ability.handleEvent(e, registryPlayer);
 
         }
@@ -107,9 +114,9 @@ public class PublicAbilityListener implements Listener {
      * @param slot Equipment slot
      */
     private void cacheAbility(AEvent e, RegistryPlayer player, EquipmentSlot slot) {
-        List<Ability> list = player.getActiveEquipmentAbilities().get(slot);
+        List<ItemAbility> list = player.getActiveEquipmentAbilities().get(slot);
         list.forEach(ability -> {
-            if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.triggerType == Ability.TriggerType.ARMORSLOT) {
+            if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.getTriggerType() == ItemAbility.TriggerType.ARMORSLOT) {
                 ability.handleEvent(e, player);
             }
         });
@@ -122,7 +129,7 @@ public class PublicAbilityListener implements Listener {
      */
     private void cacheFullSetAbility(AEvent e, RegistryPlayer player) {
         player.getActiveFullSetAbilities().forEach(ability -> {
-            if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.triggerType == Ability.TriggerType.FULL_ARMOR) {
+            if (ability != null && Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace()) && ability.getTriggerType() == ItemAbility.TriggerType.FULL_ARMOR) {
                 ability.handleEvent(e, player);
             }
         });

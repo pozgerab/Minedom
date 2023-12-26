@@ -1,6 +1,7 @@
 package com.gertoxq.minedom.events;
 
 import com.gertoxq.minedom.Minedom;
+import com.gertoxq.minedom.events.Custom.Events.Regen.ManaRegen.ManaRegenTrigger;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.NamespacedKey;
@@ -42,6 +43,7 @@ public class PlayerStatSetup implements Listener {
             registryPlayer.skillLevels.put(skill, Skill.CalcLvlFromEXP(skill, exp));
             player.getPersistentDataContainer().remove(new NamespacedKey(Minedom.getPlugin(), skill.name));
         }
+        new ManaRegenTrigger(registryPlayer);
     }
 
     /**

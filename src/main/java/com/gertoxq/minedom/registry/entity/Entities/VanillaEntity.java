@@ -1,10 +1,10 @@
 package com.gertoxq.minedom.registry.entity.Entities;
 
-import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.Stats.EntityState;
+import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
-import net.kyori.adventure.text.TextComponent;
+import com.gertoxq.minedom.util.StatContainter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -30,8 +30,8 @@ public class VanillaEntity extends RegistryEntity {
         super("#def");
         this.entity = entity;
         type = entity.getType();
-        stats.put(Stats.HEALTH, entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-        stats.put(Stats.DAMAGE, entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null ? entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() : 0);
+        stats.put(Stat.HEALTH, entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+        stats.put(Stat.DAMAGE, entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null ? entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() : 0);
         StringBuilder result = new StringBuilder();
         String[] words = type.toString().toLowerCase().split("_");
         for (String word : words) {
@@ -53,8 +53,8 @@ public class VanillaEntity extends RegistryEntity {
         this.nonAliveEntity = spawnWorld.spawnEntity(loc, type);
         if (!(nonAliveEntity instanceof LivingEntity)) return nonAliveEntity;
         this.entity = (LivingEntity) nonAliveEntity;
-        stats.put(Stats.HEALTH, entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-        stats.put(Stats.DAMAGE, entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null ? entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() : 0);
+        stats.put(Stat.HEALTH, entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+        stats.put(Stat.DAMAGE, entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null ? entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() : 0);
         StringBuilder result = new StringBuilder();
         String[] words = type.toString().toLowerCase().split("_");
         for (String word : words) {
@@ -80,8 +80,8 @@ public class VanillaEntity extends RegistryEntity {
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> getStats() {
-        return Stats.newEmptyPlayerStats();
+    public @NonNull StatContainter getStats() {
+        return Stat.newEmptyPlayerStats();
     }
 
     @Override

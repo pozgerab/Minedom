@@ -2,10 +2,10 @@ package com.gertoxq.minedom.registry.ability.abilities;
 
 import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.events.Custom.AEvent;
-import com.gertoxq.minedom.events.Custom.Events.ProjectileHitEvent;
-import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
-import com.gertoxq.minedom.events.Custom.Events.ShootBowEvent;
-import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.events.Custom.Events.ProjectileHit.ProjectileHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.ShootBow.ShootBowEvent;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
 import com.gertoxq.minedom.registry.ability.TriggerFace.ProjectileHitAbility;
@@ -13,7 +13,6 @@ import com.gertoxq.minedom.registry.ability.TriggerFace.ShootBowAbility;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.RegistryItem;
 import com.gertoxq.minedom.registry.RegistryPlayer;
-import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
@@ -21,7 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbility, ShootBowAbility {
+public class Overwhelm extends ItemAbility implements HitAbility, ProjectileHitAbility, ShootBowAbility {
 
     @Override
     public String getName() {
@@ -31,11 +30,6 @@ public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbili
     @Override
     public String getId() {
         return "overwhelm";
-    }
-
-    @Override
-    public double getBaseDamage() {
-        return 0.0;
     }
 
     @Override
@@ -61,21 +55,6 @@ public class Overwhelm extends Ability implements HitAbility, ProjectileHitAbili
         lore.add(ChatColor.DARK_GRAY +"If enemy is closer than 20 blocks,");
         lore.add(ChatColor.DARK_GRAY+"reduce final damage by"+ ChatColor.RED +" 80%");
         return lore;
-    }
-
-    @Override
-    public boolean getHasRequirement() {
-        return false;
-    }
-
-    @Override
-    public Skill getRequirementType() {
-        return null;
-    }
-
-    @Override
-    public int getRequirementLevel() {
-        return 0;
     }
 
     @Override

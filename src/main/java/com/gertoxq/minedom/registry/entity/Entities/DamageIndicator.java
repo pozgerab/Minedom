@@ -1,9 +1,10 @@
 package com.gertoxq.minedom.registry.entity.Entities;
 
-import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.Stats.EntityState;
+import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
+import com.gertoxq.minedom.util.StatContainter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,8 +12,11 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 
 public class DamageIndicator extends RegistryEntity {
@@ -22,7 +26,13 @@ public class DamageIndicator extends RegistryEntity {
     }
     public DamageIndicator(Double dmg) {
         super("damage_indicator");
-        this.name = ChatColor.RED + String.valueOf((int) Math.floor(dmg));
+        NumberFormat formatter = new DecimalFormat("#0.0");
+        this.name = ChatColor.RED+formatter.format(dmg);
+    }
+    public DamageIndicator(Double dmg, ChatColor color) {
+        super("damage_indicator");
+        NumberFormat formatter = new DecimalFormat("#0.0");
+        this.name = color + formatter.format(dmg);
     }
 
     @Override
@@ -36,8 +46,8 @@ public class DamageIndicator extends RegistryEntity {
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> getStats() {
-        return Stats.newPassiveStats(1.0,0.0);
+    public @NonNull StatContainter getStats() {
+        return Stat.newPassiveStats(1.0,0.0);
     }
 
     @Override
@@ -73,13 +83,15 @@ public class DamageIndicator extends RegistryEntity {
         this.state = getState();
         this.type = getType();
         this.persistent = getPersistent();
-        this.entity = (LivingEntity) spawnWorld.spawnEntity(loc, getType());
+        this.entity = (LivingEntity) spawnWorld.spawnEntity(loc.clone().add(new Vector(0,+100,0)), getType());
         entity.setCustomName(name);
         entity.setCustomNameVisible(true);
         this.uuid = entity.getUniqueId();
         this.entity.setGravity(false);
         entity.setInvisible(true);
+        entity.setSilent(true);
         ((ArmorStand) entity).setMarker(true);
+        this.entity.teleport(loc);
         entities.add(this);
         return entity;
     }

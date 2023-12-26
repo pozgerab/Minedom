@@ -1,10 +1,12 @@
 package com.gertoxq.minedom.registry.item;
 
 import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Item that has abilities
@@ -18,13 +20,14 @@ public abstract class AbilityItem extends StatItem {
     /**
      * Item abilities
      */
-    public ArrayList<Ability> abilities;
+    public List<Ability> abilities;
 
     /**
      * Get item abilities
+     *
      * @return List of ability
      */
-    public abstract ArrayList<Ability> getAbilities();
+    public abstract List<Ability> getAbilities();
 
     /**
      * Ability item constructor
@@ -34,11 +37,7 @@ public abstract class AbilityItem extends StatItem {
         this.abilities = getAbilities();
         this.abilityLore = new ArrayList<>();
         if (getAbilities() != null) {
-            for (Ability ability : getAbilities()) {
-                abilityLore.addAll(ability.lore);
-            }
-            allLore.add("");
-            allLore.addAll(abilityLore);
+            allLore.addAll(getAbilities().get(0).buildMultipleDesc(getAbilities()));
         }
         meta.setLore(allLore);
         item.setItemMeta(meta);

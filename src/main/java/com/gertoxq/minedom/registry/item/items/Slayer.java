@@ -1,22 +1,21 @@
 package com.gertoxq.minedom.registry.item.items;
 
-import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.registry.ability.Ability;
-import com.gertoxq.minedom.registry.ability.abilities.Lightning;
+import com.gertoxq.minedom.registry.ability.abilities.lightning.Lightning;
 import com.gertoxq.minedom.registry.item.AbilityItem;
-import com.gertoxq.minedom.registry.item.RegistryItem;
-import com.gertoxq.minedom.skill.Skill;
+import com.gertoxq.minedom.util.StatContainter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Slayer extends AbilityItem {
 
@@ -30,8 +29,12 @@ public class Slayer extends AbilityItem {
     }
 
     @Override
-    public HashMap<Stats, Double> getStats() {
-        return Stats.newPlayerStats(0.0, 60.0, 30.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0, 0.0);
+    public StatContainter getStats() {
+        StatContainter containter = new StatContainter();
+        containter.setDEFENSE(60);
+        containter.setDAMAGE(30);
+        containter.setAGILITY(100);
+        return containter;
     }
 
     @Override
@@ -58,8 +61,8 @@ public class Slayer extends AbilityItem {
     }
 
     @Override
-    public ArrayList<Ability> getAbilities() {
-        ArrayList<Ability> abilities = new ArrayList<>();
+    public List<Ability> getAbilities() {
+        List<Ability> abilities = new ArrayList<>();
         abilities.add(new Lightning());
         return abilities;
     }

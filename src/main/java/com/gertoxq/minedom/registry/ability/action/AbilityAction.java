@@ -3,6 +3,8 @@ package com.gertoxq.minedom.registry.ability.action;
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 
+import java.util.HashMap;
+
 /**
  * Class for ability actions. Keep in mind that if you use this as an anonymous class, every time the ability triggers, the class gets recreated,
  * so it can't hold any persistent data and the cooldown cannot be modified mid-action.
@@ -17,6 +19,10 @@ public abstract class AbilityAction {
      * Initial cooldown, cannot be edited
      */
     private final int initCooldown;
+    /**
+     * Cooldown map
+     */
+    public HashMap<String, Long> cooldowns = new HashMap<>();
     /**
      * Actual cooldown, this gets checked when a player tries to cast an ability, this can be modified in the {@link #ability(AEvent, RegistryPlayer)}
      * if you want to reset or modify the cooldown.

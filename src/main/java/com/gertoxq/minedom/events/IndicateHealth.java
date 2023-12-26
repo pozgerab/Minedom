@@ -1,7 +1,7 @@
 package com.gertoxq.minedom.events;
 
 import com.gertoxq.minedom.Minedom;
-import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.entity.Entities.DamageIndicator;
 import org.bukkit.Bukkit;
@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
@@ -25,7 +26,7 @@ public class IndicateHealth implements Listener {
 
         Entity victim = e.getEntity();
         RegistryEntity entity = RegistryEntity.getRegistryEntity(victim);
-        if (entity == null || entity.persistent) {return;}
+        if (entity == null || entity.persistent) return;
         Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> {
             entity.entity.setCustomName(entity.name + ChatColor.GRAY + " [" +
                     ChatColor.GREEN + entity.entity.getHealth() +
@@ -39,7 +40,7 @@ public class IndicateHealth implements Listener {
      * Listens to hits and displays damage and updates health tag
      * @param e {@link RegistryHitEvent}
      */
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH)
     public void onDamage(RegistryHitEvent e) {
         RegistryEntity entity = e.getEntity();
         if (entity == null) return;
@@ -55,9 +56,7 @@ public class IndicateHealth implements Listener {
             DamageIndicator indicator = new DamageIndicator(e.getDamage());
 
             indicator.spawn(entity.entity.getLocation());
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> {
-                indicator.entity.remove();
-            }, 60L);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> indicator.entity.remove(), 60L);
 
         }, 2L);
 

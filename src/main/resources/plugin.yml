@@ -4,11 +4,13 @@ main: com.gertoxq.minedom.Minedom
 api-version: 1.19
 depend: [ ProtocolLib ]
 commands:
-  getstat:
-    description: Get the value of a stat of yours
   giveitem:
     description: Give yourself custom items
   stats:
     description: Opens a GUI with your stats displayed
   spawn:
     description: Spawns custom entities
+  setmana:
+    description: Sets your mana
+  setstat:
+    description: Increases profile stat

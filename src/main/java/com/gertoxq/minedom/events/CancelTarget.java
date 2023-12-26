@@ -1,6 +1,6 @@
 package com.gertoxq.minedom.events;
 
-import com.gertoxq.minedom.StatSystem.EntityState;
+import com.gertoxq.minedom.Stats.EntityState;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

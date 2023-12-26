@@ -1,17 +1,16 @@
 package com.gertoxq.minedom.registry.ability.abilities;
 
 import com.gertoxq.minedom.events.Custom.AEvent;
-import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
-import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
 import com.gertoxq.minedom.registry.RegistryPlayer;
-import com.gertoxq.minedom.skill.Skill;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 
-public class Marksman extends Ability implements HitAbility {
+public class Marksman extends ItemAbility implements HitAbility {
 
     @Override
     public String getName() {
@@ -21,11 +20,6 @@ public class Marksman extends Ability implements HitAbility {
     @Override
     public String getId() {
         return "marksman";
-    }
-
-    @Override
-    public double getBaseDamage() {
-        return 0.0;
     }
 
     @Override
@@ -52,23 +46,8 @@ public class Marksman extends Ability implements HitAbility {
     }
 
     @Override
-    public boolean getHasRequirement() {
-        return false;
-    }
-
-    @Override
-    public Skill getRequirementType() {
-        return null;
-    }
-
-    @Override
-    public int getRequirementLevel() {
-        return 0;
-    }
-
-    @Override
     public AbilityAction ability(HitAbility classs) {
-        return new AbilityAction(id) {
+        return new AbilityAction(getId()) {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {
                 RegistryHitEvent event = (RegistryHitEvent) e;

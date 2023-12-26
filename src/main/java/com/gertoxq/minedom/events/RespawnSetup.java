@@ -1,6 +1,6 @@
 package com.gertoxq.minedom.events;
 
-import com.gertoxq.minedom.events.Custom.Events.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -2,8 +2,8 @@ package com.gertoxq.minedom.MenuSystem.menu;
 
 import com.gertoxq.minedom.MenuSystem.Menu;
 import com.gertoxq.minedom.MenuSystem.PlayerMenuUtility;
-import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.Stats.EntityState;
+import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.items.CustomEgg;
 import com.gertoxq.minedom.registry.RegistryPlayer;
@@ -46,11 +46,11 @@ public class CustomEggMenu extends Menu {
     @Override
     public void setMenuItems() {
 
-        Stats[] stats = new Stats[] {Stats.DAMAGE,Stats.HEALTH,Stats.DEFENSE};
+        Stat[] stats = new Stat[] {Stat.DAMAGE, Stat.HEALTH, Stat.DEFENSE};
 
         for (int i = 0; i < stats.length; i++) {
 
-            Stats stat = stats[i];
+            Stat stat = stats[i];
 
             ItemStack item = new ItemStack(stat.asItem, 1);
             ItemMeta itemMeta = item.getItemMeta();

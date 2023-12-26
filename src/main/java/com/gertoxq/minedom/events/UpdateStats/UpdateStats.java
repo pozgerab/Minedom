@@ -1,13 +1,12 @@
 package com.gertoxq.minedom.events.UpdateStats;
 
-import com.gertoxq.minedom.StatSystem.Stats;
-import com.gertoxq.minedom.events.Custom.Events.InitEvent;
+import com.gertoxq.minedom.Stats.Stat;
+import com.gertoxq.minedom.events.Custom.Events.Init.InitEvent;
 import com.gertoxq.minedom.registry.ability.Ability;
-import com.gertoxq.minedom.registry.item.AbilityItem;
-import com.gertoxq.minedom.registry.item.FullsetAbilityItem;
-import com.gertoxq.minedom.registry.item.RegistryItem;
-import com.gertoxq.minedom.registry.item.StatItem;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
+import com.gertoxq.minedom.registry.item.*;
 import com.gertoxq.minedom.registry.RegistryPlayer;
+import com.gertoxq.minedom.util.StatContainter;
 import com.gertoxq.minedom.util.Util;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -76,7 +75,7 @@ public class UpdateStats implements Listener {
      * @param registryPlayer Player to check
      */
     public void updateArmor(RegistryPlayer registryPlayer) {
-        HashMap<Stats, Double> stats = Stats.newEmptyPlayerStats();
+        StatContainter stats = Stat.newEmptyPlayerStats();
         ItemStack[] defarmor = registryPlayer.player.getEquipment().getArmorContents();
         Arrays.stream(EquipmentSlot.values()).forEach(equipmentSlot -> {
             if (equipmentSlot == EquipmentSlot.HAND) return;
@@ -86,13 +85,14 @@ public class UpdateStats implements Listener {
             if (piece == null || piece.getType() == Material.AIR) continue;
             RegistryItem item = RegistryItem.getItemByItemStack(piece);
             if (!(item instanceof StatItem statItem)) continue;
-            Stats.addItemStat(stats, statItem);
+            Stat.addItemStat(stats, statItem);
             if (!(statItem instanceof AbilityItem abilityItem)) continue;
             if (abilityItem.abilities == null) continue;
             for (Ability ability : abilityItem.abilities) {
                 if (ability == null) continue;
-                if (ability.triggerType != Ability.TriggerType.ARMORSLOT) continue;
-                registryPlayer.addActiveAbility(abilityItem.item.getType().getEquipmentSlot(), ability);
+                if (!(ability instanceof ItemAbility)) return;
+                if (ability.getTriggerType() != ItemAbility.TriggerType.ARMORSLOT) continue;
+                registryPlayer.addActiveAbility(abilityItem.item.getType().getEquipmentSlot(), (ItemAbility) ability);
             }
         }
         registryPlayer.armorStats = stats;
@@ -109,22 +109,22 @@ public class UpdateStats implements Listener {
             fullSet = Arrays.stream(realArmor).map(a -> a instanceof FullsetAbilityItem item1 ? item1 : null).filter(Objects::nonNull).toList().toArray(new FullsetAbilityItem[0]);
             canBeFullSet = fullSet.length == 4;
         } else {
-            List<Ability> preActive = registryPlayer.getActiveFullSetAbilities();
+            List<ItemAbility> preActive = registryPlayer.getActiveFullSetAbilities();
             preActive.forEach(registryPlayer::clearFullSetAbility);
             preActive.clear();
             return;
         }
         if (canBeFullSet) {
-            ArrayList<Ability> canBe = new ArrayList<>();
-            List<ArrayList<Ability>> abilityList = Arrays.stream(fullSet).map(a -> a.fullSetAbilities).toList();
-            for (Ability ability : abilityList.get(0)) {
-                if (ability.triggerType != Ability.TriggerType.FULL_ARMOR) continue;
-                canBeFullSet = Arrays.stream(fullSet).allMatch(fullsetAbilityItem -> fullsetAbilityItem.fullSetAbilities.stream().filter(ability1 -> ability1.id.equals(ability.id)).findAny().orElse(null) != null);
+            ArrayList<ItemAbility> canBe = new ArrayList<>();
+            List<ArrayList<ItemAbility>> abilityList = Arrays.stream(fullSet).map(a -> a.fullSetAbilities).toList();
+            for (ItemAbility ability : abilityList.get(0)) {
+                if (ability.getTriggerType() != ItemAbility.TriggerType.FULL_ARMOR) continue;
+                canBeFullSet = Arrays.stream(fullSet).allMatch(fullsetAbilityItem -> fullsetAbilityItem.fullSetAbilities.stream().filter(ability1 -> ability1.getId().equals(ability.getId())).findAny().orElse(null) != null);
                 if (canBeFullSet) canBe.add(ability);
             }
-            List<Ability> preActive = registryPlayer.getActiveFullSetAbilities();
-            List<Ability> removed = Util.getRemovedElements(preActive, canBe);
-            List<Ability> news = Util.getNewElements(preActive, canBe);
+            List<ItemAbility> preActive = registryPlayer.getActiveFullSetAbilities();
+            List<ItemAbility> removed = Util.getRemovedElements(preActive, canBe);
+            List<ItemAbility> news = Util.getNewElements(preActive, canBe);
             news.forEach(registryPlayer::addFullSetAbility);
             removed.forEach(registryPlayer::removeFullSetAbility);
         }
@@ -138,7 +138,7 @@ public class UpdateStats implements Listener {
     public void updateHand(Player player, ItemStack itemInMainHand) {
         RegistryPlayer registryPlayer = RegistryPlayer.getRegistryPlayer(player);
         if (registryPlayer == null) return;
-        HashMap<Stats, Double> stats = Stats.newEmptyPlayerStats();
+        StatContainter stats = Stat.newEmptyPlayerStats();
         if (itemInMainHand != null && itemInMainHand.getType() == Material.AIR) {
             registryPlayer.handStats = stats;
             registryPlayer.updateStats();
@@ -150,7 +150,7 @@ public class UpdateStats implements Listener {
             registryPlayer.updateStats();
             return;
         }
-        Stats.addItemStat(stats, item);
+        Stat.addItemStat(stats, item);
         registryPlayer.handStats = stats;
         registryPlayer.updateStats();
 
@@ -159,8 +159,9 @@ public class UpdateStats implements Listener {
         if (registryItem.abilities == null) return;
         for (Ability ability : registryItem.abilities) {
             if (ability == null) continue;
-            if (ability.triggerType != Ability.TriggerType.MAINHAND) continue;
-            registryPlayer.addActiveAbility(EquipmentSlot.HAND, ability);
+            if (!(ability instanceof ItemAbility)) return;
+            if (ability.getTriggerType() != ItemAbility.TriggerType.MAINHAND) continue;
+            registryPlayer.addActiveAbility(EquipmentSlot.HAND, (ItemAbility) ability);
         }
     }
 

@@ -1,13 +1,14 @@
 package com.gertoxq.minedom.registry;
 
-import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.Stats;
-import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.Stats.EntityState;
+import com.gertoxq.minedom.Stats.Stat;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 import com.gertoxq.minedom.registry.ability.action.Statable;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
+import com.gertoxq.minedom.util.StatContainter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -34,23 +35,19 @@ public class RegistryPlayer extends RegistryEntity {
     /**
      * Stats gained from {@link EquipmentSlot#HAND} slot
      */
-    public HashMap<Stats, Double> handStats;
+    public StatContainter handStats = new StatContainter(this);
     /**
      * Stats gained from armor slots
      */
-    public HashMap<Stats, Double> armorStats;
+    public StatContainter armorStats = new StatContainter(this);
     /**
      * Stats gained from other sources
      */
-    public HashMap<Stats, Double> profileStats;
+    public final StatContainter profileStats = getStats();
     /**
      * Stats gained by abilities
      */
-    public HashMap<Stats, Double> abilityStats;
-    /**
-     * Stats sum
-     */
-    public HashMap<Stats, Double> stats;
+    public final StatContainter abilityStats = new StatContainter(this);
     /**
      * Player UUID
      */
@@ -60,25 +57,28 @@ public class RegistryPlayer extends RegistryEntity {
      */
     public Boolean joined;
     /**
-     * Player entity state ({@link EntityState#PLAYER})
-     */
-    public EntityState state;
-    /**
      * Player skill level container
      */
-    public HashMap<Skill, Double> skillLevels;
+    public HashMap<Skill, Double> skillLevels = Skill.newEmptySkills();
     /**
      * Player skill exp container
      */
-    public HashMap<Skill, Double> skillExps;
+    public HashMap<Skill, Double> skillExps = Skill.newEmptySkills();
     /**
      * Player's active abilities from their armor
      */
-    private final HashMap<EquipmentSlot, List<Ability>> activeEquipmentAbilities = new HashMap<>();
+    private final HashMap<EquipmentSlot, List<ItemAbility>> activeEquipmentAbilities = new HashMap<>();
     /**
      * Player's active full set abilities
      */
-    private final List<Ability> activeFullSetAbility = new ArrayList<>();
+    private final List<ItemAbility> activeFullSetAbility = new ArrayList<>();
+
+    /**
+     * The mana the player currently has
+     */
+    public double manapool;
+
+    public boolean loaded = false;
 
     /**
      * Init of Player
@@ -86,13 +86,8 @@ public class RegistryPlayer extends RegistryEntity {
      */
     public RegistryPlayer(Player player) {
         super("player", player);
-        this.abilityStats = Stats.newEmptyPlayerStats();
-        this.skillLevels = Skill.newEmptySkills();
-        this.skillExps = Skill.newEmptySkills();
-        this.profileStats = getStats();
-        this.armorStats = Stats.newEmptyPlayerStats();
-        this.handStats = Stats.newEmptyPlayerStats();
-        this.stats = Stats.sumStats(this);
+        this.stats = Stat.sumStats(this);
+        updateManaPool();
         this.uuid = player.getUniqueId();
         this.joined = true;
         this.player = player;
@@ -102,6 +97,7 @@ public class RegistryPlayer extends RegistryEntity {
             activeEquipmentAbilities.put(equipmentSlot, new ArrayList<>());
         });
         players.add(this);
+        loaded = true;
     }
 
     /**
@@ -109,24 +105,27 @@ public class RegistryPlayer extends RegistryEntity {
      * @param player Bukkit Player
      * @return Registry Player
      */
-
     public static RegistryPlayer getRegistryPlayer(Player player) {
 
         RegistryPlayer registryPlayer = players.stream().filter(e -> e.uuid.compareTo(player.getUniqueId()) == 0).findAny().orElse(null);
         if (registryPlayer == null) return null;
-        registryPlayer.stats = Stats.sumStats(registryPlayer);
-        Double speed = registryPlayer.stats.get(Stats.AGILITY);
-        Double health = registryPlayer.stats.get(Stats.HEALTH);
+        registryPlayer.stats = Stat.sumStats(registryPlayer);
+        double speed = registryPlayer.stats.getAGILITY();
+        double health = registryPlayer.stats.getHEALTH();
         registryPlayer.player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
         registryPlayer.player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speed / 1000);
         return registryPlayer;
     }
 
+    public void updateManaPool() {
+        this.manapool = this.stats.getMANA();
+    }
+
     /**
-     * Get active equipment abilitites
+     * Get active equipment abilities
      * @return Ability map
      */
-    public HashMap<EquipmentSlot, List<Ability>> getActiveEquipmentAbilities() {
+    public HashMap<EquipmentSlot, List<ItemAbility>> getActiveEquipmentAbilities() {
         return activeEquipmentAbilities;
     }
 
@@ -134,7 +133,7 @@ public class RegistryPlayer extends RegistryEntity {
      * Gets active full set abilities
      * @return Ability List
      */
-    public List<Ability> getActiveFullSetAbilities() {
+    public List<ItemAbility> getActiveFullSetAbilities() {
         return activeFullSetAbility;
     }
 
@@ -143,7 +142,7 @@ public class RegistryPlayer extends RegistryEntity {
      * @param slot Responsible slot for ability
      * @param ability Ability
      */
-    public void addActiveAbility(EquipmentSlot slot, Ability ability) {
+    public void addActiveAbility(EquipmentSlot slot, ItemAbility ability) {
         activeEquipmentAbilities.get(slot).add(ability);
     }
 
@@ -152,7 +151,7 @@ public class RegistryPlayer extends RegistryEntity {
      * @param slot Responsible slot
      */
     public void clearActiveAbility(EquipmentSlot slot) {
-        List<Ability> abilities = activeEquipmentAbilities.get(slot);
+        List<ItemAbility> abilities = activeEquipmentAbilities.get(slot);
         abilities.forEach(ability -> {
             ability.getActions().forEach(action -> {
                 if (action instanceof Statable stateAction) {
@@ -161,23 +160,24 @@ public class RegistryPlayer extends RegistryEntity {
             });
         });
         activeEquipmentAbilities.get(slot).clear();
+
     }
 
     /**
      * Adds full set ability
      * @param ability Ability
      */
-    public void addFullSetAbility(Ability ability) {
+    public void addFullSetAbility(ItemAbility ability) {
         activeFullSetAbility.add(ability);
     }
 
     /**
      * Clears active full set ability. Runs the {@link Statable#cleanUp(RegistryPlayer player)} on the player.
-     * If throws {@link ConcurrentModificationException}, use {@link #clearFullSetAbility(Ability)} instead and separately remove the abilities from list.
+     * If throws {@link ConcurrentModificationException}, use {@link #clearFullSetAbility(ItemAbility)} instead and separately remove the abilities from list.
      * @param ability Ability to be removed.
      * @throws ConcurrentModificationException if iterates through {@link #activeFullSetAbility}.
      */
-    public void removeFullSetAbility(Ability ability) {
+    public void removeFullSetAbility(ItemAbility ability) {
         ability.getActions().forEach(action -> {
             if (action instanceof Statable stateAction) {
                 stateAction.cleanUp(this);
@@ -188,10 +188,10 @@ public class RegistryPlayer extends RegistryEntity {
 
     /**
      * Used to avoid {@link ConcurrentModificationException}.
-     * Similar to {@link #removeFullSetAbility(Ability ability)}, but doesn't remove the ability from the ability list, so that needs to be cleared separately.
+     * Similar to {@link #removeFullSetAbility(ItemAbility ability)}, but doesn't remove the ability from the ability list, so that needs to be cleared separately.
      * @param ability Ability to be removed.
      */
-    public void clearFullSetAbility(Ability ability) {
+    public void clearFullSetAbility(ItemAbility ability) {
         ability.getActions().forEach(action -> {
             if (action instanceof Statable stateAction) {
                 stateAction.cleanUp(this);
@@ -203,10 +203,23 @@ public class RegistryPlayer extends RegistryEntity {
      * Refreshes the player's stats
      */
     public void updateStats() {
-        stats = Stats.sumStats(this);
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.get(Stats.HEALTH));
-        player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(stats.get(Stats.AGILITY) / 1000);
-        player.setHealthScale(40.0);
+        double prevMana = stats.getMANA();
+        double prevPool = manapool;
+        double manaScale = prevPool/prevMana;
+        stats = Stat.sumStats(this);
+        double prevMax = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+        double prevHp = player.getHealth();
+        double scale =  (prevHp / prevMax) > 1 ? 1 : prevHp / prevMax;
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.getHEALTH());
+        if (prevMax != stats.get(Stat.HEALTH)) {
+            player.setHealth(stats.get(Stat.HEALTH) * scale);
+        }
+        if (prevMana != stats.getMANA()) {
+            updateManaPool();
+            manapool = stats.getMANA()*manaScale;
+        }
+        player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(stats.getAGILITY() / 1000);
+        player.setHealthScale(40);
     }
 
     /**
@@ -216,7 +229,7 @@ public class RegistryPlayer extends RegistryEntity {
     public void addExp(RegistryEntity killedEntity) {
         if (killedEntity.expType == null) return;
         Skill.addSkillExp(killedEntity.expType, this, killedEntity.expDrop);
-        this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "+" + killedEntity.expDrop + " " + killedEntity.expType.displayName + " exp"));
+        this.player.showTitle(Title.title(Component.empty(), Component.text(ChatColor.GREEN + "+" + killedEntity.expDrop + " " + killedEntity.expType.displayName + " exp")));
         double newExp = this.skillExps.get(killedEntity.expType) + killedEntity.expDrop;
         this.skillExps.put(killedEntity.expType, newExp);
         double newLevel = Skill.CalcLvlFromEXP(killedEntity.expType, newExp);
@@ -234,7 +247,7 @@ public class RegistryPlayer extends RegistryEntity {
      */
     public void addExp(Skill skill, double amount) {
         Skill.addSkillExp(skill, this, amount);
-        this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + "+" + amount + " " + skill.displayName + " exp"));
+        this.player.showTitle(Title.title(Component.empty(), Component.text(ChatColor.GREEN + "+" + amount + " " + skill.displayName + " exp")));
         double newExp = this.skillExps.get(skill) + amount;
         this.skillExps.put(skill, newExp);
         double newLevel = Skill.CalcLvlFromEXP(skill, newExp);
@@ -260,8 +273,18 @@ public class RegistryPlayer extends RegistryEntity {
 
     @Override
     @NotNull
-    public HashMap<Stats, Double> getStats() {
-        return Stats.newPlayerStats(20.0, 0.0, 5.0, 0.0, 100.0, 20.0, 0.0, 100.0, 100.0, 100.0, 100.0);
+    public StatContainter getStats() {
+        StatContainter containter = new StatContainter(this);
+        containter.setHEALTH(20);
+        containter.setDAMAGE(5);
+        containter.setMANA(100);
+        containter.setMAGIC_DAMAGE(20);
+        containter.setREGENERGY(100);
+        containter.setVITALIS(100);
+        containter.setAGILITY(100);
+        containter.setBLESSING(100);
+        containter.setMANA_REGEN(100);
+        return containter;
     }
 
     @Override

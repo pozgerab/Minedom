@@ -1,13 +1,12 @@
 package com.gertoxq.minedom.registry.ability.abilities;
 
 import com.gertoxq.minedom.events.Custom.AEvent;
-import com.gertoxq.minedom.events.Custom.Events.RegistryHitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
 import com.gertoxq.minedom.registry.RegistryPlayer;
-import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 import com.gertoxq.minedom.registry.ability.TriggerFace.HitAbility;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
-import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.util.Glow;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -15,7 +14,7 @@ import org.bukkit.entity.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hawkeye extends Ability implements HitAbility {
+public class Hawkeye extends ItemAbility implements HitAbility {
 
     @Override
     public String getName() {
@@ -25,11 +24,6 @@ public class Hawkeye extends Ability implements HitAbility {
     @Override
     public String getId() {
         return "hawkeye";
-    }
-
-    @Override
-    public double getBaseDamage() {
-        return 0.0;
     }
 
     @Override
@@ -55,23 +49,8 @@ public class Hawkeye extends Ability implements HitAbility {
     }
 
     @Override
-    public boolean getHasRequirement() {
-        return false;
-    }
-
-    @Override
-    public Skill getRequirementType() {
-        return null;
-    }
-
-    @Override
-    public int getRequirementLevel() {
-        return 0;
-    }
-
-    @Override
     public AbilityAction ability(HitAbility classs) {
-        return new AbilityAction(10, id) {
+        return new AbilityAction(10, getId()) {
             @Override
             public void ability(AEvent e, RegistryPlayer player) {
                 RegistryHitEvent event = (RegistryHitEvent) e;

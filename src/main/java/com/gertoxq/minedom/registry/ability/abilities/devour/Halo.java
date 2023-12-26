@@ -19,7 +19,7 @@ public class Halo extends AbilityAction implements Statable {
     final static HashMap<RegistryPlayer, Vector> upRotator = new HashMap<>();
 
     public Halo() {
-        super("halo");
+        super("devour.halo");
     }
 
     @Override

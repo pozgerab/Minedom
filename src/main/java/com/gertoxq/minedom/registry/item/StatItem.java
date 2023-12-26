@@ -1,6 +1,7 @@
 package com.gertoxq.minedom.registry.item;
 
-import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.Stats.Stat;
+import com.gertoxq.minedom.util.StatContainter;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,7 @@ public abstract class StatItem extends RegistryItem {
     /**
      * Stats that the item holds
      */
-    public HashMap<Stats, Double> stats;
+    public StatContainter stats;
     /**
      * Lore generated and added to {@link #allLore} to show stats
      */
@@ -26,7 +27,7 @@ public abstract class StatItem extends RegistryItem {
     /**
      * @return Item's stats
      */
-    public abstract HashMap<Stats, Double> getStats();
+    public abstract StatContainter getStats();
 
     /**
      * Init, adds lore to {@link #allLore}
@@ -34,7 +35,7 @@ public abstract class StatItem extends RegistryItem {
     public StatItem() {
         super();
         this.stats = getStats();
-        if (getStats() != null) for (Stats stat : Stats.values()) {
+        if (getStats() != null) for (Stat stat : Stat.values()) {
             if (stats.get(stat) == 0) continue;
             statLore.add(ChatColor.GRAY+stat.displayName+": "+stats.get(stat));
         }

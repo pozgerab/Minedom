@@ -1,15 +1,18 @@
 package com.gertoxq.minedom.registry.item.items.armor.BeastArmor;
 
-import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.registry.ability.Ability;
+import com.gertoxq.minedom.registry.ability.ItemAbility;
 import com.gertoxq.minedom.registry.ability.abilities.devour.Devour;
 import com.gertoxq.minedom.registry.item.FullsetAbilityItem;
+import com.gertoxq.minedom.util.StatContainter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class BeastChestplate extends FullsetAbilityItem {
 
@@ -19,8 +22,16 @@ public class BeastChestplate extends FullsetAbilityItem {
     }
 
     @Override
-    public HashMap<Stats, Double> getStats() {
-        return Stats.newPlayerStats(100.0, -100.0, 0.0, 10.0, 50.0, 0.0, 0.0, 50.0, 50.0, 20.0, 0.0);
+    public StatContainter getStats() {
+        StatContainter containter = new StatContainter();
+        containter.setHEALTH(100);
+        containter.setDEFENSE(-100);
+        containter.setSTRENGTH(10);
+        containter.setMANA(50);
+        containter.setREGENERGY(50);
+        containter.setVITALIS(50);
+        containter.setAGILITY(20);
+        return containter;
     }
 
     @Override
@@ -44,7 +55,7 @@ public class BeastChestplate extends FullsetAbilityItem {
     }
 
     @Override
-    public ArrayList<Ability> getAbilities() {
+    public List<Ability> getAbilities() {
         return null;
     }
 
@@ -54,8 +65,8 @@ public class BeastChestplate extends FullsetAbilityItem {
     }
 
     @Override
-    public ArrayList<Ability> getFullSetAbilities() {
-        ArrayList<Ability> abilities1 = new ArrayList<>();
+    public ArrayList<ItemAbility> getFullSetAbilities() {
+        ArrayList<ItemAbility> abilities1 = new ArrayList<>();
         abilities1.add(new Devour());
         return abilities1;
     }

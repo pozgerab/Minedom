@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Custom item
  */
-public abstract class RegistryItem {
+public abstract class RegistryItem implements Item {
 
     /**
      * Stored all registered items by their ids
@@ -45,26 +45,14 @@ public abstract class RegistryItem {
     /**
      * Unique number id
      */
-    public int uuid;
-    /**
-     * Display name
-     */
-    public String name;
-    /**
-     * Item material
-     */
-    public Material material;
+    public int uuid = UUIDAmount++;
 
     /**
      * Initiates the item
      */
     public RegistryItem() {
         this.item = new ItemStack(getMaterial(), 1);
-        this.uuid = UUIDAmount;
-        UUIDAmount++;
         this.id = getID();
-        this.material = getMaterial();
-        this.name = getName();
         item = new ItemStack(getMaterial());
         meta = getMeta() != null ? getMeta() : item.getItemMeta();
         lore = getLore() != null ? getLore() : new ArrayList<>();
@@ -76,32 +64,6 @@ public abstract class RegistryItem {
         item.setItemMeta(meta);
         registryItems.put(getID(), this);
     }
-
-    /**
-     * @return Item's material
-     */
-    public abstract Material getMaterial();
-
-    /**
-     * @return Item's display name
-     */
-    public abstract String getName();
-
-    /**
-     * Unique item identifier
-     * @return ID
-     */
-    public abstract String getID();
-
-    /**
-     * @return Basic item lore
-     */
-    public abstract ArrayList<String> getLore();
-
-    /**
-     * @return Item's item meta
-     */
-    public abstract ItemMeta getMeta();
 
     /**
      * Gets the registry item instance from Bukkit item stack

@@ -2,7 +2,7 @@ package com.gertoxq.minedom.MenuSystem.menu;
 
 import com.gertoxq.minedom.MenuSystem.Menu;
 import com.gertoxq.minedom.MenuSystem.PlayerMenuUtility;
-import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -32,7 +32,7 @@ public class GetStatMenu extends Menu {
 
         e.setCancelled(true);
         e.getWhoClicked().closeInventory();
-        Stats stat = Stats.getStatFromItem(e.getCurrentItem().getType());
+        Stat stat = Stat.getStatFromItem(e.getCurrentItem().getType());
         if (stat == null) return;
         e.getWhoClicked().sendMessage(ChatColor.AQUA + "Your " + stat.displayName + " is " + ChatColor.GOLD + RegistryPlayer.getRegistryPlayer(playerMenuUtility.getOwner()).stats.get(stat).toString());
 
@@ -41,7 +41,7 @@ public class GetStatMenu extends Menu {
     @Override
     public void setMenuItems() {
 
-        for (Stats stat : Stats.values()) {
+        for (Stat stat : Stat.values()) {
 
             ItemStack item = new ItemStack(stat.asItem, 1);
             ItemMeta itemMeta = item.getItemMeta();

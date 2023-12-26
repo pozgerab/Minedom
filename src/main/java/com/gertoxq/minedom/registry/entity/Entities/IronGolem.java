@@ -1,9 +1,10 @@
 package com.gertoxq.minedom.registry.entity.Entities;
 
-import com.gertoxq.minedom.StatSystem.EntityState;
-import com.gertoxq.minedom.StatSystem.Stats;
+import com.gertoxq.minedom.Stats.EntityState;
+import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.skill.Skill;
+import com.gertoxq.minedom.util.StatContainter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -31,8 +32,8 @@ public class IronGolem extends RegistryEntity {
     }
 
     @Override
-    public @NonNull HashMap<Stats, Double> getStats() {
-        return Stats.newActiveStats(200.0, 10.0, 18.0, 0.0);
+    public @NonNull StatContainter getStats() {
+        return Stat.newActiveStats(200.0, 10.0, 18.0, 0.0);
     }
 
     @Override
