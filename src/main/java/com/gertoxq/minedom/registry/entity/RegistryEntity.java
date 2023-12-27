@@ -4,6 +4,7 @@ import com.gertoxq.minedom.Stats.EntityState;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHit.MagicHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHit.MeleeHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.Regen.RegenEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RecieveHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
 import com.gertoxq.minedom.skill.Skill;
 import com.gertoxq.minedom.util.StatContainter;
@@ -229,7 +230,14 @@ public abstract class RegistryEntity {
         (switch (source) {
             case MELEE -> new MeleeHitEvent(damager, this, damage);
             case MAGIC -> new MagicHitEvent(damager, this, damage);
-            default -> new RegistryHitEvent(damager, this, damage, source);
+            default -> new RecieveHitEvent(damager, this, damage, source);
+        }).callEvent();
+    }
+    public void damage(double damage, RegistryEntity damager, RegistryHitEvent.DamageSource source, boolean lock) {
+        (switch (source) {
+            case MELEE -> new MeleeHitEvent(damager, this, damage, lock);
+            case MAGIC -> new MagicHitEvent(damager, this, damage, lock);
+            default -> new RecieveHitEvent(damager, this, damage, source, lock);
         }).callEvent();
     }
 

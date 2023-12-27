@@ -20,8 +20,8 @@ public interface DamagerAction {
      * @param entity Damager player
      * @param victim Hurt entity
      */
-    default void doDamage(RegistryEntity entity, RegistryEntity victim) {
-        victim.damage(getDamage(), entity, getDamageType());
+    default void doDamage(RegistryEntity entity, RegistryEntity victim, boolean lock) {
+        victim.damage(getDamage(), entity, getDamageType(), lock);
     }
 
 }

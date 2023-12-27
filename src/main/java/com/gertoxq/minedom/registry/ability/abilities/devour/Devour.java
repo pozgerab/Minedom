@@ -8,7 +8,7 @@ import org.bukkit.*;
 
 import java.util.ArrayList;
 
-public class Devour extends ItemAbility implements DeathAbility, InitAbility {
+public class Devour extends ItemAbility implements KillAbility, InitAbility {
 
     @Override
     public String getName() {
@@ -47,7 +47,7 @@ public class Devour extends ItemAbility implements DeathAbility, InitAbility {
     }
 
     @Override
-    public AbilityAction ability(DeathAbility classs) {
+    public AbilityAction ability(KillAbility classs) {
         return KillBuff.action;
     }
 

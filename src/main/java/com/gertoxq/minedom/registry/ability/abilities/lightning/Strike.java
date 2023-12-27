@@ -27,12 +27,12 @@ public class Strike extends AbilityAction implements DamagerAction, ManaConsumer
         for (RegistryEntity entity: RegistryEntity.filterRegisteredEntities(entities)) {
             if (entity instanceof RegistryPlayer || entity.state == EntityState.INDICATOR) continue;
 
-            doDamage(player, entity);
+            doDamage(player, entity, true);
 
             entity.entity.getLocation().getWorld().strikeLightning(entity.entity.getLocation());
         }
         target.entity.getLocation().getWorld().strikeLightning(target.entity.getLocation());
-        doDamage(player, target);
+        doDamage(player, target, true);
     }
 
     @Override

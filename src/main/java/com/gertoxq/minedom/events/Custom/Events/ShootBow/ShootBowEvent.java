@@ -6,9 +6,11 @@ import com.gertoxq.minedom.registry.ability.TriggerFace.AbilityInterface;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +25,26 @@ public class ShootBowEvent extends EntityShootBowEvent implements AEvent {
 
     public RegistryEntity getShooter() {
         return shooter;
+    }
+    /**
+     * Handler list
+     */
+    private static final HandlerList handlers = new HandlerList();
+
+    /**
+     * @return The handler list
+     */
+    @Override
+    public @NonNull HandlerList getHandlers() {
+        return handlers;
+    }
+
+    /**
+     * Bukkit event requirement
+     * @return The handler list
+     */
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     @Override

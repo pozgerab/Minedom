@@ -16,7 +16,7 @@ public class RegistryDeathEventTrigger implements Listener {
         RegistryEntity damager = e.getDamager();
         if (entity.entity.getHealth() - e.getDamage() <= 0) {
             e.setDeadly(true);
-            RegistryDeathEvent event = new RegistryDeathEvent(entity, damager, e.getDamage(), e.getSource());
+            RegistryDeathEvent event = new KillEvent(entity, damager, e.getDamage(), e.getSource());
             e.setDeathEvent(event);
             Bukkit.getServer().getPluginManager().callEvent(event);
         }

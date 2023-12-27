@@ -1,5 +1,7 @@
 package com.gertoxq.minedom.events.Custom;
 
+import com.gertoxq.minedom.registry.RegistryPlayer;
+import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -28,4 +30,6 @@ public abstract class REvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
+
+    public abstract RegistryEntity getTriggerer();
 }

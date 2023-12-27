@@ -2,10 +2,12 @@ package com.gertoxq.minedom.registry.ability;
 
 import com.gertoxq.minedom.events.Custom.AEvent;
 import com.gertoxq.minedom.events.Custom.Events.Init.InitEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.KillEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHit.MagicHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHit.MeleeHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.ProjectileHit.ProjectileHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.RegistryDeathEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RecieveHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.ShootBow.ShootBowEvent;
 import com.gertoxq.minedom.registry.RegistryPlayer;
@@ -84,14 +86,16 @@ public abstract class Ability implements AbilityInterface, BasicAbil {
      * @param e Event
      */
     public AbilityAction sortAction(AEvent e) {
+        if (e instanceof KillEvent) return ((KillAbility) this).ability((KillAbility) this);
         if (e instanceof RegistryDeathEvent) return ((DeathAbility) this).ability((DeathAbility) this);
-        else if (e instanceof MagicHitEvent) return ((MagicHitAbility) this).ability((MagicHitAbility) this);
-        else if (e instanceof ShootBowEvent) return ((ShootBowAbility) this).ability((ShootBowAbility) this);
-        else if (e instanceof ProjectileHitEvent) return ((ProjectileHitAbility) this).ability((ProjectileHitAbility) this);
-        else if (e instanceof MeleeHitEvent) return  ((MeleeHitAbility) this).ability((MeleeHitAbility) this);
-        else if (e instanceof RegistryHitEvent) return  ((HitAbility) this).ability((HitAbility) this);
-        else if (e instanceof InitEvent) return ((InitAbility) this).ability((InitAbility) this);
-        else throw new RuntimeException("No Event Found");
+        if (e instanceof RecieveHitEvent) return ((RecieveHitAbility) this).ability((RecieveHitAbility) this);
+        if (e instanceof MagicHitEvent) return ((MagicHitAbility) this).ability((MagicHitAbility) this);
+        if (e instanceof ShootBowEvent) return ((ShootBowAbility) this).ability((ShootBowAbility) this);
+        if (e instanceof ProjectileHitEvent) return ((ProjectileHitAbility) this).ability((ProjectileHitAbility) this);
+        if (e instanceof MeleeHitEvent) return  ((MeleeHitAbility) this).ability((MeleeHitAbility) this);
+        if (e instanceof RegistryHitEvent) return  ((HitAbility) this).ability((HitAbility) this);
+        if (e instanceof InitEvent) return ((InitAbility) this).ability((InitAbility) this);
+        throw new RuntimeException("No Event Found");
     }
 }
 

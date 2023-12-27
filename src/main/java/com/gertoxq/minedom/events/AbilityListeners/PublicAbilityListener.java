@@ -8,11 +8,14 @@ import com.gertoxq.minedom.events.Custom.Events.ProjectileHit.ProjectileHitEvent
 import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.RegistryDeathEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryHit.RegistryHitEvent;
 import com.gertoxq.minedom.events.Custom.Events.ShootBow.ShootBowEvent;
+import com.gertoxq.minedom.events.Custom.REvent;
 import com.gertoxq.minedom.registry.ability.Ability;
 import com.gertoxq.minedom.registry.ability.ItemAbility;
+import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import com.gertoxq.minedom.registry.item.AbilityItem;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,30 +30,9 @@ import java.util.*;
 public class PublicAbilityListener implements Listener {
 
     @EventHandler (priority = EventPriority.LOWEST)
-    public void onInit(InitEvent e) {
-        searchAbilityUsage(e.getPlayer(), e);
-    }
-
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onMagicHit(MagicHitEvent e) {
-        if (e.isLock()) return;
-        if (e.getDamager() instanceof RegistryPlayer player) {
-            searchAbilityUsage(player, e);
-        }
-    }
-
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onMeleeHit(MeleeHitEvent e) {
-        if (e.getDamager() instanceof RegistryPlayer player) {
-            searchAbilityUsage(player, e);
-        }
-    }
-
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void onDeath(RegistryDeathEvent e) {
-        if (e.getKiller() instanceof RegistryPlayer) {
-            searchAbilityUsage((RegistryPlayer) e.getKiller(), e);
-        }
+    public <T extends REvent & AEvent> void onAny(T e) {
+        if (!(e instanceof AEvent)) return;
+        if (e.getTriggerer() instanceof RegistryPlayer player) searchAbilityUsage(player, e);
     }
 
     @EventHandler (priority = EventPriority.LOWEST)
@@ -67,14 +49,6 @@ public class PublicAbilityListener implements Listener {
             RegistryPlayer registryPlayer = RegistryPlayer.getRegistryPlayer(player);
             if (registryPlayer == null) return;
             searchAbilityUsage(registryPlayer, e);
-        }
-
-    }
-
-    @EventHandler (priority = EventPriority.LOWEST)
-    public void hit(RegistryHitEvent e) {
-        if (e.getDamager() instanceof RegistryPlayer player) {
-            searchAbilityUsage(player, e);
         }
 
     }
@@ -99,7 +73,6 @@ public class PublicAbilityListener implements Listener {
         if (registryItem.abilities == null) return;
         for (Ability ability : registryItem.abilities) {
             if (!(ability instanceof ItemAbility)) continue;
-            if (ability == null) continue;
             if (!Arrays.stream(ability.getClass().getInterfaces()).toList().contains(e.getTriggerFace())) continue;
             if (ability.getTriggerType() != ItemAbility.TriggerType.MAINHAND) continue;
             ability.handleEvent(e, registryPlayer);

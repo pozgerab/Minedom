@@ -2,6 +2,7 @@ package com.gertoxq.minedom.events.Custom.Events.Regen.ManaRegen;
 
 import com.gertoxq.minedom.events.Custom.REvent;
 import com.gertoxq.minedom.registry.RegistryPlayer;
+import com.gertoxq.minedom.registry.entity.RegistryEntity;
 
 public class ManaRegenEvent extends REvent {
 
@@ -32,5 +33,10 @@ public class ManaRegenEvent extends REvent {
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    @Override
+    public RegistryEntity getTriggerer() {
+        return this.regened;
     }
 }

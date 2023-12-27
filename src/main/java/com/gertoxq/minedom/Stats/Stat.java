@@ -30,7 +30,7 @@ import java.util.Objects;
     AGILITY("agility", ChatColor.WHITE + "✦ Agility"+ChatColor.GRAY, Material.FEATHER, 9),
     BLESSING("blessing", ChatColor.AQUA+"α Blessing"+ChatColor.GRAY, Material.EXPERIENCE_BOTTLE, 10),
     MANA_REGEN("mana_regen", ChatColor.DARK_PURPLE+"ξ Mana Regen"+ChatColor.GRAY, Material.ENDER_EYE, 11),
-    ATTACK_SPEED("attack_speed", ChatColor.DARK_AQUA+" Attack Speed"+ChatColor.GRAY, Material.SUGAR, 12);
+    ATTACK_SPEED("attack_speed", ChatColor.DARK_AQUA+"կ Attack Speed"+ChatColor.GRAY, Material.SUGAR, 12);
 
     /**
      * Identifier of the stat

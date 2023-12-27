@@ -8,7 +8,7 @@ import com.gertoxq.minedom.registry.ability.TriggerFace.AbilityInterface;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class MagicHitEvent extends RegistryHitEvent implements AEvent {
+public class MagicHitEvent extends RecieveHitEvent implements AEvent {
 
     public MagicHitEvent(RegistryEntity damager, RegistryEntity target, double damage, boolean lock) {
         super(damager, target, damage, DamageSource.MAGIC, lock);

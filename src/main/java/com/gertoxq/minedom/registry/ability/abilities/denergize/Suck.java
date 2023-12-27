@@ -3,6 +3,7 @@ package com.gertoxq.minedom.registry.ability.abilities.denergize;
 import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.events.Custom.AEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.KillEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
@@ -23,7 +24,7 @@ public class Suck extends AbilityAction implements StatBuffAction, ManaConsumerA
 
     @Override
     public void ability(AEvent e, RegistryPlayer player) {
-        RegistryDeathEvent event = (RegistryDeathEvent) e;
+        KillEvent event = (KillEvent) e;
 
         if (!consume(player)) return;
 

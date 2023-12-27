@@ -2,19 +2,20 @@ package com.gertoxq.minedom.registry.ability.abilities.denergize;
 
 import com.gertoxq.minedom.registry.ability.ItemAbility;
 import com.gertoxq.minedom.registry.ability.TriggerFace.DeathAbility;
+import com.gertoxq.minedom.registry.ability.TriggerFace.KillAbility;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 
-public class Denergize extends ItemAbility implements DeathAbility {
+public class Denergize extends ItemAbility implements KillAbility {
     @Override
     public int getCooldown() {
         return 0;
     }
 
     @Override
-    public AbilityAction ability(DeathAbility classs) {
+    public AbilityAction ability(KillAbility classs) {
         return new Suck();
     }
 

@@ -5,6 +5,9 @@ import com.gertoxq.minedom.events.Custom.Events.Regen.RegenEvent;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.registry.entity.Entities.DamageIndicator;
 import com.gertoxq.minedom.registry.entity.RegistryEntity;
+import com.gertoxq.minedom.util.Hologram;
+import net.kyori.adventure.text.Component;
+import net.minecraft.network.chat.IChatBaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
+
+import java.awt.*;
 
 public class ExecuteRegen implements Listener {
 
@@ -25,10 +30,11 @@ public class ExecuteRegen implements Listener {
         if (healAmount == 0) return;
         entity.entity.setHealth(Math.min(entity.entity.getHealth() + e.getAmount(), entity.stats.getHEALTH()));
 
-        DamageIndicator indicator = new DamageIndicator(healAmount, ChatColor.GREEN);
+        if (!(entity instanceof RegistryPlayer player)) return;
 
-        indicator.spawn(location.add(new Vector(Math.random()*2.4-1.2, Math.random()*2.4-1.2, Math.random()*2.4-1.2)));
+        Hologram ind = new Hologram(player.player);
+        int id = ind.spawn(location.add(new Vector(Math.random()*1.6-0.8, Math.random()*0.4-0.2, Math.random()*1.6-0.8)), ChatColor.GREEN+""+healAmount);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> indicator.entity.remove(), 20L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> ind.destroy(id), 20L);
     }
 }

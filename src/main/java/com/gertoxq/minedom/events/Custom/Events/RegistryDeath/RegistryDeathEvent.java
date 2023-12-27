@@ -52,4 +52,9 @@ public class RegistryDeathEvent extends REvent implements AEvent {
     public Class<? extends AbilityInterface> getTriggerFace() {
         return DeathAbility.class;
     }
+
+    @Override
+    public RegistryEntity getTriggerer() {
+        return this.entity;
+    }
 }

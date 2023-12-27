@@ -3,6 +3,7 @@ package com.gertoxq.minedom.events.Custom.Events.Regen.ManaRegen;
 import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.registry.RegistryPlayer;
 import com.gertoxq.minedom.registry.entity.Entities.DamageIndicator;
+import com.gertoxq.minedom.util.Hologram;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -25,10 +26,10 @@ public class ExecuteManaRegen implements Listener {
         double manaAmount = player.manapool - befm;
         if (manaAmount == 0) return;
 
-        DamageIndicator indicator = new DamageIndicator(e.getAmount(), ChatColor.AQUA);
+        Hologram ind = new Hologram(player.player);
+        int id = ind.spawn(location.add(new Vector(Math.random()*1.6-0.8, Math.random()*0.4-0.2, Math.random()*1.6-0.8)), ChatColor.AQUA+""+e.getAmount());
 
-        indicator.spawn(location.add(new Vector(Math.random()*2.4-1.2, Math.random()*2.4-1.2, Math.random()*2.4-1.2)));
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> indicator.entity.remove(), 60L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Minedom.getPlugin(), () -> ind.destroy(id), 20L);
 
     }
 }

@@ -90,6 +90,11 @@ public class RegistryHitEvent extends REvent implements AEvent {
         return HitAbility.class;
     }
 
+    @Override
+    public RegistryEntity getTriggerer() {
+        return this.damager;
+    }
+
     public enum DamageSource {
         MELEE,
         MAGIC,

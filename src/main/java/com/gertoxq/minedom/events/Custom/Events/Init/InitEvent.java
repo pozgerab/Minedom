@@ -22,4 +22,9 @@ public class InitEvent extends REvent implements AEvent {
     public @NotNull Class<? extends AbilityInterface> getTriggerFace() {
         return InitAbility.class;
     }
+
+    @Override
+    public RegistryPlayer getTriggerer() {
+        return this.player;
+    }
 }

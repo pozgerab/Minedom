@@ -3,6 +3,7 @@ package com.gertoxq.minedom.registry.ability.abilities.devour;
 import com.gertoxq.minedom.Minedom;
 import com.gertoxq.minedom.Stats.Stat;
 import com.gertoxq.minedom.events.Custom.AEvent;
+import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.KillEvent;
 import com.gertoxq.minedom.events.Custom.Events.RegistryDeath.RegistryDeathEvent;
 import com.gertoxq.minedom.registry.ability.action.AbilityAction;
 import com.gertoxq.minedom.registry.RegistryPlayer;
@@ -26,7 +27,7 @@ public class KillBuff extends AbilityAction implements ManaConsumerAction {
 
     @Override
     public void ability(AEvent e, RegistryPlayer player) {
-        RegistryDeathEvent event = (RegistryDeathEvent) e;
+        KillEvent event = (KillEvent) e;
         if (!consume(player)) return;
         setCooldown(0);
         if (!playerCastMap.containsKey(player)) {
